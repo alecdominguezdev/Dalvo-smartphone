@@ -1,7 +1,7 @@
 name: dalvo_mobile
 description: Dalvo Móvil - Supervisión de proyectos
 publish_to: 'none'
-version: 0.1.0+1
+version: 0.2.0+2
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -22,3 +22,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/dalvo/logo-dalvo.png
+    - assets/dalvo/logo-dalvo-blanco.png
+    - assets/dalvo/favicon.png

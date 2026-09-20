@@ -28,6 +28,7 @@ class ApiClient {
 
   String? _token;
   MobileUser? currentUser;
+  MobileAccessProfile? currentAccess;
 
   Future<void> initialize() async {
     _token = await _storage.read(key: _tokenKey);
@@ -91,6 +92,11 @@ class ApiClient {
     _token = token;
     await _storage.write(key: _tokenKey, value: token);
     currentUser = MobileUser.fromJson(data['user'] as Map<String, dynamic>);
+    if (data['access'] is Map<String, dynamic>) {
+      currentAccess = MobileAccessProfile.fromJson(data['access'] as Map<String, dynamic>);
+    } else {
+      await access();
+    }
     return currentUser!;
   }
 
@@ -98,7 +104,21 @@ class ApiClient {
     final response = await http.get(ApiConfig.uri('/me'), headers: _headers());
     final data = _decode(response);
     currentUser = MobileUser.fromJson(data['user'] as Map<String, dynamic>);
+    if (data['access'] is Map<String, dynamic>) {
+      currentAccess = MobileAccessProfile.fromJson(data['access'] as Map<String, dynamic>);
+    } else {
+      await access();
+    }
     return currentUser!;
+  }
+
+  Future<MobileAccessProfile> access() async {
+    final response = await http.get(ApiConfig.uri('/access'), headers: _headers());
+    final data = _decode(response);
+    currentAccess = MobileAccessProfile.fromJson(
+      (data['access'] as Map<String, dynamic>? ?? const <String, dynamic>{}),
+    );
+    return currentAccess!;
   }
 
   Future<void> logout() async {
@@ -109,6 +129,7 @@ class ApiClient {
     }
     _token = null;
     currentUser = null;
+    currentAccess = null;
     await _storage.delete(key: _tokenKey);
   }
 

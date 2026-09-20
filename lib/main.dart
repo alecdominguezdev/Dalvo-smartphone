@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'screens/login_page.dart';
-import 'screens/projects_page.dart';
+import 'screens/shell_page.dart';
 import 'services/api_client.dart';
+import 'theme/dalvo_theme.dart';
+import 'widgets/dalvo_widgets.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,34 +20,7 @@ class DalvoMobileApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Dalvo Móvil',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF0B6673),
-          brightness: Brightness.light,
-        ),
-        scaffoldBackgroundColor: const Color(0xFFF5F6F7),
-        cardTheme: const CardThemeData(
-          elevation: 0,
-          margin: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(18)),
-            side: BorderSide(color: Color(0xFFE0E3E6)),
-          ),
-        ),
-        inputDecorationTheme: const InputDecorationTheme(
-          filled: true,
-          fillColor: Colors.white,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(14)),
-            borderSide: BorderSide(color: Color(0xFFD8DDE1)),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(14)),
-            borderSide: BorderSide(color: Color(0xFFD8DDE1)),
-          ),
-        ),
-      ),
+      theme: buildDalvoTheme(),
       home: const _BootstrapPage(),
     );
   }
@@ -82,12 +57,61 @@ class _BootstrapPageState extends State<_BootstrapPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_loading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-    if (_authenticated) return const ProjectsPage();
+    if (_loading) return const _DalvoLaunchView();
+    if (_authenticated) return const DalvoShellPage();
     return const LoginPage();
   }
+}
+
+class _DalvoLaunchView extends StatefulWidget {
+  const _DalvoLaunchView();
+
+  @override
+  State<_DalvoLaunchView> createState() => _DalvoLaunchViewState();
+}
+
+class _DalvoLaunchViewState extends State<_DalvoLaunchView>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 950),
+      lowerBound: .96,
+      upperBound: 1.03,
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        body: Center(
+          child: ScaleTransition(
+            scale: _controller,
+            child: const Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                DalvoLogo(width: 150),
+                SizedBox(height: 22),
+                SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.2,
+                    color: DalvoColors.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
 }
