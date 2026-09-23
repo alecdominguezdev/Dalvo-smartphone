@@ -152,7 +152,6 @@ class _ProjectCard extends StatelessWidget {
     final state = project.state.trim();
     final closed = state.toLowerCase() == 'cerrada';
     final progress = (project.lastProgress ?? 0).clamp(0, 100).toDouble();
-    final hasProgress = project.lastProgress != null;
 
     return DalvoSurface(
       onTap: () => Navigator.of(context).push(
@@ -226,11 +225,11 @@ class _ProjectCard extends StatelessWidget {
                 ),
             ],
           ),
-          if (hasProgress) ...[
+          ...[
             const SizedBox(height: 16),
             Row(
               children: [
-                Text('Avance reportado', style: Theme.of(context).textTheme.bodySmall),
+                Text('Avance del proyecto', style: Theme.of(context).textTheme.bodySmall),
                 const Spacer(),
                 Text(
                   '${progress.toStringAsFixed(0)}%',

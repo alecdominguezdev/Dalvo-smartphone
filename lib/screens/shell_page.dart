@@ -1,14 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../models/mobile_models.dart';
 import '../services/api_client.dart';
+import '../services/budget_notification_service.dart';
+import '../services/shared_document_service.dart';
 import '../theme/dalvo_theme.dart';
 import '../widgets/dalvo_widgets.dart';
 import 'home_page.dart';
+import 'document_assignment_page.dart';
 import 'login_page.dart';
+import 'budgets_page.dart';
+import 'attendance_page.dart';
 import 'profile_page.dart';
 import 'projects_page.dart';
-import 'reports_overview_page.dart';
 
 class DalvoShellPage extends StatefulWidget {
   const DalvoShellPage({super.key});
@@ -17,13 +23,78 @@ class DalvoShellPage extends StatefulWidget {
   State<DalvoShellPage> createState() => _DalvoShellPageState();
 }
 
-class _DalvoShellPageState extends State<DalvoShellPage> {
+class _DalvoShellPageState extends State<DalvoShellPage> with WidgetsBindingObserver {
   int _index = 0;
+  bool _openingShared = false;
+  int _pendingBudgets = 0;
+  Set<int>? _knownPendingBudgetIds;
+  Timer? _budgetTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    BudgetNotificationService.instance.initialize();
+    SharedDocumentService.instance.addListener(_handleSharedDocuments);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _handleSharedDocuments();
+      _refreshBudgetAlerts();
+    });
+    _budgetTimer = Timer.periodic(const Duration(minutes: 1), (_) => _refreshBudgetAlerts());
+  }
+
+  @override
+  void dispose() {
+    SharedDocumentService.instance.removeListener(_handleSharedDocuments);
+    WidgetsBinding.instance.removeObserver(this);
+    _budgetTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) _refreshBudgetAlerts();
+  }
+
+  Future<void> _refreshBudgetAlerts() async {
+    try {
+      final rows = await ApiClient.instance.budgets();
+      final pending = rows.where((row) {
+        final status = '${row['status'] ?? ''}'.toLowerCase();
+        return status.contains('espera de aprob') || status == 'pendiente' || status == 'sin aprobar';
+      }).toList()
+        ..sort((a, b) => '${b['updatedAt'] ?? b['createdAt'] ?? ''}'.compareTo('${a['updatedAt'] ?? a['createdAt'] ?? ''}'));
+      final ids = pending.map((row) => int.tryParse('${row['id']}') ?? 0).where((id) => id > 0).toSet();
+      if (_knownPendingBudgetIds != null) {
+        final newCount = ids.difference(_knownPendingBudgetIds!).length;
+        if (newCount > 0 && mounted) {
+          BudgetNotificationService.instance.showNewBudget(count: newCount);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(newCount == 1 ? 'Nuevo presupuesto pendiente de aprobación.' : '$newCount nuevos presupuestos pendientes de aprobación.'),
+            action: SnackBarAction(label: 'Ver', onPressed: () => _goTo('budgets')),
+          ));
+        }
+      }
+      _knownPendingBudgetIds = ids;
+      BudgetNotificationService.instance.setBudgetBadge(pending.length);
+      if (mounted) setState(() => _pendingBudgets = pending.length);
+    } catch (_) {
+      // El usuario puede no tener permiso de presupuesto; la navegación sigue disponible.
+    }
+  }
+
+  Future<void> _handleSharedDocuments() async {
+    if (!mounted || _openingShared || !SharedDocumentService.instance.hasPending) return;
+    _openingShared = true;
+    final files = SharedDocumentService.instance.takePending();
+    await Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) => DocumentAssignmentPage(initialFiles: files, source: 'compartido'),
+    ));
+    _openingShared = false;
+  }
 
   MobileUser? get _user => ApiClient.instance.currentUser;
   MobileAccessProfile? get _access => ApiClient.instance.currentAccess;
-  bool get _canSupervise => _access?.canUseSupervision == true;
-
   List<_Destination> get _destinations => [
         const _Destination(
           label: 'Inicio',
@@ -31,24 +102,19 @@ class _DalvoShellPageState extends State<DalvoShellPage> {
           selectedIcon: Icons.home_rounded,
           keyName: 'home',
         ),
-        if (_canSupervise)
-          const _Destination(
-            label: 'Proyectos',
-            icon: Icons.dashboard_outlined,
-            selectedIcon: Icons.dashboard_rounded,
-            keyName: 'projects',
-          ),
-        if (_canSupervise)
-          const _Destination(
-            label: 'Reportes',
-            icon: Icons.description_outlined,
-            selectedIcon: Icons.description_rounded,
-            keyName: 'reports',
-          ),
+        _Destination(
+          label: 'Presupuestos',
+          icon: Icons.request_quote_outlined,
+          selectedIcon: Icons.request_quote_rounded,
+          keyName: 'budgets',
+          badge: _pendingBudgets,
+        ),
+        const _Destination(label: 'Asistencia', icon: Icons.fingerprint_rounded, selectedIcon: Icons.fingerprint_rounded, keyName: 'attendance'),
+        const _Destination(label: 'Proyectos', icon: Icons.dashboard_outlined, selectedIcon: Icons.dashboard_rounded, keyName: 'projects'),
         const _Destination(
-          label: 'Perfil',
-          icon: Icons.person_outline_rounded,
-          selectedIcon: Icons.person_rounded,
+          label: 'Ajustes',
+          icon: Icons.settings_outlined,
+          selectedIcon: Icons.settings_rounded,
           keyName: 'account',
         ),
       ];
@@ -71,15 +137,19 @@ class _DalvoShellPageState extends State<DalvoShellPage> {
     switch (destination.keyName) {
       case 'projects':
         return const ProjectsPage(embedded: true);
-      case 'reports':
-        return const ReportsOverviewPage();
+      case 'budgets':
+        return const BudgetsPage();
+      case 'attendance':
+        return const AttendancePage();
       case 'account':
         return ProfilePage(onLogout: _logout);
       default:
         return HomePage(
-          onOpenProjects: _canSupervise ? () => _goTo('projects') : null,
-          onOpenReports: _canSupervise ? () => _goTo('reports') : null,
+          onOpenProjects: () => _goTo('projects'),
+          onOpenBudgets: () => _goTo('budgets'),
+          onOpenAttendance: () => _goTo('attendance'),
           onOpenProfile: () => _goTo('account'),
+          pendingBudgets: _pendingBudgets,
         );
     }
   }
@@ -106,6 +176,15 @@ class _DalvoShellPageState extends State<DalvoShellPage> {
         titleSpacing: 9,
         title: const DalvoLogo(width: 104),
         actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 4),
+            child: _RoundAction(
+              icon: Icons.add_link,
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => const DocumentAssignmentPage(),
+              )),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 14),
             child: InkWell(
@@ -139,6 +218,10 @@ class _DalvoShellPageState extends State<DalvoShellPage> {
           Navigator.of(context).pop();
           _goTo(key);
         },
+        onOpenPage: (page) {
+          Navigator.of(context).pop();
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) => page));
+        },
         onLogout: () {
           Navigator.of(context).pop();
           _logout();
@@ -156,7 +239,7 @@ class _DalvoShellPageState extends State<DalvoShellPage> {
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
             color: DalvoColors.ink,
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(10),
             boxShadow: const [
               BoxShadow(
                 color: Color(0x1A000000),
@@ -188,12 +271,14 @@ class _Destination {
   final IconData icon;
   final IconData selectedIcon;
   final String keyName;
+  final int badge;
 
   const _Destination({
     required this.label,
     required this.icon,
     required this.selectedIcon,
     required this.keyName,
+    this.badge = 0,
   });
 }
 
@@ -222,14 +307,29 @@ class _BottomDestination extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 180),
-                child: Icon(
-                  selected ? destination.selectedIcon : destination.icon,
-                  key: ValueKey(selected),
-                  size: 21,
-                  color: selected ? DalvoColors.ink : const Color(0xFFB5BEC3),
+              Stack(clipBehavior: Clip.none, children: [
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 180),
+                  child: Icon(
+                    selected ? destination.selectedIcon : destination.icon,
+                    key: ValueKey(selected),
+                    size: 21,
+                    color: selected ? DalvoColors.ink : const Color(0xFFB5BEC3),
+                  ),
                 ),
+                if (destination.badge > 0)
+                  Positioned(
+                    right: -12,
+                    top: -9,
+                    child: Container(
+                      constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      alignment: Alignment.center,
+                      decoration: const BoxDecoration(color: DalvoColors.danger, shape: BoxShape.circle),
+                      child: Text('${destination.badge}', style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.w900)),
+                    ),
+                  ),
+              ],
               ),
               const SizedBox(height: 4),
               Text(
@@ -272,18 +372,19 @@ class _DalvoDrawer extends StatelessWidget {
   final MobileUser? user;
   final MobileAccessProfile? access;
   final ValueChanged<String> onGoTo;
+  final ValueChanged<Widget> onOpenPage;
   final VoidCallback onLogout;
 
   const _DalvoDrawer({
     required this.user,
     required this.access,
     required this.onGoTo,
+    required this.onOpenPage,
     required this.onLogout,
   });
 
   @override
   Widget build(BuildContext context) {
-    final canSupervise = access?.canUseSupervision == true;
     return Drawer(
       backgroundColor: DalvoColors.surface,
       shape: const RoundedRectangleBorder(
@@ -346,53 +447,17 @@ class _DalvoDrawer extends StatelessWidget {
               ),
             ),
             const Divider(height: 1),
-            const SizedBox(height: 8),
+            Expanded(child: ListView(padding: const EdgeInsets.symmetric(vertical: 8), children: [
             _DrawerItem(icon: Icons.home_outlined, label: 'Inicio', onTap: () => onGoTo('home')),
-            if (canSupervise)
-              _DrawerItem(
-                icon: Icons.dashboard_outlined,
-                label: 'Proyectos',
-                onTap: () => onGoTo('projects'),
-              ),
-            if (canSupervise)
-              _DrawerItem(
-                icon: Icons.description_outlined,
-                label: 'Reportes',
-                onTap: () => onGoTo('reports'),
-              ),
+            _DrawerItem(icon: Icons.request_quote_outlined, label: 'Presupuestos', onTap: () => onGoTo('budgets')),
+            _DrawerItem(icon: Icons.fingerprint_rounded, label: 'Asistencia', onTap: () => onGoTo('attendance')),
+            _DrawerItem(icon: Icons.dashboard_outlined, label: 'Proyectos', onTap: () => onGoTo('projects')),
             _DrawerItem(
-              icon: Icons.person_outline_rounded,
+              icon: Icons.settings_outlined,
               label: 'Ajustes',
               onTap: () => onGoTo('account'),
             ),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                decoration: BoxDecoration(
-                  color: DalvoColors.primarySoft,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.science_outlined, size: 17, color: DalvoColors.primaryDark),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'Pruebas',
-                        style: TextStyle(
-                          color: DalvoColors.primaryDark,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
+            ])),
             _DrawerItem(
               icon: Icons.logout_rounded,
               label: 'Cerrar sesión',
@@ -442,4 +507,13 @@ class _DrawerItem extends StatelessWidget {
           onTap: onTap,
         ),
       );
+}
+
+class _ModuleAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+  const _ModuleAppBar(this.title);
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  @override
+  Widget build(BuildContext context) => AppBar(title: Text(title));
 }

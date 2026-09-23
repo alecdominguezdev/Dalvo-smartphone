@@ -22,7 +22,7 @@ class DalvoColors {
 }
 
 ThemeData buildDalvoTheme() {
-  const radius = BorderRadius.all(Radius.circular(12));
+  const radius = BorderRadius.all(Radius.circular(8));
   final scheme = ColorScheme.fromSeed(
     seedColor: DalvoColors.primary,
     brightness: Brightness.light,
@@ -96,7 +96,7 @@ ThemeData buildDalvoTheme() {
         foregroundColor: Colors.white,
         minimumSize: const Size(0, 50),
         padding: const EdgeInsets.symmetric(horizontal: 18),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(11)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         textStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5),
       ),
     ),
@@ -106,7 +106,7 @@ ThemeData buildDalvoTheme() {
         minimumSize: const Size(0, 48),
         padding: const EdgeInsets.symmetric(horizontal: 16),
         side: const BorderSide(color: DalvoColors.line),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(11)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
       ),
     ),

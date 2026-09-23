@@ -1,6 +1,7 @@
-name: dalvo_mobile
+﻿name: dalvo_mobile
 description: Dalvo Móvil - Supervisión de proyectos
 publish_to: 'none'
+
 version: 0.2.0+2
 
 environment:
@@ -9,20 +10,34 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  http: ^1.2.2
-  flutter_secure_storage: ^9.2.2
-  image_picker: ^1.1.2
-  geolocator: ^13.0.1
+
+  http: ^1.5.0
+  flutter_secure_storage: ^11.2.0
+  geolocator: ^14.0.2
   local_auth: ^2.3.0
+  image_picker: ^1.2.3
+  file_picker: ^13.1.0
+  listen_sharing_intent: ^1.9.2
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
+
   assets:
     - assets/dalvo/logo-dalvo.png
     - assets/dalvo/logo-dalvo-blanco.png
     - assets/dalvo/favicon.png
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/dalvo/logo-favicon.png
+  remove_alpha_ios: true
+  min_sdk_android: 21

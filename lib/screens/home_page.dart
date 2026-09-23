@@ -8,14 +8,18 @@ import 'project_page.dart';
 
 class HomePage extends StatefulWidget {
   final VoidCallback? onOpenProjects;
-  final VoidCallback? onOpenReports;
+  final VoidCallback onOpenBudgets;
+  final VoidCallback onOpenAttendance;
   final VoidCallback onOpenProfile;
+  final int pendingBudgets;
 
   const HomePage({
     super.key,
     required this.onOpenProjects,
-    required this.onOpenReports,
+    required this.onOpenBudgets,
+    required this.onOpenAttendance,
     required this.onOpenProfile,
+    required this.pendingBudgets,
   });
 
   @override
@@ -52,7 +56,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final user = ApiClient.instance.currentUser;
-    final access = ApiClient.instance.currentAccess;
     final latest = _projects.isEmpty ? null : _projects.first;
     final pending = _projects
         .where((p) => (p.lastReportState ?? '').toUpperCase().contains('INCOMPLETO'))
@@ -75,6 +78,33 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const SizedBox(height: 22),
+          if (widget.pendingBudgets > 0) ...[
+            DalvoAnimatedEntry(
+              delayMs: 40,
+              child: InkWell(
+                onTap: widget.onOpenBudgets,
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    color: DalvoColors.warningSoft,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: DalvoColors.warning.withOpacity(.22)),
+                  ),
+                  child: Row(children: [
+                    const Icon(Icons.notifications_active_outlined, color: DalvoColors.warning),
+                    const SizedBox(width: 11),
+                    Expanded(child: Text(
+                      'Tienes ${widget.pendingBudgets} presupuesto${widget.pendingBudgets == 1 ? '' : 's'} pendiente${widget.pendingBudgets == 1 ? '' : 's'} de aprobación.',
+                      style: const TextStyle(color: DalvoColors.warning, fontWeight: FontWeight.w800),
+                    )),
+                    const Icon(Icons.chevron_right_rounded, color: DalvoColors.warning),
+                  ]),
+                ),
+              ),
+            ),
+            const SizedBox(height: 18),
+          ],
           if (_canSupervise) ...[
             DalvoAnimatedEntry(
               delayMs: 70,
@@ -113,8 +143,10 @@ class _HomePageState extends State<HomePage> {
             delayMs: 160,
             child: _QuickActions(
               canSupervise: _canSupervise,
+              pendingBudgets: widget.pendingBudgets,
+              onBudgets: widget.onOpenBudgets,
+              onAttendance: widget.onOpenAttendance,
               onProjects: widget.onOpenProjects,
-              onReports: widget.onOpenReports,
               onProfile: widget.onOpenProfile,
             ),
           ),
@@ -157,18 +189,6 @@ class _HomePageState extends State<HomePage> {
                 child: _RecentProjectCard(project: latest),
               ),
           ],
-          const SizedBox(height: 26),
-          DalvoAnimatedEntry(
-            delayMs: 260,
-            child: const DalvoSectionTitle(
-              title: 'Mis módulos',
-            ),
-          ),
-          const SizedBox(height: 12),
-          DalvoAnimatedEntry(
-            delayMs: 300,
-            child: _ModulesCard(access: access),
-          ),
         ],
       ),
     );
@@ -319,20 +339,36 @@ class _HeroPanel extends StatelessWidget {
 
 class _QuickActions extends StatelessWidget {
   final bool canSupervise;
+  final int pendingBudgets;
+  final VoidCallback onBudgets;
+  final VoidCallback onAttendance;
   final VoidCallback? onProjects;
-  final VoidCallback? onReports;
   final VoidCallback onProfile;
 
   const _QuickActions({
     required this.canSupervise,
+    required this.pendingBudgets,
+    required this.onBudgets,
+    required this.onAttendance,
     required this.onProjects,
-    required this.onReports,
     required this.onProfile,
   });
 
   @override
   Widget build(BuildContext context) {
     final actions = <_QuickActionData>[
+      _QuickActionData(
+        icon: Icons.request_quote_outlined,
+        label: pendingBudgets > 0 ? 'Presupuestos ($pendingBudgets)' : 'Presupuestos',
+        onTap: onBudgets,
+        accent: DalvoColors.warning,
+      ),
+      _QuickActionData(
+        icon: Icons.fingerprint_rounded,
+        label: 'Asistencia',
+        onTap: onAttendance,
+        accent: DalvoColors.primary,
+      ),
       if (canSupervise)
         _QuickActionData(
           icon: Icons.location_on_outlined,
@@ -340,16 +376,9 @@ class _QuickActions extends StatelessWidget {
           onTap: onProjects!,
           accent: DalvoColors.primary,
         ),
-      if (canSupervise)
-        _QuickActionData(
-          icon: Icons.add_a_photo_outlined,
-          label: 'Reportes',
-          onTap: onReports!,
-          accent: const Color(0xFF6B6FD8),
-        ),
       _QuickActionData(
-        icon: Icons.manage_accounts_outlined,
-        label: 'Perfil',
+        icon: Icons.settings_outlined,
+        label: 'Ajustes',
         onTap: onProfile,
         accent: const Color(0xFF2B8A63),
       ),
@@ -483,75 +512,5 @@ class _RecentProjectCard extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class _ModulesCard extends StatelessWidget {
-  final MobileAccessProfile? access;
-  const _ModulesCard({required this.access});
-
-  @override
-  Widget build(BuildContext context) {
-    final modules = access?.allowedModules ?? const <DalvoModuleAccess>[];
-    if (modules.isEmpty) {
-      return const DalvoEmptyState(
-        icon: Icons.lock_outline_rounded,
-        title: 'Sin módulos asignados',
-        message: 'Dalvo no reportó módulos adicionales para este usuario.',
-      );
-    }
-
-    return DalvoSurface(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Column(
-        children: [
-          for (var i = 0; i < modules.length; i++) ...[
-            _ModuleRow(module: modules[i]),
-            if (i < modules.length - 1) const Divider(height: 1, indent: 62, endIndent: 12),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-class _ModuleRow extends StatelessWidget {
-  final DalvoModuleAccess module;
-  const _ModuleRow({required this.module});
-
-  @override
-  Widget build(BuildContext context) => ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
-        leading: DalvoIconTile(icon: _moduleIcon(module.key), size: 39),
-        title: Text(module.label, style: const TextStyle(fontWeight: FontWeight.w800)),
-        subtitle: Text(module.mobileAvailable ? 'Disponible en Dalvo Móvil' : 'Acceso en Dalvo Web'),
-        trailing: Icon(
-          module.mobileAvailable ? Icons.phone_android_outlined : Icons.language_outlined,
-          size: 19,
-          color: DalvoColors.muted,
-        ),
-      );
-
-  static IconData _moduleIcon(String key) {
-    switch (key) {
-      case 'presupuesto':
-        return Icons.request_quote_outlined;
-      case 'compras':
-        return Icons.shopping_bag_outlined;
-      case 'cuentas-pagar':
-        return Icons.payments_outlined;
-      case 'cuentas-cobrar':
-        return Icons.receipt_long_outlined;
-      case 'inventario':
-        return Icons.inventory_2_outlined;
-      case 'tareas':
-        return Icons.task_alt_outlined;
-      case 'reportes':
-        return Icons.bar_chart_outlined;
-      case 'exportaciones':
-        return Icons.file_download_outlined;
-      default:
-        return Icons.grid_view_rounded;
-    }
   }
 }

@@ -72,7 +72,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
         longitude: position.longitude,
         accuracyMeters: position.accuracy,
       );
-      if (reportId <= 0) throw Exception('No se pudo crear el reporte.');
+      if (reportId <= 0) throw Exception('No se pudo crear el informe.');
 
       if (_photos.isNotEmpty) {
         await ApiClient.instance.uploadPhotos(
@@ -85,7 +85,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Reporte enviado.')),
+        const SnackBar(content: Text('Informe guardado en Dalvo.')),
       );
       Navigator.of(context).pop(true);
     } catch (error) {
@@ -106,7 +106,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
       backgroundColor: DalvoColors.surface,
       appBar: AppBar(
         backgroundColor: DalvoColors.surface,
-        title: const Text('Nuevo reporte'),
+        title: const Text('Nuevo informe'),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(18, 4, 18, 118),
@@ -115,6 +115,28 @@ class _ReportFormPageState extends State<ReportFormPage> {
             child: _ProjectHeader(
               folio: folio,
               title: widget.project.title,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.all(13),
+            decoration: BoxDecoration(
+              color: DalvoColors.primarySoft,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: DalvoColors.primary.withOpacity(.14)),
+            ),
+            child: const Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.info_outline_rounded, color: DalvoColors.primaryDark, size: 19),
+                SizedBox(width: 9),
+                Expanded(
+                  child: Text(
+                    'Este informe se guardará en Dalvo para revisión del supervisor y Administración. No se enviará automáticamente al cliente por correo.',
+                    style: TextStyle(color: DalvoColors.primaryDark, fontSize: 12, height: 1.35, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ],
             ),
           ),
           const _FormDivider(),
@@ -168,7 +190,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
           DalvoAnimatedEntry(
             delayMs: 70,
             child: _FormSection(
-              title: 'Reporte',
+              title: 'Informe',
               icon: Icons.description_outlined,
               child: Column(
                 children: [
@@ -373,8 +395,8 @@ class _ReportFormPageState extends State<ReportFormPage> {
                     height: 18,
                     child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                   )
-                : const Icon(Icons.send_rounded, size: 18),
-            label: Text(_saving ? 'Enviando...' : 'Enviar reporte'),
+                : const Icon(Icons.save_outlined, size: 18),
+            label: Text(_saving ? 'Guardando...' : 'Guardar informe'),
           ),
         ),
       ),

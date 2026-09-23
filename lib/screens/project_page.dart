@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../models/mobile_models.dart';
 import '../services/api_client.dart';
-import '../services/biometric_service.dart';
-import '../services/location_service.dart';
 import '../theme/dalvo_theme.dart';
 import '../widgets/dalvo_widgets.dart';
 import 'report_form_page.dart';
@@ -18,10 +16,8 @@ class ProjectPage extends StatefulWidget {
 
 class _ProjectPageState extends State<ProjectPage> {
   bool _loading = true;
-  bool _actionLoading = false;
   String? _error;
   List<SupervisionReport> _reports = const [];
-  AttendanceStatus? _attendance;
 
   @override
   void initState() {
@@ -35,52 +31,11 @@ class _ProjectPageState extends State<ProjectPage> {
       _error = null;
     });
     try {
-      final results = await Future.wait([
-        ApiClient.instance.reports(widget.project.id),
-        ApiClient.instance.attendanceStatus(widget.project.id),
-      ]);
-      _reports = results[0] as List<SupervisionReport>;
-      _attendance = results[1] as AttendanceStatus;
+      _reports = await ApiClient.instance.reports(widget.project.id);
     } catch (error) {
       _error = error.toString();
     } finally {
       if (mounted) setState(() => _loading = false);
-    }
-  }
-
-  Future<void> _attendanceAction() async {
-    if (_actionLoading) return;
-    setState(() => _actionLoading = true);
-    try {
-      final biometric = await BiometricService.verify();
-      if (!biometric.verified) return;
-      final position = await LocationService.currentPosition();
-      final event = (_attendance?.checkedIn ?? false) ? 'SALIDA' : 'ENTRADA';
-      final result = await ApiClient.instance.registerAttendance(
-        projectId: widget.project.id,
-        event: event,
-        latitude: position.latitude,
-        longitude: position.longitude,
-        accuracyMeters: position.accuracy,
-        biometricVerified: biometric.verified,
-        biometricMethod: biometric.method,
-      );
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            '$event registrada · ${result['distanceMeters'] ?? '-'} m del punto del proyecto',
-          ),
-        ),
-      );
-      await _load();
-    } catch (error) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error.toString())),
-      );
-    } finally {
-      if (mounted) setState(() => _actionLoading = false);
     }
   }
 
@@ -94,7 +49,6 @@ class _ProjectPageState extends State<ProjectPage> {
   @override
   Widget build(BuildContext context) {
     final project = widget.project;
-    final checkedIn = _attendance?.checkedIn ?? false;
     final progress = (project.lastProgress ?? 0).clamp(0, 100).toDouble();
     final closed = project.state.trim().toLowerCase() == 'cerrada';
 
@@ -164,84 +118,23 @@ class _ProjectPageState extends State<ProjectPage> {
                           _DarkBadge(icon: Icons.person_outline_rounded, label: project.supervisor),
                       ],
                     ),
-                    if (project.lastProgress != null) ...[
-                      const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          const Text(
-                            'Avance reportado',
-                            style: TextStyle(color: Color(0xFFB8C1C6), fontSize: 12),
-                          ),
-                          const Spacer(),
-                          Text(
-                            '${progress.toStringAsFixed(0)}%',
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(9),
-                        child: LinearProgressIndicator(
-                          value: progress / 100,
-                          minHeight: 7,
-                          backgroundColor: Colors.white.withOpacity(.10),
-                          color: closed ? const Color(0xFF61D09C) : const Color(0xFF72D4F7),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 14),
-            DalvoAnimatedEntry(
-              delayMs: 70,
-              child: DalvoSurface(
-                padding: const EdgeInsets.all(18),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
+                    const SizedBox(height: 20),
                     Row(
                       children: [
-                        DalvoIconTile(
-                          icon: checkedIn ? Icons.location_on_rounded : Icons.fingerprint_rounded,
-                          color: checkedIn ? DalvoColors.success : DalvoColors.primary,
-                          background: checkedIn ? DalvoColors.successSoft : DalvoColors.primarySoft,
-                          size: 44,
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Chequeo en proyecto', style: Theme.of(context).textTheme.titleMedium),
-                              const SizedBox(height: 2),
-                              Text(
-                                checkedIn ? 'Entrada activa' : 'Sin entrada activa',
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            ],
-                          ),
-                        ),
-                        DalvoBadge(
-                          label: checkedIn ? 'EN SITIO' : 'FUERA',
-                          foreground: checkedIn ? DalvoColors.success : DalvoColors.muted,
-                          background: checkedIn ? DalvoColors.successSoft : DalvoColors.surfaceSoft,
-                        ),
+                        const Text('Avance del proyecto', style: TextStyle(color: Color(0xFFB8C1C6), fontSize: 12)),
+                        const Spacer(),
+                        Text('${progress.toStringAsFixed(0)}%', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
                       ],
                     ),
-                    const SizedBox(height: 14),
-                    FilledButton.icon(
-                      onPressed: _actionLoading ? null : _attendanceAction,
-                      icon: _actionLoading
-                          ? const SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                            )
-                          : Icon(checkedIn ? Icons.logout_rounded : Icons.fingerprint_rounded),
-                      label: Text(checkedIn ? 'Registrar salida' : 'Registrar entrada'),
+                    const SizedBox(height: 8),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(9),
+                      child: LinearProgressIndicator(
+                        value: progress / 100,
+                        minHeight: 7,
+                        backgroundColor: Colors.white.withOpacity(.10),
+                        color: closed ? const Color(0xFF61D09C) : const Color(0xFF72D4F7),
+                      ),
                     ),
                   ],
                 ),
@@ -251,7 +144,7 @@ class _ProjectPageState extends State<ProjectPage> {
             DalvoAnimatedEntry(
               delayMs: 120,
               child: DalvoSectionTitle(
-                title: 'Reportes de supervisión',
+                title: 'Informes de supervisión',
               ),
             ),
             const SizedBox(height: 12),
@@ -269,8 +162,8 @@ class _ProjectPageState extends State<ProjectPage> {
             else if (_reports.isEmpty)
               const DalvoEmptyState(
                 icon: Icons.description_outlined,
-                title: 'Aún no hay reportes',
-                message: 'Crea el primer reporte de supervisión de este proyecto.',
+                title: 'Aún no hay informes',
+                message: 'Crea el primer informe de supervisión de este proyecto.',
               )
             else
               ...List.generate(
@@ -279,7 +172,10 @@ class _ProjectPageState extends State<ProjectPage> {
                   padding: const EdgeInsets.only(bottom: 10),
                   child: DalvoAnimatedEntry(
                     delayMs: 30 * (index > 5 ? 5 : index),
-                    child: _ReportCard(report: _reports[index]),
+                    child: _ReportCard(
+                      report: _reports[index],
+                      label: 'I${_reports.length - index}-${project.folio.isEmpty ? project.id : project.folio}',
+                    ),
                   ),
                 ),
               ),
@@ -292,7 +188,7 @@ class _ProjectPageState extends State<ProjectPage> {
         child: FilledButton.icon(
           onPressed: _newReport,
           icon: const Icon(Icons.add_a_photo_outlined),
-          label: const Text('Nuevo reporte'),
+          label: const Text('Nuevo informe'),
         ),
       ),
     );
@@ -328,7 +224,8 @@ class _DarkBadge extends StatelessWidget {
 
 class _ReportCard extends StatelessWidget {
   final SupervisionReport report;
-  const _ReportCard({required this.report});
+  final String label;
+  const _ReportCard({required this.report, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -357,7 +254,9 @@ class _ReportCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(dateText, style: const TextStyle(fontWeight: FontWeight.w900)),
+                    Text(label, style: const TextStyle(fontWeight: FontWeight.w900)),
+                    const SizedBox(height: 2),
+                    Text(dateText, style: Theme.of(context).textTheme.bodySmall),
                     if (report.supervisor.isNotEmpty) ...[
                       const SizedBox(height: 2),
                       Text(report.supervisor, style: Theme.of(context).textTheme.bodySmall),

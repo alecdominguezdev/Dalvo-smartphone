@@ -210,13 +210,334 @@ class SupervisionReport {
 class AttendanceStatus {
   final bool checkedIn;
   final Map<String, dynamic>? lastEvent;
+  final List<AttendanceLocation> locations;
 
-  const AttendanceStatus({required this.checkedIn, this.lastEvent});
+  const AttendanceStatus({
+    required this.checkedIn,
+    this.lastEvent,
+    this.locations = const [],
+  });
 
   factory AttendanceStatus.fromJson(Map<String, dynamic> json) => AttendanceStatus(
         checkedIn: json['checkedIn'] == true,
         lastEvent: json['lastEvent'] is Map<String, dynamic>
             ? json['lastEvent'] as Map<String, dynamic>
             : null,
+        locations: (json['locations'] as List? ?? const [])
+            .whereType<Map<String, dynamic>>()
+            .map(AttendanceLocation.fromJson)
+            .toList(),
+      );
+}
+
+class AttendanceUser {
+  final int id;
+  final String name;
+  final String username;
+
+  const AttendanceUser({required this.id, required this.name, required this.username});
+
+  factory AttendanceUser.fromJson(Map<String, dynamic> json) => AttendanceUser(
+        id: int.tryParse('${json['id'] ?? 0}') ?? 0,
+        name: '${json['name'] ?? ''}',
+        username: '${json['username'] ?? ''}',
+      );
+
+  String get displayName => name.trim().isEmpty ? username : name.trim();
+}
+
+class AttendanceLocation {
+  final int id;
+  final String name;
+  final double latitude;
+  final double longitude;
+  final int radiusMeters;
+  final bool active;
+  final List<AttendanceUser> assignedUsers;
+
+  const AttendanceLocation({
+    required this.id,
+    required this.name,
+    required this.latitude,
+    required this.longitude,
+    required this.radiusMeters,
+    this.active = true,
+    this.assignedUsers = const [],
+  });
+
+  factory AttendanceLocation.fromJson(Map<String, dynamic> json) => AttendanceLocation(
+        id: int.tryParse('${json['id'] ?? 0}') ?? 0,
+        name: '${json['name'] ?? ''}',
+        latitude: double.tryParse('${json['latitude'] ?? 0}') ?? 0,
+        longitude: double.tryParse('${json['longitude'] ?? 0}') ?? 0,
+        radiusMeters: int.tryParse('${json['radiusMeters'] ?? 300}') ?? 300,
+        active: json['active'] != false,
+        assignedUsers: (json['assignedUsers'] as List? ?? const [])
+            .whereType<Map<String, dynamic>>()
+            .map(AttendanceUser.fromJson)
+            .toList(),
+      );
+}
+
+class AttendanceMovement {
+  final int id;
+  final String event;
+  final int locationId;
+  final String locationName;
+  final int? userId;
+  final String userName;
+  final double distanceMeters;
+  final bool insideGeofence;
+  final DateTime? createdAt;
+
+  const AttendanceMovement({
+    required this.id,
+    required this.event,
+    required this.locationId,
+    required this.locationName,
+    required this.userId,
+    required this.userName,
+    required this.distanceMeters,
+    required this.insideGeofence,
+    required this.createdAt,
+  });
+
+  factory AttendanceMovement.fromJson(Map<String, dynamic> json) => AttendanceMovement(
+        id: int.tryParse('${json['id'] ?? 0}') ?? 0,
+        event: '${json['event'] ?? ''}',
+        locationId: int.tryParse('${json['locationId'] ?? 0}') ?? 0,
+        locationName: '${json['locationName'] ?? ''}',
+        userId: json['userId'] == null ? null : int.tryParse('${json['userId']}'),
+        userName: '${json['userName'] ?? ''}',
+        distanceMeters: double.tryParse('${json['distanceMeters'] ?? 0}') ?? 0,
+        insideGeofence: json['insideGeofence'] != false,
+        createdAt: json['createdAt'] == null ? null : DateTime.tryParse('${json['createdAt']}'),
+      );
+}
+
+class DocumentTarget {
+  final int id;
+  final String folio;
+  final String company;
+  final String title;
+  final String reference;
+  final String state;
+  final String status;
+  final double amount;
+
+  const DocumentTarget({
+    required this.id,
+    required this.folio,
+    required this.company,
+    required this.title,
+    required this.reference,
+    required this.state,
+    required this.status,
+    required this.amount,
+  });
+
+  factory DocumentTarget.fromJson(Map<String, dynamic> json) => DocumentTarget(
+        id: int.tryParse('${json['id'] ?? 0}') ?? 0,
+        folio: '${json['folio'] ?? ''}',
+        company: '${json['company'] ?? ''}',
+        title: '${json['title'] ?? ''}',
+        reference: '${json['reference'] ?? ''}',
+        state: '${json['state'] ?? ''}',
+        status: '${json['status'] ?? ''}',
+        amount: double.tryParse('${json['amount'] ?? 0}') ?? 0,
+      );
+}
+
+class FinancialAccount {
+  final int id;
+  final int projectId;
+  final String folio;
+  final String company;
+  final String title;
+  final String po;
+  final String state;
+  final String pending;
+  final double amount;
+  final int filesCount;
+  final List<String> fileTypes;
+
+  const FinancialAccount({
+    required this.id,
+    required this.projectId,
+    required this.folio,
+    required this.company,
+    required this.title,
+    required this.po,
+    required this.state,
+    required this.pending,
+    required this.amount,
+    required this.filesCount,
+    required this.fileTypes,
+  });
+
+  factory FinancialAccount.fromJson(Map<String, dynamic> json) => FinancialAccount(
+        id: int.tryParse('${json['id'] ?? 0}') ?? 0,
+        projectId: int.tryParse('${json['projectId'] ?? 0}') ?? 0,
+        folio: '${json['folio'] ?? ''}',
+        company: '${json['company'] ?? ''}',
+        title: '${json['title'] ?? ''}',
+        po: '${json['po'] ?? ''}',
+        state: '${json['state'] ?? ''}',
+        pending: '${json['pending'] ?? ''}',
+        amount: double.tryParse('${json['amount'] ?? 0}') ?? 0,
+        filesCount: int.tryParse('${json['filesCount'] ?? 0}') ?? 0,
+        fileTypes: (json['fileTypes'] as List? ?? const []).map((e) => '$e').toList(),
+      );
+}
+
+class BudgetApproval {
+  final int id;
+  final int projectId;
+  final String quote;
+  final String projectFolio;
+  final String company;
+  final String title;
+  final int version;
+  final String status;
+  final double subtotal;
+
+  const BudgetApproval({
+    required this.id,
+    required this.projectId,
+    required this.quote,
+    required this.projectFolio,
+    required this.company,
+    required this.title,
+    required this.version,
+    required this.status,
+    required this.subtotal,
+  });
+
+  factory BudgetApproval.fromJson(Map<String, dynamic> json) => BudgetApproval(
+        id: int.tryParse('${json['id'] ?? 0}') ?? 0,
+        projectId: int.tryParse('${json['projectId'] ?? 0}') ?? 0,
+        quote: '${json['quote'] ?? ''}',
+        projectFolio: '${json['projectFolio'] ?? ''}',
+        company: '${json['company'] ?? ''}',
+        title: '${json['title'] ?? ''}',
+        version: int.tryParse('${json['version'] ?? 0}') ?? 0,
+        status: '${json['status'] ?? ''}',
+        subtotal: double.tryParse('${json['subtotal'] ?? 0}') ?? 0,
+      );
+}
+
+class TeamAttendance {
+  final int id;
+  final int projectId;
+  final String supervisor;
+  final String event;
+  final double distanceMeters;
+  final bool insideGeofence;
+  final DateTime? createdAt;
+  final String folio;
+  final String company;
+  final String project;
+
+  const TeamAttendance({
+    required this.id,
+    required this.projectId,
+    required this.supervisor,
+    required this.event,
+    required this.distanceMeters,
+    required this.insideGeofence,
+    required this.createdAt,
+    required this.folio,
+    required this.company,
+    required this.project,
+  });
+
+  factory TeamAttendance.fromJson(Map<String, dynamic> json) => TeamAttendance(
+        id: int.tryParse('${json['id'] ?? 0}') ?? 0,
+        projectId: int.tryParse('${json['projectId'] ?? 0}') ?? 0,
+        supervisor: '${json['supervisor'] ?? ''}',
+        event: '${json['event'] ?? ''}',
+        distanceMeters: double.tryParse('${json['distanceMeters'] ?? 0}') ?? 0,
+        insideGeofence: json['insideGeofence'] == true,
+        createdAt: json['createdAt'] == null ? null : DateTime.tryParse('${json['createdAt']}'),
+        folio: '${json['folio'] ?? ''}',
+        company: '${json['company'] ?? ''}',
+        project: '${json['project'] ?? ''}',
+      );
+}
+
+class CompanyLocationTarget {
+  final int companyId;
+  final String company;
+  final String companyAddress;
+  final int? branchId;
+  final String branch;
+  final String address;
+  final int? locationId;
+  final String locationName;
+  final double? latitude;
+  final double? longitude;
+  final int radiusMeters;
+  final bool active;
+  final DateTime? updatedAt;
+
+  const CompanyLocationTarget({
+    required this.companyId,
+    required this.company,
+    required this.companyAddress,
+    required this.branchId,
+    required this.branch,
+    required this.address,
+    required this.locationId,
+    required this.locationName,
+    required this.latitude,
+    required this.longitude,
+    required this.radiusMeters,
+    required this.active,
+    required this.updatedAt,
+  });
+
+  factory CompanyLocationTarget.fromJson(Map<String, dynamic> json) => CompanyLocationTarget(
+        companyId: int.tryParse('${json['companyId'] ?? 0}') ?? 0,
+        company: '${json['company'] ?? ''}',
+        companyAddress: '${json['companyAddress'] ?? ''}',
+        branchId: json['branchId'] == null ? null : int.tryParse('${json['branchId']}'),
+        branch: '${json['branch'] ?? ''}',
+        address: '${json['address'] ?? ''}',
+        locationId: json['locationId'] == null ? null : int.tryParse('${json['locationId']}'),
+        locationName: '${json['locationName'] ?? ''}',
+        latitude: json['latitude'] == null ? null : double.tryParse('${json['latitude']}'),
+        longitude: json['longitude'] == null ? null : double.tryParse('${json['longitude']}'),
+        radiusMeters: int.tryParse('${json['radiusMeters'] ?? 300}') ?? 300,
+        active: json['active'] == true,
+        updatedAt: json['updatedAt'] == null ? null : DateTime.tryParse('${json['updatedAt']}'),
+      );
+
+  bool get configured => active && latitude != null && longitude != null;
+}
+
+class OperationsSummary {
+  final int projects;
+  final int pendingPayables;
+  final double payableAmount;
+  final int pendingReceivables;
+  final double receivableAmount;
+  final int draftSupervisionReports;
+
+  const OperationsSummary({
+    required this.projects,
+    required this.pendingPayables,
+    required this.payableAmount,
+    required this.pendingReceivables,
+    required this.receivableAmount,
+    required this.draftSupervisionReports,
+  });
+
+  factory OperationsSummary.fromJson(Map<String, dynamic> json) => OperationsSummary(
+        projects: int.tryParse('${json['projects'] ?? 0}') ?? 0,
+        pendingPayables: int.tryParse('${json['pendingPayables'] ?? 0}') ?? 0,
+        payableAmount: double.tryParse('${json['payableAmount'] ?? 0}') ?? 0,
+        pendingReceivables: int.tryParse('${json['pendingReceivables'] ?? 0}') ?? 0,
+        receivableAmount: double.tryParse('${json['receivableAmount'] ?? 0}') ?? 0,
+        draftSupervisionReports: int.tryParse('${json['draftSupervisionReports'] ?? 0}') ?? 0,
       );
 }

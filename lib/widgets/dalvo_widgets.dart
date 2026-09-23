@@ -8,12 +8,40 @@ class DalvoLogo extends StatelessWidget {
   const DalvoLogo({super.key, this.width = 112, this.white = false});
 
   @override
-  Widget build(BuildContext context) => Image.asset(
-        white ? 'assets/dalvo/logo-dalvo-blanco.png' : 'assets/dalvo/logo-dalvo.png',
-        width: width,
-        fit: BoxFit.contain,
-        filterQuality: FilterQuality.high,
-      );
+  Widget build(BuildContext context) {
+    final markSize = (width * .30).clamp(30.0, 48.0).toDouble();
+    return SizedBox(
+      width: width,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(markSize * .18),
+            child: Image.asset(
+              'assets/dalvo/logo-favicon.png',
+              width: markSize,
+              height: markSize,
+              fit: BoxFit.cover,
+              filterQuality: FilterQuality.high,
+            ),
+          ),
+          SizedBox(width: width * .07),
+          Expanded(
+            child: Text(
+              'DALVO',
+              maxLines: 1,
+              style: TextStyle(
+                color: white ? Colors.white : DalvoColors.ink,
+                fontWeight: FontWeight.w900,
+                fontSize: (width * .20).clamp(17.0, 29.0).toDouble(),
+                letterSpacing: -.8,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class DalvoAnimatedEntry extends StatelessWidget {
@@ -136,31 +164,25 @@ class DalvoSurface extends StatelessWidget {
     required this.child,
     this.padding = const EdgeInsets.all(16),
     this.color = DalvoColors.surface,
-    this.borderRadius = const BorderRadius.all(Radius.circular(12)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(8)),
     this.onTap,
   });
 
   @override
-  Widget build(BuildContext context) {
-    final content = Container(
-      padding: padding,
-      decoration: BoxDecoration(
+  Widget build(BuildContext context) => Material(
         color: color,
-        borderRadius: borderRadius,
-        border: Border.all(color: DalvoColors.line),
-      ),
-      child: child,
-    );
-    if (onTap == null) return content;
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: borderRadius,
-        onTap: onTap,
-        child: content,
-      ),
-    );
-  }
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: borderRadius,
+          side: const BorderSide(color: DalvoColors.line),
+        ),
+        child: onTap == null
+            ? Padding(padding: padding, child: child)
+            : InkWell(
+                onTap: onTap,
+                child: Padding(padding: padding, child: child),
+              ),
+      );
 }
 
 class DalvoIconTile extends StatelessWidget {

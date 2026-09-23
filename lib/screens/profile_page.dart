@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../models/mobile_models.dart';
 import '../services/api_client.dart';
 import '../theme/dalvo_theme.dart';
 import '../widgets/dalvo_widgets.dart';
@@ -12,15 +11,12 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = ApiClient.instance.currentUser;
-    final access = ApiClient.instance.currentAccess;
-    final branches = access?.branches ?? const <DalvoBranchAccess>[];
-
     return ListView(
       padding: const EdgeInsets.fromLTRB(18, 12, 18, 28),
       children: [
         const DalvoAnimatedEntry(
           child: DalvoSectionTitle(
-            title: 'Perfil',
+            title: 'Ajustes de la app',
           ),
         ),
         const SizedBox(height: 16),
@@ -34,42 +30,6 @@ class ProfilePage extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
-        if (branches.isNotEmpty) ...[
-          const SizedBox(height: 24),
-          const DalvoAnimatedEntry(
-            delayMs: 180,
-            child: DalvoSectionTitle(
-              title: 'Sucursales',
-            ),
-          ),
-          const SizedBox(height: 12),
-          DalvoAnimatedEntry(
-            delayMs: 220,
-            child: DalvoSurface(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Column(
-                children: [
-                  for (var i = 0; i < branches.length; i++) ...[
-                    ListTile(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
-                      leading: const DalvoIconTile(icon: Icons.storefront_outlined, size: 39),
-                      title: Text(
-                        '${branches[i].company} · ${branches[i].name}',
-                        style: const TextStyle(fontWeight: FontWeight.w800),
-                      ),
-                      subtitle: Text(
-                        '${branches[i].level.isEmpty ? 'Acceso' : branches[i].level} · ${branches[i].permissions.length} permisos',
-                      ),
-                    ),
-                    if (i < branches.length - 1)
-                      const Divider(height: 1, indent: 62, endIndent: 12),
-                  ],
-                ],
-              ),
-            ),
-          ),
-        ],
-        const SizedBox(height: 24),
         const DalvoAnimatedEntry(
           delayMs: 240,
           child: DalvoSectionTitle(title: 'Seguridad'),
@@ -81,6 +41,12 @@ class ProfilePage extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 4),
             child: Column(
               children: [
+                _SecurityTile(
+                  icon: Icons.notifications_active_outlined,
+                  title: 'Notificaciones',
+                  subtitle: 'Avisos de presupuestos pendientes',
+                ),
+                Divider(height: 1, indent: 62, endIndent: 12),
                 _SecurityTile(
                   icon: Icons.fingerprint_rounded,
                   title: 'Biometría',

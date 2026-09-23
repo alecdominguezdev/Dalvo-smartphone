@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'screens/login_page.dart';
 import 'screens/shell_page.dart';
 import 'services/api_client.dart';
+import 'services/shared_document_service.dart';
 import 'theme/dalvo_theme.dart';
 import 'widgets/dalvo_widgets.dart';
 
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await ApiClient.instance.initialize();
   runApp(const DalvoMobileApp());
 }
 
@@ -44,12 +44,32 @@ class _BootstrapPageState extends State<_BootstrapPage> {
   }
 
   Future<void> _bootstrap() async {
+    try {
+      await ApiClient.instance.initialize();
+    } catch (error, stackTrace) {
+      debugPrint('Error iniciando almacenamiento seguro: $error');
+      debugPrintStack(stackTrace: stackTrace);
+    }
+
+    try {
+      await SharedDocumentService.instance.initialize();
+    } catch (error, stackTrace) {
+      debugPrint('Error iniciando archivos compartidos: $error');
+      debugPrintStack(stackTrace: stackTrace);
+    }
+
     if (ApiClient.instance.hasToken) {
       try {
         await ApiClient.instance.me();
         _authenticated = true;
-      } catch (_) {
-        await ApiClient.instance.logout();
+      } catch (error, stackTrace) {
+        debugPrint('Error recuperando sesión: $error');
+        debugPrintStack(stackTrace: stackTrace);
+        try {
+          await ApiClient.instance.logout();
+        } catch (logoutError) {
+          debugPrint('Error limpiando sesión: $logoutError');
+        }
       }
     }
     if (mounted) setState(() => _loading = false);

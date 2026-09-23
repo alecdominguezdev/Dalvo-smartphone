@@ -4,6 +4,7 @@ import '../models/mobile_models.dart';
 import '../services/api_client.dart';
 import '../theme/dalvo_theme.dart';
 import '../widgets/dalvo_widgets.dart';
+import 'module_common.dart';
 import 'project_page.dart';
 
 class ReportsOverviewPage extends StatefulWidget {
@@ -14,14 +15,70 @@ class ReportsOverviewPage extends StatefulWidget {
 }
 
 class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
+  final _search = TextEditingController();
   bool _loading = true;
   String? _error;
   List<DalvoProject> _projects = const [];
+  String _status = 'todos';
 
   @override
   void initState() {
     super.initState();
     _load();
+  }
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
+
+  List<DalvoProject> get _visibleProjects {
+    final query = _search.text.trim().toLowerCase();
+    return _projects.where((project) {
+      final reportState = (project.lastReportState ?? '').trim().toLowerCase();
+      final matchesQuery = query.isEmpty || [
+        project.folio,
+        project.company,
+        project.title,
+        project.po,
+        project.supervisor,
+      ].any((value) => value.toLowerCase().contains(query));
+      final matchesStatus = switch (_status) {
+        'sin-informe' => reportState.isEmpty,
+        'incompleto' => reportState.contains('incompleto'),
+        'completo' => reportState.isNotEmpty && !reportState.contains('incompleto'),
+        _ => true,
+      };
+      return matchesQuery && matchesStatus;
+    }).toList();
+  }
+
+  Future<void> _chooseStatus() async {
+    final value = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: Colors.white,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const ListTile(title: Text('Filtrar informes', style: TextStyle(fontWeight: FontWeight.w900))),
+            for (final item in const [
+              ('todos', 'Todos'),
+              ('completo', 'Con informe completo'),
+              ('incompleto', 'Con información incompleta'),
+              ('sin-informe', 'Sin informe'),
+            ])
+              ListTile(
+                title: Text(item.$2),
+                trailing: _status == item.$1 ? const Icon(Icons.check_rounded, color: DalvoColors.primary) : null,
+                onTap: () => Navigator.pop(context, item.$1),
+              ),
+          ],
+        ),
+      ),
+    );
+    if (value != null && mounted) setState(() => _status = value);
   }
 
   Future<void> _load() async {
@@ -45,16 +102,29 @@ class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
   }
 
   @override
-  Widget build(BuildContext context) => RefreshIndicator(
+  Widget build(BuildContext context) {
+    final visibleProjects = _visibleProjects;
+    return RefreshIndicator(
         onRefresh: _load,
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.fromLTRB(18, 12, 18, 28),
           children: [
             const DalvoAnimatedEntry(
-              child: DalvoSectionTitle(
-                title: 'Reportes',
+              child: ModuleHeader(
+                eyebrow: 'Supervisión',
+                title: 'Informes',
+                subtitle: 'Consulta los avances registrados en tus proyectos asignados.',
+                icon: Icons.description_outlined,
               ),
+            ),
+            const SizedBox(height: 16),
+            ModuleSearch(
+              controller: _search,
+              hint: 'Buscar folio, empresa, proyecto, PO o supervisor',
+              onSearch: () => setState(() {}),
+              onFilters: _chooseStatus,
+              filtersActive: _status != 'todos',
             ),
             const SizedBox(height: 16),
             if (_loading) ...[
@@ -64,7 +134,7 @@ class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
             ] else if (_error != null)
               DalvoEmptyState(
                 icon: Icons.error_outline_rounded,
-                title: 'No se pudieron cargar los reportes',
+                title: 'No se pudieron cargar los informes',
                 message: _error!,
                 error: true,
                 action: OutlinedButton.icon(
@@ -73,26 +143,27 @@ class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
                   label: const Text('Reintentar'),
                 ),
               )
-            else if (_projects.isEmpty)
+            else if (visibleProjects.isEmpty)
               const DalvoEmptyState(
                 icon: Icons.description_outlined,
-                title: 'Sin reportes visibles',
-                message: 'No hay proyectos disponibles para tu usuario.',
+                title: 'Sin informes visibles',
+                message: 'No hay proyectos que coincidan con los filtros seleccionados.',
               )
             else
               ...List.generate(
-                _projects.length,
+                visibleProjects.length,
                 (index) => Padding(
                   padding: const EdgeInsets.only(bottom: 11),
                   child: DalvoAnimatedEntry(
                     delayMs: 35 * (index > 5 ? 5 : index),
-                    child: _LatestReportCard(project: _projects[index]),
+                    child: _LatestReportCard(project: visibleProjects[index]),
                   ),
                 ),
               ),
           ],
         ),
       );
+  }
 }
 
 class _LatestReportCard extends StatelessWidget {
@@ -152,7 +223,7 @@ class _LatestReportCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  state.isEmpty ? 'Sin reporte registrado' : state.replaceAll('_', ' '),
+                  state.isEmpty ? 'Sin informe registrado' : state.replaceAll('_', ' '),
                   style: const TextStyle(fontWeight: FontWeight.w800),
                 ),
               ),
