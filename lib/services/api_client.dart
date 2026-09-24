@@ -61,8 +61,11 @@ class ApiClient {
     } catch (_) {}
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
+      final serverMessage = body['message']?.toString().trim() ?? '';
       throw ApiException(
-        '${body['message'] ?? 'No se pudo completar la solicitud.'}',
+        serverMessage.isNotEmpty
+            ? serverMessage
+            : 'No se pudo completar la solicitud (HTTP ${response.statusCode}).',
         statusCode: response.statusCode,
         code: body['code']?.toString(),
       );
@@ -210,6 +213,38 @@ class ApiClient {
     }
     final streamed = await request.send();
     final response = await http.Response.fromStream(streamed);
+    _decode(response);
+  }
+
+  Future<void> updateReport({
+    required int reportId,
+    required double progress,
+    required String workDone,
+    required String pending,
+    required String incidents,
+    required String observations,
+    required bool incompleteInformation,
+    required String missingInformation,
+    required double latitude,
+    required double longitude,
+    required double accuracyMeters,
+  }) async {
+    final response = await http.patch(
+      ApiConfig.uri('/reports/$reportId'),
+      headers: _headers(),
+      body: jsonEncode({
+        'progress': progress,
+        'workDone': workDone.trim(),
+        'pending': pending.trim(),
+        'incidents': incidents.trim(),
+        'observations': observations.trim(),
+        'incompleteInformation': incompleteInformation,
+        'missingInformation': missingInformation.trim(),
+        'latitude': latitude,
+        'longitude': longitude,
+        'accuracyMeters': accuracyMeters,
+      }),
+    );
     _decode(response);
   }
 

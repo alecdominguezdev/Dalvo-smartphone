@@ -31,9 +31,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/dalvo/logo-dalvo.png
-    - assets/dalvo/logo-dalvo-blanco.png
-    - assets/dalvo/favicon.png
+    - assets/dalvo/
 
 flutter_launcher_icons:
   android: true

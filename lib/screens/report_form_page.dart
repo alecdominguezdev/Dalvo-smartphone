@@ -28,6 +28,8 @@ class _ReportFormPageState extends State<ReportFormPage> {
   double _progress = 0;
   bool _incomplete = false;
   bool _saving = false;
+  int? _draftReportId;
+  bool _photosUploaded = false;
   final List<XFile> _photos = [];
 
   @override
@@ -46,12 +48,22 @@ class _ReportFormPageState extends State<ReportFormPage> {
       imageQuality: 78,
       maxWidth: 1920,
     );
-    if (photo != null && mounted) setState(() => _photos.add(photo));
+    if (photo != null && mounted) {
+      setState(() {
+        _photos.add(photo);
+        _photosUploaded = false;
+      });
+    }
   }
 
   Future<void> _pickPhotos() async {
     final photos = await _picker.pickMultiImage(imageQuality: 78, maxWidth: 1920);
-    if (photos.isNotEmpty && mounted) setState(() => _photos.addAll(photos));
+    if (photos.isNotEmpty && mounted) {
+      setState(() {
+        _photos.addAll(photos);
+        _photosUploaded = false;
+      });
+    }
   }
 
   Future<void> _submit() async {
@@ -59,27 +71,46 @@ class _ReportFormPageState extends State<ReportFormPage> {
     setState(() => _saving = true);
     try {
       final position = await LocationService.currentPosition();
-      final reportId = await ApiClient.instance.createReport(
-        projectId: widget.project.id,
-        progress: _progress,
-        workDone: _workDone.text,
-        pending: _pending.text,
-        incidents: _incidents.text,
-        observations: _observations.text,
-        incompleteInformation: _incomplete,
-        missingInformation: _missingInformation.text,
-        latitude: position.latitude,
-        longitude: position.longitude,
-        accuracyMeters: position.accuracy,
-      );
+      var reportId = _draftReportId;
+      if (reportId == null) {
+        reportId = await ApiClient.instance.createReport(
+          projectId: widget.project.id,
+          progress: _progress,
+          workDone: _workDone.text,
+          pending: _pending.text,
+          incidents: _incidents.text,
+          observations: _observations.text,
+          incompleteInformation: _incomplete,
+          missingInformation: _missingInformation.text,
+          latitude: position.latitude,
+          longitude: position.longitude,
+          accuracyMeters: position.accuracy,
+        );
+        if (reportId > 0) _draftReportId = reportId;
+      } else {
+        await ApiClient.instance.updateReport(
+          reportId: reportId,
+          progress: _progress,
+          workDone: _workDone.text,
+          pending: _pending.text,
+          incidents: _incidents.text,
+          observations: _observations.text,
+          incompleteInformation: _incomplete,
+          missingInformation: _missingInformation.text,
+          latitude: position.latitude,
+          longitude: position.longitude,
+          accuracyMeters: position.accuracy,
+        );
+      }
       if (reportId <= 0) throw Exception('No se pudo crear el informe.');
 
-      if (_photos.isNotEmpty) {
+      if (_photos.isNotEmpty && !_photosUploaded) {
         await ApiClient.instance.uploadPhotos(
           projectId: widget.project.id,
           reportId: reportId,
           filePaths: _photos.map((e) => e.path).toList(),
         );
+        _photosUploaded = true;
       }
       await ApiClient.instance.submitReport(reportId);
 
@@ -88,10 +119,17 @@ class _ReportFormPageState extends State<ReportFormPage> {
         const SnackBar(content: Text('Informe guardado en Dalvo.')),
       );
       Navigator.of(context).pop(true);
+    } on ApiException catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(error.message)),
+      );
     } catch (error) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error.toString())),
+        const SnackBar(
+          content: Text('No se pudo guardar el informe. Intenta nuevamente.'),
+        ),
       );
     } finally {
       if (mounted) setState(() => _saving = false);
@@ -356,7 +394,10 @@ class _ReportFormPageState extends State<ReportFormPage> {
                                             borderRadius: BorderRadius.circular(8),
                                             child: InkWell(
                                               borderRadius: BorderRadius.circular(8),
-                                              onTap: () => setState(() => _photos.removeAt(index)),
+                                              onTap: () => setState(() {
+                                                _photos.removeAt(index);
+                                                _photosUploaded = false;
+                                              }),
                                               child: const SizedBox(
                                                 width: 28,
                                                 height: 28,

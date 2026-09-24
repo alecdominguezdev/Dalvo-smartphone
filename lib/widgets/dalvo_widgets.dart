@@ -9,37 +9,15 @@ class DalvoLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final markSize = (width * .30).clamp(30.0, 48.0).toDouble();
-    return SizedBox(
+    return Image.asset(
+      white
+          ? 'assets/dalvo/logo-dalvo-blanco.png'
+          : 'assets/dalvo/logo-dalvo.png',
       width: width,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(markSize * .18),
-            child: Image.asset(
-              'assets/dalvo/logo-favicon.png',
-              width: markSize,
-              height: markSize,
-              fit: BoxFit.cover,
-              filterQuality: FilterQuality.high,
-            ),
-          ),
-          SizedBox(width: width * .07),
-          Expanded(
-            child: Text(
-              'DALVO',
-              maxLines: 1,
-              style: TextStyle(
-                color: white ? Colors.white : DalvoColors.ink,
-                fontWeight: FontWeight.w900,
-                fontSize: (width * .20).clamp(17.0, 29.0).toDouble(),
-                letterSpacing: -.8,
-              ),
-            ),
-          ),
-        ],
-      ),
+      fit: BoxFit.contain,
+      alignment: Alignment.centerLeft,
+      filterQuality: FilterQuality.high,
+      semanticLabel: 'Dalvo Solutions',
     );
   }
 }
