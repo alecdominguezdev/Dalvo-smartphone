@@ -1,0 +1,262 @@
+/*
+ * Empresas · lista compacta
+ * Se carga después de los temas para que sus reglas históricas de tarjetas
+ * no conviertan cada contacto en una columna independiente.
+ */
+.command-center #clientesModule .client-branch-location-list,
+.command-center #clientesModule .clients-card-list {
+  display: block !important;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(134, 160, 181, .24);
+  border-radius: 14px;
+  background: var(--card-bg, #fff);
+}
+
+.command-center #clientesModule .client-directory-list-head {
+  display: grid;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 42px;
+  padding: 0 14px;
+  color: var(--muted);
+  background: rgba(53, 167, 207, .07);
+  border-bottom: 1px solid rgba(134, 160, 181, .2);
+  font-size: 10px;
+  font-weight: 1000;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.command-center #clientesModule .location-list-head,
+.command-center #clientesModule .location-catalog-card {
+  grid-template-columns: minmax(220px, 1fr) minmax(120px, .35fr) minmax(180px, auto) !important;
+}
+
+.command-center #clientesModule .branch-list-head,
+.command-center #clientesModule .client-branch-location-card:not(.location-catalog-card) {
+  grid-template-columns: minmax(180px, .8fr) minmax(190px, 1fr) minmax(210px, .8fr) minmax(180px, auto) !important;
+}
+
+.command-center #clientesModule .contacts-list-head,
+.command-center #clientesModule .client-directory-card {
+  grid-template-columns: minmax(210px, 1.15fr) minmax(105px, .5fr) minmax(145px, .75fr) minmax(180px, 1fr) minmax(185px, 1fr) minmax(245px, auto) !important;
+}
+
+.command-center #clientesModule .client-branch-location-card,
+.command-center #clientesModule .client-directory-card {
+  position: relative;
+  display: grid !important;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-width: 0;
+  min-height: 70px !important;
+  padding: 11px 14px;
+  overflow: visible;
+  border: 0;
+  border-bottom: 1px solid rgba(134, 160, 181, .18);
+  border-radius: 0 !important;
+  background: transparent;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.command-center #clientesModule .client-branch-location-card:last-child,
+.command-center #clientesModule .client-directory-card:last-child {
+  border-bottom: 0;
+}
+
+.command-center #clientesModule .client-branch-location-card:hover,
+.command-center #clientesModule .client-directory-card:hover {
+  background: rgba(53, 167, 207, .055);
+}
+
+.command-center #clientesModule .client-directory-card::before,
+.command-center #clientesModule .client-directory-card::after {
+  display: none !important;
+}
+
+.command-center #clientesModule .client-card-header {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 10px;
+  min-width: 0;
+}
+
+.command-center #clientesModule .client-card-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  font-size: 12px;
+  box-shadow: none;
+}
+
+.command-center #clientesModule .client-card-title h2 {
+  display: block !important;
+  min-height: 0 !important;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap !important;
+}
+
+.command-center #clientesModule .client-card-title span {
+  margin-top: 3px;
+  font-size: 10px;
+}
+
+.command-center #clientesModule .client-list-cell,
+.command-center #clientesModule .client-list-primary,
+.command-center #clientesModule .client-list-branch {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.command-center #clientesModule .client-list-cell b,
+.command-center #clientesModule .client-list-primary strong,
+.command-center #clientesModule .client-list-branch span,
+.command-center #clientesModule .client-list-cell small,
+.command-center #clientesModule .client-list-primary small,
+.command-center #clientesModule .client-list-branch small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.command-center #clientesModule .client-list-cell b,
+.command-center #clientesModule .client-list-primary strong,
+.command-center #clientesModule .client-list-branch span {
+  color: var(--ink);
+  font-size: 12px;
+}
+
+.command-center #clientesModule .client-list-cell small,
+.command-center #clientesModule .client-list-primary small,
+.command-center #clientesModule .client-list-branch small {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.command-center #clientesModule .client-branch-location-stats,
+.command-center #clientesModule .client-branch-location-actions,
+.command-center #clientesModule .client-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+.command-center #clientesModule .client-branch-location-stats {
+  justify-content: flex-start;
+}
+
+.command-center #clientesModule .client-card-actions .small-button,
+.command-center #clientesModule .client-branch-location-actions .small-button {
+  width: auto !important;
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: 9px;
+  font-size: 10px;
+}
+
+body.dark-mode .command-center #clientesModule .client-branch-location-list,
+body.dark-mode .command-center #clientesModule .clients-card-list {
+  background: rgba(10, 23, 40, .86);
+}
+
+body.dark-mode .command-center #clientesModule .client-list-cell b,
+body.dark-mode .command-center #clientesModule .client-list-primary strong,
+body.dark-mode .command-center #clientesModule .client-list-branch span {
+  color: #f5fbff;
+}
+
+@media (max-width: 1180px) {
+  .command-center #clientesModule .client-directory-list-head {
+    display: none;
+  }
+
+  .command-center #clientesModule .client-branch-location-card,
+  .command-center #clientesModule .client-directory-card,
+  .command-center #clientesModule .location-catalog-card {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    align-items: start;
+    gap: 10px 16px;
+  }
+
+  .command-center #clientesModule .client-card-header,
+  .command-center #clientesModule .client-list-primary,
+  .command-center #clientesModule .client-card-actions,
+  .command-center #clientesModule .client-branch-location-actions {
+    grid-column: 1 / -1;
+  }
+
+  .command-center #clientesModule .client-card-actions,
+  .command-center #clientesModule .client-branch-location-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 620px) {
+  .command-center #clientesModule .client-branch-location-card,
+  .command-center #clientesModule .client-directory-card,
+  .command-center #clientesModule .location-catalog-card {
+    grid-template-columns: 1fr !important;
+  }
+
+  .command-center #clientesModule .client-list-cell::before {
+    content: attr(data-label);
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: 1000;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+}
+
+/* Filtros compactos de Comisiones y acceso directo desde Exportaciones. */
+.command-center #comisionesModule .module-toolbar {
+  align-items: end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.command-center #comisionesModule .commission-toolbar-filter {
+  display: grid;
+  gap: 6px;
+  min-width: 170px;
+}
+
+.command-center #comisionesModule .commission-toolbar-filter > span {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.command-center #comisionesModule .commission-toolbar-filter select,
+.command-center #comisionesModule .commission-toolbar-filter input[type="date"] {
+  min-height: 42px;
+}
+
+.command-center #comisionesModule .commission-date-filter {
+  min-width: 150px;
+}
+
+.command-center .report-open-commission {
+  min-height: 30px;
+  padding: 0 10px;
+  white-space: nowrap;
+}
+
+.command-center .report-row-has-action:hover td {
+  background: rgba(53, 167, 207, .055);
+}

@@ -1,0 +1,1517 @@
+/*
+ * Dalvo Command Center — interfaz híbrida
+ * Conserva el menú lateral completo como drawer y prioriza una navegación
+ * horizontal ligera para los módulos de uso diario.
+ */
+
+.command-center {
+  --hybrid-topbar-height: 70px;
+  --hybrid-nav-height: 48px;
+  --hybrid-bg: #eef3f6;
+  --hybrid-panel: #ffffff;
+  --hybrid-panel-soft: #f7fafc;
+  --hybrid-line: #d8e4eb;
+  --hybrid-text: #071c2a;
+  --hybrid-muted: #66798a;
+  --hybrid-brand: #0b7894;
+  --hybrid-accent: #27a9c6;
+  --hybrid-accent-soft: rgba(39, 169, 198, 0.12);
+  --hybrid-shadow: 0 16px 42px rgba(10, 35, 52, 0.08);
+  min-height: 100vh;
+  color: var(--hybrid-text);
+  background:
+    radial-gradient(circle at 8% 0%, rgba(39, 169, 198, 0.08), transparent 26%),
+    var(--hybrid-bg);
+}
+
+body.dark-mode .command-center {
+  --hybrid-bg: #061827;
+  --hybrid-panel: #0d2639;
+  --hybrid-panel-soft: #123149;
+  --hybrid-line: #28536d;
+  --hybrid-text: #f1f8fb;
+  --hybrid-muted: #a9c2d0;
+  --hybrid-brand: #45bdd7;
+  --hybrid-accent: #45bdd7;
+  --hybrid-accent-soft: rgba(69, 189, 215, 0.18);
+  --hybrid-shadow: 0 18px 50px rgba(1, 13, 23, 0.30);
+  background:
+    radial-gradient(circle at 8% 0%, rgba(45, 180, 208, 0.18), transparent 30%),
+    linear-gradient(180deg, #071c2c 0%, #061827 48%, #051522 100%);
+}
+
+body.sidebar-drawer-open {
+  overflow: hidden;
+}
+
+/* ---------- Encabezado ---------- */
+.command-center .topbar,
+.command-center.sidebar-expanded .topbar,
+.command-center.sidebar-collapsed .topbar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 120;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  min-height: var(--hybrid-topbar-height);
+  padding: 10px 24px;
+  border: 0;
+  border-bottom: 1px solid var(--hybrid-line);
+  border-radius: 0;
+  background: color-mix(in srgb, var(--hybrid-panel) 95%, transparent);
+  box-shadow: 0 8px 26px rgba(10, 35, 52, 0.05);
+  backdrop-filter: blur(18px);
+}
+
+.command-center .topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 235px;
+}
+
+.command-center .topbar-logo {
+  width: 122px;
+  height: auto;
+  object-fit: contain;
+}
+
+body.dark-mode .command-center .topbar-logo {
+  content: url("../img/logo letra blancas.png");
+}
+
+.command-center .topbar-product {
+  padding-left: 11px;
+  border-left: 1px solid var(--hybrid-line);
+  color: var(--hybrid-text);
+  font-size: 10px;
+  font-weight: 950;
+  line-height: 1.15;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.command-center .sidebar-toggle {
+  width: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  border: 1px solid var(--hybrid-line);
+  border-radius: 12px;
+  color: var(--hybrid-text);
+  background: var(--hybrid-panel-soft);
+  box-shadow: none;
+}
+
+.command-center.sidebar-expanded .sidebar-toggle span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.command-center.sidebar-expanded .sidebar-toggle span:nth-child(2) {
+  opacity: 0;
+}
+
+.command-center.sidebar-expanded .sidebar-toggle span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.command-center .topbar-actions {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.command-center .global-search {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.command-center .global-search input,
+body.dark-mode .command-center .global-search input {
+  min-height: 42px;
+  border: 1px solid var(--hybrid-line);
+  border-radius: 13px;
+  color: var(--hybrid-text);
+  background: var(--hybrid-panel-soft);
+  box-shadow: none;
+}
+
+.command-center .global-search input:focus {
+  border-color: color-mix(in srgb, var(--hybrid-accent) 70%, var(--hybrid-line));
+  box-shadow: 0 0 0 3px var(--hybrid-accent-soft);
+}
+
+.command-center .topbar-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.command-center .create-button {
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: 12px;
+  background: #071522;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center .create-button {
+  border-color: #45bdd7;
+  color: #ffffff;
+  background: linear-gradient(135deg, #1687a3, #32b5d0);
+  box-shadow: 0 8px 22px rgba(19, 139, 166, 0.22);
+}
+
+.command-center .theme-toggle,
+.command-center .assistant-button,
+.command-center .launcher-button {
+  width: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  border: 1px solid var(--hybrid-line);
+  border-radius: 12px;
+  color: var(--hybrid-brand);
+  background: var(--hybrid-panel-soft);
+  box-shadow: none;
+}
+
+.command-center .topbar-session.sidebar-session-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: auto;
+  min-width: 166px;
+  margin: 0;
+  padding: 0 0 0 12px;
+  border: 0;
+  border-left: 1px solid var(--hybrid-line);
+  border-radius: 0;
+  color: var(--hybrid-text);
+  background: transparent;
+  box-shadow: none;
+}
+
+.command-center .topbar-session > div {
+  display: grid;
+  min-width: 78px;
+}
+
+.command-center .topbar-session strong,
+body.dark-mode .command-center .topbar-session strong {
+  overflow: hidden;
+  color: var(--hybrid-text);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.command-center .topbar-session span,
+body.dark-mode .command-center .topbar-session span {
+  overflow: hidden;
+  color: var(--hybrid-muted);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.command-center .topbar-session .sidebar-logout-button,
+body.dark-mode .command-center .topbar-session .sidebar-logout-button {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--hybrid-line);
+  border-radius: 10px;
+  color: var(--hybrid-text);
+  background: var(--hybrid-panel-soft);
+}
+
+.command-center .topbar-session .sidebar-logout-button:hover,
+body.dark-mode .command-center .topbar-session .sidebar-logout-button:hover {
+  color: #fff;
+  background: #0a7189;
+}
+
+/* ---------- Navegación horizontal principal ---------- */
+.command-center .primary-nav {
+  position: fixed;
+  inset: var(--hybrid-topbar-height) 0 auto 0;
+  z-index: 110;
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  min-height: var(--hybrid-nav-height);
+  padding: 6px 24px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--hybrid-line);
+  background: color-mix(in srgb, var(--hybrid-panel) 97%, transparent);
+  scrollbar-width: none;
+}
+
+.command-center .primary-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.command-center .primary-nav .primary-nav-item {
+  position: relative;
+  flex: 0 0 auto;
+  width: auto;
+  min-height: 36px;
+  padding: 0 13px;
+  border: 0;
+  border-radius: 9px;
+  color: var(--hybrid-muted);
+  background: transparent;
+  box-shadow: none;
+  font-size: 12px;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.command-center .primary-nav .primary-nav-item::before,
+.command-center .primary-nav .primary-nav-item::after {
+  display: none;
+}
+
+.command-center .primary-nav .primary-nav-item:hover {
+  color: var(--hybrid-text);
+  background: var(--hybrid-accent-soft);
+  transform: none;
+}
+
+.command-center .primary-nav .primary-nav-item.active {
+  color: #fff;
+  background: linear-gradient(135deg, #0a6078, #108ba7);
+  box-shadow: 0 6px 16px rgba(10, 96, 120, 0.2);
+}
+
+body.dark-mode .command-center .primary-nav .primary-nav-item.active {
+  color: #06121c;
+  background: #dff7fc;
+}
+
+.command-center .primary-nav .nav-badge {
+  position: static;
+  margin-left: 7px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  color: #fff;
+  background: #e64555;
+  font-size: 9px;
+  line-height: 1;
+}
+
+.command-center .primary-more-button {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  margin-left: auto;
+  padding: 0 13px;
+  border: 1px solid var(--hybrid-line);
+  border-radius: 9px;
+  color: var(--hybrid-brand);
+  background: var(--hybrid-panel-soft);
+  font-size: 11px;
+  font-weight: 900;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.command-center .primary-more-button:hover {
+  border-color: var(--hybrid-accent);
+  background: var(--hybrid-accent-soft);
+}
+
+/* ---------- Menú lateral como drawer ---------- */
+.command-center .main-nav,
+.command-center.sidebar-collapsed .main-nav,
+.command-center.sidebar-expanded .main-nav {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  width: min(310px, 88vw);
+  padding: 20px 18px;
+  overflow: hidden;
+  border: 0;
+  border-right: 1px solid var(--hybrid-line);
+  border-radius: 0 22px 22px 0;
+  color: var(--hybrid-text);
+  background: var(--hybrid-panel);
+  box-shadow: 24px 0 70px rgba(3, 18, 28, 0.22);
+  backdrop-filter: none;
+  transition: transform 0.22s ease, visibility 0.22s ease;
+}
+
+.command-center.sidebar-collapsed .main-nav {
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(-105%);
+}
+
+.command-center.sidebar-expanded .main-nav {
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.command-center .main-nav::before {
+  display: none;
+}
+
+.command-center .sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding: 0 4px 18px;
+  border: 0;
+  border-bottom: 1px solid var(--hybrid-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.command-center .sidebar-brand img {
+  width: 132px;
+}
+
+body.dark-mode .command-center .sidebar-brand img {
+  content: url("../img/logo letra blancas.png");
+}
+
+.command-center .sidebar-brand span {
+  color: var(--hybrid-text);
+  font-size: 10px;
+  line-height: 1.25;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.command-center .sidebar-nav-scroll {
+  display: grid;
+  gap: 15px;
+  min-height: 0;
+  padding: 0 3px 20px;
+  overflow-y: auto;
+}
+
+.command-center .sidebar-nav-scroll::before {
+  display: none;
+}
+
+.command-center .sidebar-nav-group {
+  display: grid;
+  gap: 5px;
+}
+
+.command-center .sidebar-nav-label {
+  margin: 0 10px 3px;
+  color: var(--hybrid-muted);
+  font-size: 9px;
+  font-weight: 950;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.command-center .main-nav .nav-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  min-height: 43px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 11px;
+  color: color-mix(in srgb, var(--hybrid-text) 82%, var(--hybrid-muted));
+  background: transparent;
+  box-shadow: none;
+  font-size: 12px;
+  font-weight: 850;
+  text-align: left;
+}
+
+.command-center .main-nav .nav-item::before,
+.command-center .main-nav .nav-item::after {
+  display: none;
+}
+
+.command-center .main-nav .nav-item i {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  border-radius: 9px;
+  color: var(--hybrid-brand);
+  background: var(--hybrid-accent-soft);
+  font-size: 16px;
+}
+
+.command-center .main-nav .nav-item span:not(.nav-badge) {
+  flex: 1;
+}
+
+.command-center .main-nav .nav-item:hover {
+  color: var(--hybrid-text);
+  background: var(--hybrid-accent-soft);
+  transform: none;
+}
+
+.command-center .main-nav .nav-item.active {
+  color: #fff;
+  background: linear-gradient(135deg, #0a6078, #108ba7);
+  box-shadow: 0 8px 20px rgba(10, 96, 120, 0.18);
+}
+
+.command-center .main-nav .nav-item.active i {
+  color: #0a6078;
+  background: #fff;
+}
+
+body.dark-mode .command-center .main-nav .nav-item.active {
+  color: #06131e;
+  background: #dff7fc;
+}
+
+body.dark-mode .command-center .main-nav .nav-item.active i {
+  color: #dff7fc;
+  background: #0b728a;
+}
+
+.command-center .sidebar-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  visibility: hidden;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  background: rgba(3, 13, 21, 0.48);
+  backdrop-filter: blur(4px);
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.command-center.sidebar-expanded .sidebar-scrim {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* ---------- Área de trabajo ---------- */
+.command-center .workspace,
+.command-center.sidebar-expanded .workspace,
+.command-center.sidebar-collapsed .workspace {
+  width: min(1600px, calc(100% - 48px));
+  max-width: 1600px;
+  margin: 0 auto;
+  padding-top: calc(var(--hybrid-topbar-height) + var(--hybrid-nav-height) + 28px);
+  padding-bottom: 42px;
+  color: var(--hybrid-text);
+}
+
+.command-center .workspace-heading {
+  padding: 8px 2px 22px;
+}
+
+.command-center .workspace-heading h1 {
+  color: var(--hybrid-text);
+}
+
+.command-center .workspace-heading p:last-child {
+  color: var(--hybrid-muted);
+}
+
+/* ---------- Inicio ---------- */
+.command-center .home-command {
+  display: grid;
+  gap: 18px;
+}
+
+.command-center .home-hero {
+  position: relative;
+  min-height: 218px;
+  padding: 34px 38px;
+  overflow: hidden;
+  border: 1px solid rgba(86, 177, 202, 0.28);
+  border-radius: 20px;
+  color: #fff;
+  background:
+    linear-gradient(105deg, rgba(4, 31, 47, 0.98) 0%, rgba(5, 52, 69, 0.94) 54%, rgba(8, 66, 83, 0.84) 100%),
+    url("../img/fondo dalvo system.svg") center 42% / cover no-repeat;
+  box-shadow: 0 18px 48px rgba(5, 35, 50, 0.15);
+}
+
+.command-center .home-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 84% 30%, rgba(88, 200, 224, 0.16), transparent 30%),
+    linear-gradient(120deg, rgba(255, 255, 255, 0.035), transparent 45%);
+}
+
+.command-center .home-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.command-center .home-hero .eyebrow {
+  color: #7fd7e9;
+}
+
+.command-center .home-hero h1 {
+  max-width: 760px;
+  margin: 12px 0 8px;
+  color: #fff;
+  font-size: clamp(2.8rem, 5vw, 4.6rem);
+  line-height: 0.96;
+  letter-spacing: -0.045em;
+}
+
+.command-center .home-hero p:not(.eyebrow) {
+  max-width: 680px;
+  color: rgba(240, 249, 252, 0.79);
+  font-size: 15px;
+}
+
+.command-center .home-launcher-card {
+  min-width: 245px;
+  padding: 16px 18px;
+  border: 1px solid rgba(188, 233, 243, 0.24);
+  border-radius: 15px;
+  color: #fff;
+  background: rgba(4, 24, 38, 0.42);
+  box-shadow: none;
+  backdrop-filter: blur(10px);
+}
+
+.command-center .home-launcher-card:hover {
+  border-color: rgba(188, 233, 243, 0.52);
+  background: rgba(8, 51, 66, 0.68);
+  transform: translateY(-2px);
+}
+
+.command-center .home-launcher-icon {
+  color: #fff;
+  background: rgba(42, 171, 201, 0.3);
+}
+
+.command-center .home-launcher-card small {
+  color: rgba(235, 247, 250, 0.66);
+}
+
+.command-center .home-kpi-grid {
+  gap: 14px;
+}
+
+.command-center .home-kpi-card,
+.command-center .home-panel,
+.command-center .users-panel,
+.command-center .clients-panel,
+.command-center .providers-panel,
+.command-center .price-panel,
+.command-center .fixed-expenses-panel,
+.command-center .budgets-panel,
+.command-center .report-card,
+.command-center .report-kpi,
+.command-center .report-table-card,
+.command-center .module-toolbar {
+  border: 1px solid var(--hybrid-line);
+  border-radius: 16px;
+  color: var(--hybrid-text);
+  background: var(--hybrid-panel);
+  box-shadow: var(--hybrid-shadow);
+}
+
+.command-center .home-kpi-card {
+  min-height: 122px;
+  padding: 20px 21px;
+  overflow: hidden;
+  border-left: 4px solid var(--hybrid-accent);
+}
+
+.command-center .home-kpi-card::before,
+.command-center .home-kpi-card::after {
+  display: none;
+}
+
+.command-center .home-kpi-card:hover {
+  border-color: color-mix(in srgb, var(--hybrid-accent) 52%, var(--hybrid-line));
+  border-left-color: var(--hybrid-accent);
+  transform: translateY(-2px);
+}
+
+.command-center .home-kpi-card i {
+  display: none;
+}
+
+.command-center .home-kpi-card span,
+.command-center .home-panel-heading span {
+  color: var(--hybrid-muted);
+}
+
+.command-center .home-kpi-card strong {
+  color: var(--hybrid-text);
+  font-size: clamp(1.65rem, 2.5vw, 2.15rem);
+  letter-spacing: -0.035em;
+}
+
+.command-center .home-kpi-card button,
+.command-center .home-link-button {
+  color: var(--hybrid-brand);
+  background: transparent;
+}
+
+.command-center .home-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2.05fr) minmax(310px, 0.95fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.command-center .home-side-stack {
+  display: block;
+}
+
+.command-center .home-panel {
+  overflow: hidden;
+}
+
+.command-center .home-panel-heading {
+  padding: 20px 20px 15px;
+  border-bottom: 1px solid var(--hybrid-line);
+}
+
+.command-center .home-panel-heading h2,
+.command-center .home-money {
+  color: var(--hybrid-text);
+}
+
+.command-center .home-activity-item,
+.command-center .home-pending-item {
+  border-color: var(--hybrid-line);
+}
+
+.command-center .home-activity-item:hover,
+.command-center .home-pending-item:hover {
+  background: var(--hybrid-panel-soft);
+}
+
+.command-center .home-activity-item small,
+.command-center .home-pending-item small {
+  color: var(--hybrid-muted);
+}
+
+.command-center .home-pending-item b {
+  color: #fff;
+  background: linear-gradient(135deg, #0a7189, #2db4d0);
+  box-shadow: none;
+}
+
+body.dark-mode .command-center .home-pending-item b {
+  color: #06131e;
+  background: #bfeef7;
+}
+
+/* Información secundaria bajo demanda */
+.command-center .home-more {
+  overflow: hidden;
+  border: 1px solid var(--hybrid-line);
+  border-radius: 15px;
+  background: var(--hybrid-panel);
+  box-shadow: var(--hybrid-shadow);
+}
+
+.command-center .home-more > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 66px;
+  padding: 14px 20px;
+  list-style: none;
+  cursor: pointer;
+}
+
+.command-center .home-more > summary::-webkit-details-marker {
+  display: none;
+}
+
+.command-center .home-more > summary > span:first-child {
+  display: grid;
+  gap: 2px;
+}
+
+.command-center .home-more > summary small {
+  color: var(--hybrid-muted);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.command-center .home-more > summary strong {
+  color: var(--hybrid-text);
+  font-size: 14px;
+}
+
+.command-center .home-more-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--hybrid-brand);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.command-center .home-more-action i {
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+
+.command-center .home-more[open] .home-more-action i {
+  transform: rotate(180deg);
+}
+
+.command-center .home-more[open] > summary {
+  border-bottom: 1px solid var(--hybrid-line);
+}
+
+.command-center .home-more-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 14px;
+  padding: 14px;
+  background: var(--hybrid-panel-soft);
+}
+
+.command-center .home-more-grid .home-panel {
+  box-shadow: none;
+}
+
+.command-center .home-payable-card {
+  display: grid;
+  align-content: start;
+}
+
+.command-center .home-money {
+  padding: 24px 20px 4px;
+}
+
+.command-center .home-payable-card .home-link-button {
+  margin: 0 20px 20px;
+  justify-self: start;
+}
+
+.command-center .home-quick-actions {
+  padding: 16px 20px 20px;
+}
+
+.command-center .home-quick-actions button {
+  border: 1px solid var(--hybrid-line);
+  color: var(--hybrid-text);
+  background: var(--hybrid-panel-soft);
+}
+
+.command-center .home-quick-actions button:hover {
+  border-color: var(--hybrid-accent);
+  color: var(--hybrid-brand);
+  background: var(--hybrid-accent-soft);
+}
+
+/* ---------- Formularios y módulos ---------- */
+.command-center .module-toolbar {
+  padding: 18px;
+}
+
+.command-center .module-search input,
+body.dark-mode .command-center .module-search input,
+body.dark-mode .command-center input,
+body.dark-mode .command-center select,
+body.dark-mode .command-center textarea {
+  border-color: var(--hybrid-line);
+  color: var(--hybrid-text);
+  background: var(--hybrid-panel-soft);
+}
+
+.command-center .create-user-button,
+.command-center .primary-button,
+.command-center .success-button {
+  border-radius: 12px;
+  background: var(--hybrid-brand);
+  box-shadow: none;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1260px) {
+  .command-center .topbar-product {
+    display: none;
+  }
+
+  .command-center .topbar-brand {
+    min-width: 180px;
+  }
+
+  .command-center .topbar-actions {
+    grid-template-columns: minmax(220px, 1fr) auto auto;
+  }
+
+  .command-center .topbar-session {
+    min-width: 120px;
+  }
+
+  .command-center .topbar-session span {
+    display: none;
+  }
+}
+
+@media (max-width: 1040px) {
+  .command-center .topbar,
+  .command-center.sidebar-expanded .topbar,
+  .command-center.sidebar-collapsed .topbar {
+    padding-inline: 16px;
+  }
+
+  .command-center .topbar-brand {
+    min-width: 166px;
+  }
+
+  .command-center .topbar-logo {
+    width: 108px;
+  }
+
+  .command-center .topbar-actions {
+    grid-template-columns: minmax(180px, 1fr) auto;
+  }
+
+  .command-center .topbar-session {
+    display: none;
+  }
+
+  .command-center .primary-nav {
+    padding-inline: 16px;
+  }
+
+  .command-center .home-layout {
+    grid-template-columns: minmax(0, 1.55fr) minmax(290px, 0.8fr);
+  }
+}
+
+@media (max-width: 820px) {
+  .command-center {
+    --hybrid-topbar-height: 64px;
+    --hybrid-nav-height: 46px;
+  }
+
+  .command-center .topbar,
+  .command-center.sidebar-expanded .topbar,
+  .command-center.sidebar-collapsed .topbar {
+    grid-template-columns: auto minmax(0, 1fr);
+    padding: 8px 12px;
+  }
+
+  .command-center .topbar-brand {
+    min-width: auto;
+  }
+
+  .command-center .topbar-logo {
+    display: none;
+  }
+
+  .command-center .topbar-actions {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+
+  .command-center .global-search kbd,
+  .command-center .assistant-button,
+  .command-center .launcher-button {
+    display: none;
+  }
+
+  .command-center .create-button {
+    width: 42px;
+    min-width: 42px;
+    padding: 0;
+    font-size: 0;
+  }
+
+  .command-center .create-button span {
+    font-size: 20px;
+  }
+
+  .command-center .primary-more-button {
+    margin-left: 0;
+  }
+
+  .command-center .workspace,
+  .command-center.sidebar-expanded .workspace,
+  .command-center.sidebar-collapsed .workspace {
+    width: calc(100% - 24px);
+    padding-top: calc(var(--hybrid-topbar-height) + var(--hybrid-nav-height) + 18px);
+  }
+
+  .command-center .home-hero {
+    min-height: 0;
+    padding: 28px 24px;
+  }
+
+  .command-center .home-hero {
+    display: grid;
+    gap: 22px;
+  }
+
+  .command-center .home-launcher-card {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .command-center .home-layout,
+  .command-center .home-more-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .command-center .topbar-tools {
+    gap: 6px;
+  }
+
+  .command-center .theme-toggle {
+    display: none;
+  }
+
+  .command-center .primary-nav {
+    padding-inline: 10px;
+  }
+
+  .command-center .primary-nav .primary-nav-item,
+  .command-center .primary-more-button {
+    padding-inline: 11px;
+    font-size: 11px;
+  }
+
+  .command-center .home-hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .command-center .home-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .command-center .home-more > summary {
+    align-items: flex-start;
+  }
+
+  .command-center .home-more-action {
+    font-size: 0;
+  }
+
+  .command-center .home-more-action i {
+    font-size: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .command-center .main-nav,
+  .command-center .sidebar-scrim,
+  .command-center .home-more-action i {
+    transition: none;
+  }
+}
+
+
+/* ========================================================================== 
+   Ajustes finales de compatibilidad — macOS / Safari / zoom del navegador
+   ========================================================================== */
+
+/* Evita que el alto real del encabezado cambie por la escala, el zoom o la
+   tipografía de Safari. La navegación y el contenido usan estas mismas medidas. */
+.command-center .topbar,
+.command-center.sidebar-expanded .topbar,
+.command-center.sidebar-collapsed .topbar {
+  box-sizing: border-box;
+  height: var(--hybrid-topbar-height);
+  min-height: var(--hybrid-topbar-height);
+  overflow: visible;
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.command-center .topbar-logo {
+  display: block;
+  max-height: calc(var(--hybrid-topbar-height) - 20px);
+}
+
+.command-center .primary-nav {
+  box-sizing: border-box;
+  top: var(--hybrid-topbar-height);
+  height: var(--hybrid-nav-height);
+  min-height: var(--hybrid-nav-height);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.command-center .workspace,
+.command-center.sidebar-expanded .workspace,
+.command-center.sidebar-collapsed .workspace {
+  /* Se deja espacio real para las dos barras fijas. Esto impide que el
+     eyebrow (por ejemplo, “Proveedores”) quede detrás del menú horizontal. */
+  padding-top: calc(var(--hybrid-topbar-height) + var(--hybrid-nav-height) + 30px);
+}
+
+.command-center .workspace-heading {
+  margin-top: 0;
+  padding-top: 4px;
+}
+
+.command-center .workspace-heading .eyebrow {
+  margin-top: 0;
+}
+
+/* Safari puede conservar el ancho intrínseco de ciertos formularios y empujar
+   los botones fuera de la pantalla. min-width: 0 permite que el buscador ceda. */
+.command-center .topbar-brand,
+.command-center .topbar-actions,
+.command-center .global-search,
+.command-center .global-search input {
+  min-width: 0;
+}
+
+.command-center .global-search input {
+  width: 100%;
+}
+
+/* Vista compacta: también cubre Mac con zoom de página, donde el viewport
+   efectivo suele quedar alrededor de 820–900 px aunque la captura sea Retina. */
+@media (max-width: 980px) {
+  .command-center {
+    --hybrid-topbar-height: 64px;
+    --hybrid-nav-height: 46px;
+  }
+
+  .command-center .topbar,
+  .command-center.sidebar-expanded .topbar,
+  .command-center.sidebar-collapsed .topbar {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 10px;
+    padding: 8px 12px;
+  }
+
+  .command-center .topbar-brand {
+    gap: 8px;
+    min-width: auto;
+  }
+
+  .command-center .sidebar-toggle {
+    width: 40px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .command-center .topbar-logo {
+    display: block;
+    width: 88px;
+    max-height: 40px;
+  }
+
+  .command-center .topbar-product,
+  .command-center .topbar-session,
+  .command-center .assistant-button,
+  .command-center .launcher-button,
+  .command-center .global-search kbd {
+    display: none;
+  }
+
+  .command-center .topbar-actions {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+
+  .command-center .topbar-tools {
+    gap: 6px;
+  }
+
+  .command-center .global-search input,
+  .command-center .create-button,
+  .command-center .theme-toggle {
+    min-height: 40px;
+    height: 40px;
+  }
+
+  .command-center .create-button {
+    padding-inline: 13px;
+    white-space: nowrap;
+  }
+
+  .command-center .primary-nav {
+    gap: 2px;
+    padding: 5px 12px;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x proximity;
+  }
+
+  .command-center .primary-nav .primary-nav-item,
+  .command-center .primary-more-button {
+    min-height: 36px;
+    padding-inline: 11px;
+    scroll-snap-align: start;
+  }
+
+  .command-center .workspace,
+  .command-center.sidebar-expanded .workspace,
+  .command-center.sidebar-collapsed .workspace {
+    width: calc(100% - 28px);
+    padding-top: calc(var(--hybrid-topbar-height) + var(--hybrid-nav-height) + 24px);
+  }
+
+  .command-center .workspace-heading {
+    padding: 2px 0 18px;
+  }
+
+  .command-center .workspace-heading h1 {
+    font-size: clamp(2rem, 6vw, 2.75rem);
+    line-height: 1.04;
+  }
+
+  .command-center .workspace-heading p:last-child {
+    margin-top: 12px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 680px) {
+  .command-center .topbar-logo {
+    display: none;
+  }
+
+  .command-center .create-button {
+    width: 40px;
+    min-width: 40px;
+    padding: 0;
+    font-size: 0;
+  }
+
+  .command-center .create-button span {
+    font-size: 20px;
+  }
+}
+
+/* ================================================================
+   Ajuste final: sesión compacta en el encabezado
+   Evita que las reglas antiguas de .sidebar-session-box conviertan
+   el usuario en una tarjeta grande dentro de la barra superior.
+   ================================================================ */
+body:not(.dark-mode) .command-center .topbar-session.sidebar-session-box,
+body.dark-mode .command-center .topbar-session.sidebar-session-box {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  align-self: center;
+  gap: 8px;
+  width: auto;
+  min-width: 0;
+  max-width: 190px;
+  min-height: 42px;
+  height: 42px;
+  margin: 0;
+  padding: 0 0 0 10px;
+  border: 0;
+  border-left: 1px solid var(--hybrid-line);
+  border-radius: 0;
+  color: var(--hybrid-text);
+  background: transparent;
+  box-shadow: none;
+}
+
+body:not(.dark-mode) .command-center .topbar-session.sidebar-session-box > div,
+body.dark-mode .command-center .topbar-session.sidebar-session-box > div {
+  display: grid;
+  min-width: 0;
+  max-width: 92px;
+  line-height: 1.05;
+}
+
+body:not(.dark-mode) .command-center .topbar-session.sidebar-session-box strong,
+body.dark-mode .command-center .topbar-session.sidebar-session-box strong {
+  display: block;
+  overflow: hidden;
+  color: var(--hybrid-text);
+  font-size: 12px;
+  font-weight: 850;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body:not(.dark-mode) .command-center .topbar-session.sidebar-session-box span,
+body.dark-mode .command-center .topbar-session.sidebar-session-box span {
+  display: block;
+  overflow: hidden;
+  color: var(--hybrid-muted);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body:not(.dark-mode) .command-center .topbar-session.sidebar-session-box .sidebar-logout-button,
+body.dark-mode .command-center .topbar-session.sidebar-session-box .sidebar-logout-button {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 52px;
+  min-height: 36px;
+  height: 36px;
+  margin: 0;
+  padding: 0 11px;
+  border: 1px solid color-mix(in srgb, #b93f4a 32%, var(--hybrid-line));
+  border-radius: 9px;
+  color: #a3313b;
+  font-size: 12px;
+  font-weight: 850;
+  background: color-mix(in srgb, #fff0f1 82%, var(--hybrid-panel));
+  box-shadow: none;
+}
+
+body.dark-mode .command-center .topbar-session.sidebar-session-box .sidebar-logout-button {
+  color: #ffb5bd;
+  border-color: rgba(255, 111, 124, 0.24);
+  background: rgba(185, 63, 74, 0.12);
+}
+
+body:not(.dark-mode) .command-center .topbar-session.sidebar-session-box .sidebar-logout-button:hover,
+body.dark-mode .command-center .topbar-session.sidebar-session-box .sidebar-logout-button:hover {
+  color: #ffffff;
+  border-color: #b93f4a;
+  background: #b93f4a;
+}
+
+@media (max-width: 1380px) {
+  body:not(.dark-mode) .command-center .topbar-session.sidebar-session-box,
+  body.dark-mode .command-center .topbar-session.sidebar-session-box {
+    max-width: 150px;
+  }
+
+  body:not(.dark-mode) .command-center .topbar-session.sidebar-session-box > div,
+  body.dark-mode .command-center .topbar-session.sidebar-session-box > div {
+    max-width: 72px;
+  }
+
+  body:not(.dark-mode) .command-center .topbar-session.sidebar-session-box span,
+  body.dark-mode .command-center .topbar-session.sidebar-session-box span {
+    display: none;
+  }
+}
+
+/* ================================================================
+   Ajuste final: separación entre navegación y contenido
+   Las hojas de tema antiguas tenían selectores más específicos y
+   podían eliminar el espacio superior del workspace en Safari/Mac.
+   ================================================================ */
+body:not(.dark-mode) .command-center.sidebar-expanded .workspace,
+body:not(.dark-mode) .command-center.sidebar-collapsed .workspace,
+body.dark-mode .command-center.sidebar-expanded .workspace,
+body.dark-mode .command-center.sidebar-collapsed .workspace {
+  padding-top: calc(
+    var(--hybrid-topbar-height) +
+    var(--hybrid-nav-height) +
+    24px
+  );
+}
+
+@media (max-width: 980px) {
+  body:not(.dark-mode) .command-center.sidebar-expanded .workspace,
+  body:not(.dark-mode) .command-center.sidebar-collapsed .workspace,
+  body.dark-mode .command-center.sidebar-expanded .workspace,
+  body.dark-mode .command-center.sidebar-collapsed .workspace {
+    padding-top: calc(
+      var(--hybrid-topbar-height) +
+      var(--hybrid-nav-height) +
+      18px
+    );
+  }
+}
+
+@media (max-width: 680px) {
+  body:not(.dark-mode) .command-center.sidebar-expanded .workspace,
+  body:not(.dark-mode) .command-center.sidebar-collapsed .workspace,
+  body.dark-mode .command-center.sidebar-expanded .workspace,
+  body.dark-mode .command-center.sidebar-collapsed .workspace {
+    padding-top: calc(
+      var(--hybrid-topbar-height) +
+      var(--hybrid-nav-height) +
+      14px
+    );
+  }
+}
+
+
+/* ================================================================
+   DALVO DARK BLUE — sustitución final del graphite negro
+   ================================================================ */
+body.dark-mode {
+  --ink: #f1f8fb;
+  --muted: #aac3d0;
+  --line: #28536d;
+  --brand: #45bdd7;
+  --brand-dark: #74d6e8;
+  --panel: #0d2639;
+  --surface: #061827;
+  --card-bg: #0d2639;
+  --glow: rgba(69, 189, 215, 0.16);
+  background: #061827;
+}
+
+body.dark-mode .command-center {
+  --graphite-canvas: #061827;
+  --graphite-sidebar: #081d2d;
+  --graphite-panel: #0d2639;
+  --graphite-raised: #123149;
+  --graphite-control: #173950;
+  --graphite-border: #28536d;
+  --graphite-border-strong: #37677f;
+  --graphite-text: #f1f8fb;
+  --graphite-muted: #aac3d0;
+  --graphite-subtle: #7898aa;
+  --graphite-action: #45bdd7;
+  --graphite-action-text: #04141f;
+  --directory-divider: #28536d;
+  --minimal-bg: #061827;
+  --minimal-panel: #0d2639;
+  --minimal-panel-soft: #123149;
+  --minimal-line: #28536d;
+  --minimal-text: #f1f8fb;
+  --minimal-muted: #aac3d0;
+  --minimal-accent: #45bdd7;
+  --minimal-accent-soft: #173950;
+}
+
+body.dark-mode .command-center .topbar,
+body.dark-mode .command-center.sidebar-expanded .topbar,
+body.dark-mode .command-center.sidebar-collapsed .topbar,
+body.dark-mode .command-center .primary-nav {
+  background: rgba(8, 29, 45, 0.96);
+  border-color: #28536d;
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+body.dark-mode .command-center .home-hero {
+  border-color: #2b5872;
+  background:
+    radial-gradient(circle at 82% 18%, rgba(69, 189, 215, 0.14), transparent 34%),
+    linear-gradient(135deg, #0b2538 0%, #0d2b40 55%, #0b2234 100%);
+}
+
+body.dark-mode .command-center .home-hero::before {
+  background: linear-gradient(180deg, #45bdd7, #1687a3);
+}
+
+body.dark-mode .command-center :where(
+  .home-kpi-card,
+  .home-activity-card,
+  .home-pending-card,
+  .home-payments-card,
+  .home-quick-card,
+  .home-launcher-card,
+  .module-card,
+  .users-panel,
+  .report-card,
+  .report-kpi,
+  .modal-panel,
+  .table-wrapper,
+  .data-card
+) {
+  border-color: #28536d;
+  background: linear-gradient(180deg, #0f2b40 0%, #0c2538 100%);
+}
+
+body.dark-mode .command-center :where(
+  input,
+  select,
+  textarea,
+  .global-search input,
+  .module-search input,
+  .sidebar-toggle,
+  .theme-toggle,
+  .assistant-button,
+  .launcher-button
+) {
+  border-color: #2c5871;
+  background: #102d43;
+}
+
+body.dark-mode .command-center :where(
+  input,
+  select,
+  textarea,
+  .global-search input,
+  .module-search input
+):focus {
+  border-color: #45bdd7;
+  box-shadow: 0 0 0 3px rgba(69, 189, 215, 0.16);
+}
+
+body.dark-mode .command-center .primary-nav-item.active,
+body.dark-mode .command-center .main-nav .nav-item.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, #137f9a, #2aaec9);
+}
+
+body.dark-mode .command-center .home-kpi-card::before,
+body.dark-mode .command-center .home-activity-dot,
+body.dark-mode .command-center .home-pending-item b {
+  background-color: #45bdd7;
+}
+
+body.dark-mode .command-center .home-kpi-card:hover,
+body.dark-mode .command-center .home-launcher-card:hover {
+  border-color: #3f7892;
+  background: linear-gradient(180deg, #14354d 0%, #102c42 100%);
+}
+
+body.dark-mode #loginView {
+  background:
+    radial-gradient(circle at 18% 18%, rgba(45, 180, 208, 0.18), transparent 34%),
+    #061827;
+}
+
+body.dark-mode #loginView .login-card,
+body.dark-mode #loginView .form-panel,
+body.dark-mode #loginView .login-security-note {
+  border-color: #28536d;
+  background-color: #0d2639;
+}
+
+body.dark-mode #loginView .brand-panel {
+  background-color: #071c2c;
+  filter: saturate(0.72) contrast(1.04);
+}
+
+body.dark-mode #loginView .brand-shade {
+  background: linear-gradient(90deg, rgba(5, 21, 34, 0.88), rgba(8, 39, 58, 0.58));
+}
+
+body.dark-mode #loginView .login-submit {
+  color: #ffffff;
+  background: linear-gradient(135deg, #1687a3, #32b5d0);
+}
+
+body.dark-mode #loginView .login-submit:hover {
+  color: #ffffff;
+  background: linear-gradient(135deg, #1b94b1, #45c3dc);
+}
+
+/* ================================================================
+   Corrección puntual: el panel de "+ Crear" debe quedar por encima
+   del encabezado y de la navegación fija.
+   ================================================================ */
+.command-center .quick-actions-overlay {
+  z-index: 220;
+}

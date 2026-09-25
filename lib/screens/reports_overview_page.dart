@@ -235,18 +235,6 @@ class _LatestReportCard extends StatelessWidget {
                 ),
             ],
           ),
-          if (project.lastProgress != null) ...[
-            const SizedBox(height: 12),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(9),
-              child: LinearProgressIndicator(
-                value: progress / 100,
-                minHeight: 6,
-                backgroundColor: DalvoColors.line,
-                color: color,
-              ),
-            ),
-          ],
         ],
       ),
     );

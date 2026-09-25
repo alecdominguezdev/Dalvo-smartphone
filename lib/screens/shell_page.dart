@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 
 import '../models/mobile_models.dart';
 import '../services/api_client.dart';
 import '../services/budget_notification_service.dart';
+import '../services/push_notification_service.dart';
 import '../services/shared_document_service.dart';
 import '../theme/dalvo_theme.dart';
 import '../widgets/dalvo_widgets.dart';
@@ -29,18 +31,43 @@ class _DalvoShellPageState extends State<DalvoShellPage> with WidgetsBindingObse
   int _pendingBudgets = 0;
   Set<int>? _knownPendingBudgetIds;
   Timer? _budgetTimer;
+  StreamSubscription<int?>? _budgetNotificationTapSubscription;
+  StreamSubscription<int?>? _pushOpenedBudgetSubscription;
+  StreamSubscription<dynamic>? _pushForegroundSubscription;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     BudgetNotificationService.instance.initialize();
+    _budgetNotificationTapSubscription = BudgetNotificationService.instance.budgetTaps.listen(_openBudgetFromNotification);
+    if (Platform.isAndroid || Platform.isIOS) {
+      _pushOpenedBudgetSubscription = PushNotificationService.instance.openedBudgets.listen(_openBudgetFromNotification);
+      _pushForegroundSubscription = PushNotificationService.instance.foregroundMessages.listen((message) {
+        final budgetId = PushNotificationService.instance.budgetIdFrom(message);
+        final pendingCount = int.tryParse('${message.data['pendingCount'] ?? ''}') ?? 1;
+        BudgetNotificationService.instance.showNewBudget(count: pendingCount, budgetId: budgetId);
+        unawaited(_refreshBudgetAlerts(notifyPages: true));
+      });
+    }
     SharedDocumentService.instance.addListener(_handleSharedDocuments);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _handleSharedDocuments();
       _refreshBudgetAlerts();
     });
-    _budgetTimer = Timer.periodic(const Duration(minutes: 1), (_) => _refreshBudgetAlerts());
+    _budgetTimer = Timer.periodic(const Duration(seconds: 30), (_) => _refreshBudgetAlerts());
+    if (Platform.isAndroid || Platform.isIOS) {
+      unawaited(_initializePushNotifications());
+    }
+  }
+
+  Future<void> _initializePushNotifications() async {
+    try {
+      await PushNotificationService.instance.initialize();
+      await PushNotificationService.instance.registerCurrentDevice();
+    } catch (_) {
+      // La app debe seguir operando si el teléfono rechaza los avisos.
+    }
   }
 
   @override
@@ -48,6 +75,9 @@ class _DalvoShellPageState extends State<DalvoShellPage> with WidgetsBindingObse
     SharedDocumentService.instance.removeListener(_handleSharedDocuments);
     WidgetsBinding.instance.removeObserver(this);
     _budgetTimer?.cancel();
+    _budgetNotificationTapSubscription?.cancel();
+    _pushOpenedBudgetSubscription?.cancel();
+    _pushForegroundSubscription?.cancel();
     super.dispose();
   }
 
@@ -56,31 +86,50 @@ class _DalvoShellPageState extends State<DalvoShellPage> with WidgetsBindingObse
     if (state == AppLifecycleState.resumed) _refreshBudgetAlerts();
   }
 
-  Future<void> _refreshBudgetAlerts() async {
+  Future<void> _refreshBudgetAlerts({bool notifyPages = false}) async {
     try {
-      final rows = await ApiClient.instance.budgets();
-      final pending = rows.where((row) {
-        final status = '${row['status'] ?? ''}'.toLowerCase();
-        return status.contains('espera de aprob') || status == 'pendiente' || status == 'sin aprobar';
-      }).toList()
+      final pending = (await ApiClient.instance.budgets(pendingApproval: true))
         ..sort((a, b) => '${b['updatedAt'] ?? b['createdAt'] ?? ''}'.compareTo('${a['updatedAt'] ?? a['createdAt'] ?? ''}'));
       final ids = pending.map((row) => int.tryParse('${row['id']}') ?? 0).where((id) => id > 0).toSet();
       if (_knownPendingBudgetIds != null) {
         final newCount = ids.difference(_knownPendingBudgetIds!).length;
         if (newCount > 0 && mounted) {
-          BudgetNotificationService.instance.showNewBudget(count: newCount);
+          final latest = pending.firstWhere(
+            (row) => ids.difference(_knownPendingBudgetIds!).contains(int.tryParse('${row['id']}') ?? 0),
+            orElse: () => pending.first,
+          );
+          final budgetId = int.tryParse('${latest['id']}');
+          BudgetNotificationService.instance.showNewBudget(count: newCount, budgetId: budgetId);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(newCount == 1 ? 'Nuevo presupuesto pendiente de aprobación.' : '$newCount nuevos presupuestos pendientes de aprobación.'),
-            action: SnackBarAction(label: 'Ver', onPressed: () => _goTo('budgets')),
+            action: SnackBarAction(label: 'Ver', onPressed: () => _openBudgetFromNotification(budgetId)),
           ));
         }
       }
+      final changed = _knownPendingBudgetIds == null ||
+          _knownPendingBudgetIds!.length != ids.length ||
+          !_knownPendingBudgetIds!.containsAll(ids);
       _knownPendingBudgetIds = ids;
       BudgetNotificationService.instance.setBudgetBadge(pending.length);
+      if (notifyPages || changed) BudgetNotificationService.instance.notifyBudgetUpdated();
       if (mounted) setState(() => _pendingBudgets = pending.length);
     } catch (_) {
       // El usuario puede no tener permiso de presupuesto; la navegación sigue disponible.
     }
+  }
+
+  void _openBudgetFromNotification(int? budgetId) {
+    if (!mounted) return;
+    if (budgetId == null || budgetId <= 0) {
+      _goTo('budgets');
+      return;
+    }
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) => BudgetDetailPage(
+        budgetId: budgetId,
+        onStatusChanged: _refreshBudgetAlerts,
+      ),
+    ));
   }
 
   Future<void> _handleSharedDocuments() async {
@@ -138,7 +187,7 @@ class _DalvoShellPageState extends State<DalvoShellPage> with WidgetsBindingObse
       case 'projects':
         return const ProjectsPage(embedded: true);
       case 'budgets':
-        return const BudgetsPage();
+        return BudgetsPage(onPendingChanged: _refreshBudgetAlerts);
       case 'attendance':
         return const AttendancePage();
       case 'account':
@@ -176,15 +225,6 @@ class _DalvoShellPageState extends State<DalvoShellPage> with WidgetsBindingObse
         titleSpacing: 9,
         title: const DalvoLogo(width: 104),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 4),
-            child: _RoundAction(
-              icon: Icons.add_link,
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => const DocumentAssignmentPage(),
-              )),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.only(right: 14),
             child: InkWell(

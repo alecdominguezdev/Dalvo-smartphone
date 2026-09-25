@@ -225,29 +225,14 @@ class _ProjectCard extends StatelessWidget {
                 ),
             ],
           ),
-          ...[
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Text('Avance del proyecto', style: Theme.of(context).textTheme.bodySmall),
-                const Spacer(),
-                Text(
-                  '${progress.toStringAsFixed(0)}%',
-                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900),
-                ),
-              ],
-            ),
-            const SizedBox(height: 7),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(9),
-              child: LinearProgressIndicator(
-                value: progress / 100,
-                minHeight: 7,
-                backgroundColor: DalvoColors.line,
-                color: closed ? DalvoColors.success : DalvoColors.primary,
-              ),
-            ),
-          ],
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Text('Avance', style: Theme.of(context).textTheme.bodySmall),
+              const Spacer(),
+              Text('${progress.toStringAsFixed(0)}%', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w900)),
+            ],
+          ),
           if (project.supervisor.isNotEmpty) ...[
             const SizedBox(height: 15),
             Row(

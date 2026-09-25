@@ -1,0 +1,2207 @@
+/* Dalvo System: Dark Graphite Neutral v3.1
+   Tema negro/gris sin tinte azul; conserva estados de éxito, alerta y error. */
+
+body.dark-mode {
+  --ink: #f1f8fb;
+  --muted: #c5c5c5;
+  --line: #4c4c4c;
+  --brand: #a5a5a5;
+  --brand-dark: #ffffff;
+  --panel: #252525;
+  --surface: #151515;
+  --card-bg: #252525;
+  --danger: #e15d66;
+  --soft-shadow: none;
+  --glow: rgba(165, 165, 165, 0.12);
+  color: var(--ink);
+  color-scheme: dark;
+  background: #131313;
+}
+
+body.dark-mode ::selection {
+  color: #151515;
+  background: #a5a5a5;
+}
+
+body.dark-mode * {
+  scrollbar-color: #6e6e6e #252525;
+}
+
+body.dark-mode .command-center {
+  --sidebar-width: 248px;
+  --app-topbar-height: 64px;
+  --graphite-canvas: #151515;
+  --graphite-sidebar: #1a1a1a;
+  --graphite-panel: #252525;
+  --graphite-raised: #2f2f2f;
+  --graphite-control: #363636;
+  --graphite-border: #4c4c4c;
+  --graphite-border-strong: #616161;
+  --graphite-text: #f1f8fb;
+  --graphite-muted: #c5c5c5;
+  --graphite-subtle: #9a9a9a;
+  --graphite-action: #a5a5a5;
+  --graphite-action-text: #252525;
+  --graphite-danger: #e15d66;
+  --graphite-success: #47b881;
+  --graphite-warning: #d2a85d;
+  --directory-divider: #4c4c4c;
+  --minimal-bg: #151515;
+  --minimal-panel: #252525;
+  --minimal-panel-soft: #2f2f2f;
+  --minimal-line: #4c4c4c;
+  --minimal-text: #f1f8fb;
+  --minimal-muted: #c5c5c5;
+  --minimal-accent: #a5a5a5;
+  --minimal-accent-soft: #363636;
+  min-height: 100vh;
+  color: var(--graphite-text);
+  background: var(--graphite-canvas);
+}
+
+body.dark-mode .command-center :focus-visible {
+  outline: 2px solid #a5a5a5;
+  outline-offset: 2px;
+}
+
+/* Login */
+body.dark-mode #loginView {
+  background: #131313;
+}
+
+body.dark-mode #loginView .login-card {
+  border: 1px solid #494949;
+  background: #1e1e1e;
+  box-shadow: 0 34px 90px rgba(0, 0, 0, 0.52);
+}
+
+body.dark-mode #loginView .brand-panel {
+  background-color: #191919;
+  filter: saturate(0.2) contrast(1.08);
+}
+
+body.dark-mode #loginView .brand-shade {
+  background: linear-gradient(90deg, rgba(18, 18, 18, 0.94), rgba(26, 26, 26, 0.82));
+}
+
+body.dark-mode #loginView .form-panel {
+  color: #f1f8fb;
+  background: #1e1e1e;
+}
+
+body.dark-mode #loginView .login-logo {
+  content: url("../img/logo letra blancas.png");
+}
+
+body.dark-mode #loginView .form-heading h2,
+body.dark-mode #loginView .login-field input,
+body.dark-mode #loginView .remember-session,
+body.dark-mode #loginView .remember-session span {
+  color: #f1f8fb;
+}
+
+body.dark-mode #loginView .form-heading p,
+body.dark-mode #loginView .field-label,
+body.dark-mode #loginView .login-security-note {
+  color: #c5c5c5;
+}
+
+body.dark-mode #loginView .login-field input {
+  border-color: #585858;
+  background: #252525;
+}
+
+body.dark-mode #loginView .login-field::after {
+  background: #a5a5a5;
+}
+
+body.dark-mode #loginView .login-field input:focus {
+  border-color: #a5a5a5;
+  background: #292929;
+  box-shadow: 0 0 0 3px rgba(165, 165, 165, 0.12);
+}
+
+body.dark-mode #loginView .login-submit {
+  color: #222222;
+  background: #a5a5a5;
+  box-shadow: none;
+}
+
+body.dark-mode #loginView .login-submit:hover {
+  background: #ffffff;
+  box-shadow: none;
+}
+
+body.dark-mode #loginView .login-security-note {
+  border-top-color: #494949;
+}
+
+body.dark-mode #loginView .login-security-note i,
+body.dark-mode #loginView .password-toggle,
+body.dark-mode #loginView .field-icon {
+  color: #deebf0;
+}
+
+/* App shell and navigation */
+body.dark-mode .command-center .topbar,
+body.dark-mode .command-center.sidebar-expanded .topbar,
+body.dark-mode .command-center.sidebar-collapsed .topbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: var(--sidebar-width);
+  min-height: var(--app-topbar-height);
+  padding: 10px 18px;
+  border: 0;
+  border-bottom: 1px solid var(--graphite-border);
+  border-radius: 0;
+  color: var(--graphite-text);
+  background: rgba(26, 26, 26, 0.96);
+  box-shadow: none;
+  backdrop-filter: blur(16px);
+}
+
+body.dark-mode .command-center.sidebar-collapsed .topbar {
+  left: 0;
+}
+
+body.dark-mode .command-center .topbar-actions {
+  gap: 8px;
+}
+
+body.dark-mode .command-center .sidebar-toggle,
+body.dark-mode .command-center .theme-toggle,
+body.dark-mode .command-center .assistant-button,
+body.dark-mode .command-center .launcher-button {
+  width: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  border: 1px solid var(--graphite-border);
+  border-radius: 8px;
+  color: #deebf0;
+  background: #292929;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center .sidebar-toggle:hover,
+body.dark-mode .command-center .theme-toggle:hover,
+body.dark-mode .command-center .assistant-button:hover,
+body.dark-mode .command-center .launcher-button:hover {
+  border-color: var(--graphite-border-strong);
+  color: #ffffff;
+  background: #363636;
+}
+
+body.dark-mode .command-center .global-search {
+  width: min(760px, 100%);
+  max-width: 760px;
+}
+
+body.dark-mode .command-center .global-search input,
+body.dark-mode .command-center .global-search input:focus {
+  min-height: 40px;
+  border: 1px solid var(--graphite-border);
+  border-radius: 8px;
+  color: var(--graphite-text);
+  background: #252525;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center .global-search input:focus {
+  border-color: #868686;
+  background: #2b2b2b;
+}
+
+body.dark-mode .command-center .global-search::before {
+  border-color: #b0b0b0;
+}
+
+body.dark-mode .command-center .global-search::after {
+  background: #b0b0b0;
+}
+
+body.dark-mode .command-center .global-search kbd {
+  border-color: #585858;
+  color: #c5c5c5;
+  background: #363636;
+}
+
+body.dark-mode .command-center .create-button {
+  min-height: 40px;
+  border: 1px solid #a5a5a5;
+  border-radius: 8px;
+  color: var(--graphite-action-text);
+  background: var(--graphite-action);
+  box-shadow: none;
+}
+
+body.dark-mode .command-center .create-button:hover {
+  color: #171717;
+  background: #ffffff;
+  transform: none;
+}
+
+body.dark-mode .command-center .main-nav {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  padding: 20px 16px 16px;
+  border: 0;
+  border-right: 1px solid var(--graphite-border);
+  border-radius: 0;
+  background: var(--graphite-sidebar);
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+body.dark-mode .command-center .sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 20px;
+  padding: 0 0 18px;
+  border: 0;
+  border-bottom: 1px solid var(--graphite-border);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center .sidebar-brand img {
+  width: 128px;
+}
+
+body.dark-mode .command-center .sidebar-brand span {
+  max-width: 72px;
+  color: #f1f8fb;
+  font-size: 10px;
+  line-height: 1.15;
+  letter-spacing: 0.1em;
+}
+
+body.dark-mode .command-center .sidebar-nav-scroll::before,
+body.dark-mode .command-center .sidebar-nav-label {
+  color: #9a9a9a;
+}
+
+body.dark-mode .command-center .nav-item {
+  position: relative;
+  min-height: 43px;
+  margin: 1px 0;
+  padding: 0 13px;
+  border: 0;
+  border-radius: 7px;
+  color: #cacaca;
+  background: transparent;
+  box-shadow: none;
+  font-size: 13px;
+  font-weight: 760;
+}
+
+body.dark-mode .command-center .nav-item::before {
+  display: none;
+}
+
+body.dark-mode .command-center .nav-item:hover {
+  color: #f1f8fb;
+  background: #2b2b2b;
+  transform: none;
+}
+
+body.dark-mode .command-center .nav-item.active {
+  color: #ffffff;
+  background: #363636;
+}
+
+body.dark-mode .command-center .nav-item.active::after {
+  top: 8px;
+  bottom: 8px;
+  left: 0;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: #a5a5a5;
+}
+
+body.dark-mode .command-center .nav-badge,
+body.dark-mode .command-center .nav-item.active .nav-badge {
+  color: #ffffff;
+  background: #c94f59;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center .sidebar-session-box {
+  gap: 10px;
+  margin: auto 0 0;
+  padding: 14px;
+  border: 1px solid var(--graphite-border);
+  border-radius: 8px;
+  color: var(--graphite-text);
+  background: #252525;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center .sidebar-session-box strong {
+  color: #f1f8fb;
+}
+
+body.dark-mode .command-center .sidebar-session-box span {
+  color: #b3b3b3;
+}
+
+body.dark-mode .command-center .sidebar-logout-button {
+  min-height: 38px;
+  border: 1px solid #3b292d;
+  border-radius: 7px;
+  color: #e98b92;
+  background: rgba(225, 93, 102, 0.08);
+}
+
+body.dark-mode .command-center .sidebar-logout-button:hover {
+  color: #ffffff;
+  background: #b8444d;
+}
+
+body.dark-mode .command-center.sidebar-expanded .workspace,
+body.dark-mode .command-center.sidebar-collapsed .workspace {
+  width: auto;
+  max-width: none;
+  margin-right: 26px;
+  padding-top: calc(var(--app-topbar-height) + 28px);
+}
+
+body.dark-mode .command-center.sidebar-expanded .workspace {
+  margin-left: calc(var(--sidebar-width) + 26px);
+}
+
+body.dark-mode .command-center.sidebar-collapsed .workspace {
+  margin-left: 26px;
+}
+
+body.dark-mode .command-center .workspace,
+body.dark-mode .command-center .workspace-heading h1,
+body.dark-mode .command-center .workspace-heading h2 {
+  color: var(--graphite-text);
+}
+
+body.dark-mode .command-center .workspace-heading {
+  margin-bottom: 22px;
+  padding: 0;
+}
+
+body.dark-mode .command-center .workspace-heading h1 {
+  font-size: 42px;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+body.dark-mode .command-center .workspace-heading p:last-child,
+body.dark-mode .command-center .eyebrow {
+  color: var(--graphite-muted);
+}
+
+/* Home */
+.command-center .home-kpi-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.command-center .home-kpi-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "label"
+    "value"
+    "action";
+  align-content: start;
+  gap: 10px;
+}
+
+.command-center .home-kpi-card > span {
+  grid-area: label;
+}
+
+.command-center .home-kpi-card > strong {
+  grid-area: value;
+  min-width: 0;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.command-center .home-kpi-card > button {
+  grid-area: action;
+}
+
+.command-center .home-kpi-card > i {
+  display: none;
+}
+
+body.dark-mode .command-center .home-command {
+  gap: 18px;
+}
+
+body.dark-mode .command-center .home-hero {
+  min-height: 210px;
+  padding: 32px 34px;
+  border: 1px solid var(--graphite-border);
+  border-radius: 10px;
+  color: var(--graphite-text);
+  background: #222222;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center .home-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: #a5a5a5;
+}
+
+body.dark-mode .command-center .home-hero::after {
+  display: none;
+}
+
+body.dark-mode .command-center .home-hero h1 {
+  max-width: 900px;
+  color: #f7fbfd;
+  font-size: 52px;
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+body.dark-mode .command-center .home-hero p:not(.eyebrow) {
+  color: #d3d3d3;
+}
+
+body.dark-mode .command-center .home-hero-meta span {
+  border-color: #565656;
+  color: #cbcbcb;
+  background: #2f2f2f;
+}
+
+body.dark-mode .command-center .home-launcher-card {
+  border: 1px solid var(--graphite-border-strong);
+  border-radius: 8px;
+  color: #f1f8fb;
+  background: #2f2f2f;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center .home-launcher-card:hover {
+  border-color: #7a7a7a;
+  background: #383838;
+  transform: none;
+}
+
+body.dark-mode .command-center .home-launcher-icon {
+  border: 1px solid #636363;
+  border-radius: 8px;
+  color: #f1f8fb;
+  background: #414141;
+}
+
+body.dark-mode .command-center .home-launcher-card small {
+  color: #bdbdbd;
+}
+
+body.dark-mode .command-center .home-kpi-grid {
+  gap: 12px;
+}
+
+body.dark-mode .command-center .home-kpi-card {
+  min-height: 138px;
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid var(--graphite-border);
+  border-radius: 9px;
+  color: var(--graphite-text);
+  background: var(--graphite-panel);
+  box-shadow: none;
+}
+
+body.dark-mode .command-center .home-kpi-card::before {
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 2px;
+  background: #616161;
+}
+
+body.dark-mode .command-center .home-kpi-card::after {
+  display: none;
+}
+
+body.dark-mode .command-center .home-kpi-card:hover {
+  border-color: var(--graphite-border-strong);
+  background: #292929;
+  box-shadow: none;
+  transform: none;
+}
+
+body.dark-mode .command-center .home-kpi-card span {
+  color: #bbbbbb;
+  line-height: 1.3;
+}
+
+body.dark-mode .command-center .home-kpi-card strong {
+  align-self: center;
+  color: #f7fbfd;
+  font-size: 32px;
+  line-height: 1.08;
+}
+
+body.dark-mode .command-center .home-kpi-card button,
+body.dark-mode .command-center .home-link-button,
+body.dark-mode .command-center .home-quick-actions button {
+  color: #eaf4f7;
+  background: transparent;
+}
+
+body.dark-mode .command-center .home-kpi-card button:hover,
+body.dark-mode .command-center .home-link-button:hover,
+body.dark-mode .command-center .home-quick-actions button:hover {
+  color: #ffffff;
+  text-decoration: underline;
+  transform: none;
+}
+
+body.dark-mode .command-center .home-layout,
+body.dark-mode .command-center .home-side-stack {
+  gap: 16px;
+}
+
+body.dark-mode .command-center .home-panel {
+  border: 1px solid var(--graphite-border);
+  border-radius: 9px;
+  color: var(--graphite-text);
+  background: var(--graphite-panel);
+  box-shadow: none;
+}
+
+body.dark-mode .command-center .home-panel-heading {
+  padding: 19px 22px 15px;
+  border-bottom: 1px solid var(--graphite-border);
+  background: #292929;
+}
+
+body.dark-mode .command-center .home-panel-heading h2,
+body.dark-mode .command-center .home-money,
+body.dark-mode .command-center .home-activity-item strong,
+body.dark-mode .command-center .home-pending-item strong {
+  color: #f1f8fb;
+}
+
+body.dark-mode .command-center .home-activity-item,
+body.dark-mode .command-center .home-pending-item {
+  border-color: var(--graphite-border);
+  background: transparent;
+}
+
+body.dark-mode .command-center .home-activity-item:hover,
+body.dark-mode .command-center .home-pending-item:hover {
+  background: #2f2f2f;
+}
+
+body.dark-mode .command-center .home-activity-item small,
+body.dark-mode .command-center .home-pending-item small {
+  color: #b8b8b8;
+}
+
+body.dark-mode .command-center .home-pending-count {
+  color: #222222;
+  background: #eaf4f7;
+  box-shadow: none;
+}
+
+/* Shared panels, controls and forms */
+body.dark-mode .command-center :where(
+  .users-panel,
+  .clients-panel,
+  .providers-panel,
+  .price-panel,
+  .fixed-expenses-panel,
+  .budgets-panel,
+  .report-card,
+  .report-kpi,
+  .report-table-card,
+  .task-stat-card,
+  .task-form,
+  .task-card,
+  .budget-detail-card,
+  .budget-block-panel,
+  .budget-documents-card,
+  .client-quote-module,
+  .payment-box,
+  fieldset
+) {
+  border-color: var(--graphite-border);
+  border-radius: 9px;
+  color: var(--graphite-text);
+  background: var(--graphite-panel);
+  box-shadow: none;
+}
+
+body.dark-mode .command-center :where(
+  .module-toolbar,
+  .budget-detail-actions,
+  .document-form,
+  .price-form,
+  .budget-cost-card,
+  .budget-cost-heading,
+  .budget-costs-access,
+  .budget-readonly-card,
+  .budget-readonly-heading,
+  .budget-block-form,
+  .budget-financial-panel,
+  .budget-financial-grid,
+  .budget-warranty-check,
+  .inline-check-field,
+  .payment-order-form,
+  .client-quote-cost-picker,
+  .client-quote-table,
+  .client-quote-total,
+  .client-po-form,
+  .client-po-current,
+  .supplier-order-file-form,
+  .supplier-order-table,
+  .fixed-purchase-budget-panel,
+  .accounts-receivable-upload-form,
+  .columns-menu
+) {
+  border-color: var(--graphite-border);
+  border-radius: 8px;
+  color: var(--graphite-text);
+  background: var(--graphite-raised);
+  box-shadow: none;
+}
+
+body.dark-mode .command-center .module-toolbar {
+  padding: 16px;
+}
+
+body.dark-mode .command-center :where(input, select, textarea) {
+  border: 1px solid var(--graphite-border-strong);
+  border-radius: 7px;
+  color: var(--graphite-text);
+  background: #1e1e1e;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center :where(input, select, textarea)::placeholder {
+  color: #969696;
+}
+
+body.dark-mode .command-center :where(input, select, textarea):focus {
+  border-color: #a1a1a1;
+  color: #ffffff;
+  background: #252525;
+  box-shadow: 0 0 0 3px rgba(165, 165, 165, 0.12);
+}
+
+body.dark-mode .command-center :where(input, select, textarea):disabled,
+body.dark-mode .command-center :where(input, select, textarea)[readonly] {
+  color: #b8b8b8;
+  background: #2f2f2f;
+}
+
+body.dark-mode .command-center label span,
+body.dark-mode .command-center legend,
+body.dark-mode .command-center .form-section-title span {
+  color: #9a9aa3;
+}
+
+body.dark-mode .command-center :where(input[type="checkbox"], input[type="radio"]) {
+  accent-color: #a5a5a5;
+}
+
+body.dark-mode .command-center input[type="file"] {
+  min-height: 50px;
+  overflow: hidden;
+  padding: 5px;
+  color: #c5c5c5;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+body.dark-mode .command-center input[type="file"]::file-selector-button {
+  min-height: 38px;
+  margin-right: 12px;
+  padding: 0 14px;
+  border: 0;
+  border-right: 1px solid #616161;
+  border-radius: 6px;
+  color: #f1f8fb;
+  background: #454545;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+body.dark-mode .command-center input[type="file"]::file-selector-button:hover {
+  background: #535353;
+}
+
+body.dark-mode .command-center :where(
+  .primary-button,
+  .success-button,
+  .small-button,
+  .create-user-button,
+  .dark-button,
+  .table-action-button,
+  .view-file-button,
+  .file-upload-button
+) {
+  border: 1px solid #a5a5a5;
+  border-radius: 7px;
+  color: #252525;
+  background: #a5a5a5;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center :where(
+  .primary-button,
+  .success-button,
+  .small-button,
+  .create-user-button,
+  .dark-button,
+  .table-action-button,
+  .view-file-button,
+  .file-upload-button
+):hover {
+  color: #151515;
+  background: #ffffff;
+  box-shadow: none;
+  transform: none;
+}
+
+body.dark-mode .command-center :where(
+  .ghost-button,
+  .secondary-button,
+  .secondary-action-button,
+  .client-quote-ghost,
+  .columns-button,
+  .icon-button,
+  .row-flag-button
+) {
+  border: 1px solid var(--graphite-border-strong);
+  border-radius: 7px;
+  color: #deebf0;
+  background: #343434;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center :where(
+  .ghost-button,
+  .secondary-button,
+  .secondary-action-button,
+  .client-quote-ghost,
+  .columns-button,
+  .icon-button,
+  .row-flag-button
+):hover {
+  border-color: #7a7a7a;
+  color: #ffffff;
+  background: #414141;
+  transform: none;
+}
+
+body.dark-mode .command-center :where(.danger-button, .delete-user-button) {
+  border-color: #73363c;
+  color: #ffd8db;
+  background: #9f3841;
+}
+
+body.dark-mode .command-center :where(.danger-button, .delete-user-button):hover {
+  background: #b8444d;
+}
+
+body.dark-mode .command-center :where(.tag, .status-pill, .user-role-pill, .task-priority) {
+  border: 1px solid #5b5b5b;
+  color: #deebf0;
+  background: #3d3d3d;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center .modal-status,
+body.dark-mode .command-center .form-message,
+body.dark-mode .command-center .client-quote-empty.is-error {
+  color: #f08a92;
+}
+
+body.dark-mode .command-center :where(.user-field-invalid input, .user-field-invalid select) {
+  border-color: #e15d66;
+  box-shadow: 0 0 0 3px rgba(225, 93, 102, 0.13);
+}
+
+/* Users, clients and providers */
+body.dark-mode .command-center #usuariosModule .users-card-list,
+body.dark-mode .command-center #clientesModule .clients-card-list,
+body.dark-mode .command-center #proveedoresModule .providers-card-list {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 12px;
+}
+
+body.dark-mode .command-center :where(
+  .user-card,
+  .user-access-card,
+  .client-directory-card,
+  .provider-directory-card,
+  .price-category-card
+) {
+  border: 1px solid var(--graphite-border);
+  border-radius: 9px;
+  color: var(--graphite-text);
+  background: var(--graphite-panel);
+  box-shadow: none;
+  transform: none;
+}
+
+body.dark-mode .command-center :where(
+  .user-card,
+  .user-access-card,
+  .client-directory-card,
+  .provider-directory-card,
+  .price-category-card
+):hover {
+  border-color: var(--graphite-border-strong);
+  background: #292929;
+  box-shadow: none;
+  transform: none;
+}
+
+body.dark-mode .command-center :where(
+  .user-card,
+  .user-access-card,
+  .client-directory-card,
+  .provider-directory-card
+)::after {
+  display: none;
+}
+
+body.dark-mode .command-center :where(
+  .user-card,
+  .user-access-card,
+  .client-directory-card,
+  .provider-directory-card
+)::before {
+  background: #616161;
+}
+
+body.dark-mode .command-center :where(
+  .user-card-avatar,
+  .client-card-avatar,
+  .provider-card-avatar
+) {
+  border: 1px solid #616161;
+  border-radius: 8px;
+  color: #f1f8fb;
+  background: #414141;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center :where(
+  .user-card h2,
+  .client-card-title h2,
+  .provider-card-title h2,
+  .client-card-facts b,
+  .provider-card-facts b,
+  .user-card-body b,
+  .users-summary-grid strong
+) {
+  color: #f1f8fb;
+}
+
+body.dark-mode .command-center :where(
+  .user-card-body span,
+  .user-access-meta span,
+  .client-card-facts span,
+  .provider-card-facts span,
+  .client-doc-chip,
+  .provider-doc-chip,
+  .users-summary-grid article,
+  .metric-card
+) {
+  border-color: var(--graphite-border);
+  border-radius: 7px;
+  color: #deebf0;
+  background: #1e1e1e;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center :where(
+  .client-card-title span,
+  .provider-card-title span,
+  .user-card-body strong,
+  .client-card-facts strong,
+  .provider-card-facts strong,
+  .user-permission-preview strong
+) {
+  color: #b8b8b8;
+}
+
+body.dark-mode .command-center :where(
+  .client-card-actions .client-docs-button,
+  .provider-card-actions .provider-docs-button
+) {
+  border-color: var(--graphite-border-strong);
+  color: #deebf0;
+  background: #363636;
+}
+
+/* Tables and data-heavy modules */
+body.dark-mode .command-center :where(
+  .budgets-table-shell,
+  .fixed-expense-table-shell,
+  .price-table,
+  .fixed-expense-table,
+  .budget-documents-table,
+  .budget-readonly-table-shell,
+  .report-table-card,
+  .data-table-wrap
+) {
+  border: 1px solid var(--graphite-border);
+  border-radius: 8px;
+  background: var(--graphite-panel);
+  box-shadow: none;
+}
+
+body.dark-mode .command-center :where(
+  .budgets-table-head,
+  .purchase-table-head,
+  .fixed-expense-table-head,
+  .price-table-head,
+  .budget-documents-head,
+  .budget-equipment-head,
+  .client-quote-head,
+  .supplier-order-head,
+  .report-table-head,
+  .data-table thead th,
+  .budget-readonly-table th
+) {
+  border-color: var(--graphite-border);
+  color: #e0e0e0;
+  background: #363636;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center :where(
+  .sortable-column,
+  .budgets-table-head span,
+  .purchase-table-head span,
+  .fixed-expense-table-head span,
+  .price-table-head span
+) {
+  color: #e0e0e0;
+}
+
+body.dark-mode .command-center :where(
+  .budget-table-row,
+  .purchase-table-row,
+  .fixed-expense-table-row,
+  .price-table-row,
+  .budget-documents-row,
+  .budget-equipment-row,
+  .budget-contractor-row,
+  .budget-labor-row,
+  .budget-material-row,
+  .client-quote-row,
+  .supplier-order-row,
+  .fixed-purchase-order-row,
+  .commission-adjustments-row,
+  .accounts-payable-discount-row,
+  .report-table-row,
+  .data-table tbody tr,
+  .budget-readonly-table td
+) {
+  border-color: var(--graphite-border);
+  color: #e5f0f4;
+  background: #252525;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center :where(
+  .budget-table-row:nth-child(even),
+  .purchase-table-row:nth-child(even),
+  .fixed-expense-table-row:nth-child(even),
+  .price-table-row:nth-child(even),
+  .budget-equipment-row:nth-child(even),
+  .budget-contractor-row:nth-child(even),
+  .budget-labor-row:nth-child(even),
+  .budget-material-row:nth-child(even),
+  .commission-adjustments-row:nth-child(even),
+  .budget-readonly-table tr:nth-child(even) td,
+  .data-table tbody tr:nth-child(even)
+) {
+  background: #292929;
+}
+
+body.dark-mode .command-center :where(
+  .budget-table-row.is-clickable,
+  .purchase-table-row.is-clickable,
+  .fixed-expense-table-row,
+  .price-table-row,
+  .commission-adjustments-row,
+  .data-table tbody tr
+):hover {
+  color: #ffffff;
+  background: #363636;
+}
+
+body.dark-mode .command-center :where(
+  .budget-table-row > span,
+  .purchase-table-row > span,
+  .fixed-expense-table-row > span,
+  .price-table-row > span,
+  .report-table-row > span,
+  .data-table tbody td
+) {
+  color: inherit;
+}
+
+body.dark-mode .command-center :where(
+  .budget-table-row strong,
+  .purchase-table-row strong,
+  .fixed-expense-table-row strong,
+  .price-table-row strong,
+  .budget-equipment-row b,
+  .report-table-row strong
+) {
+  color: #f1f8fb;
+}
+
+body.dark-mode .command-center .column-resizer {
+  background: #616161;
+}
+
+body.dark-mode .command-center .table-pagination {
+  color: #c5c5c5;
+}
+
+body.dark-mode .command-center .table-pagination button {
+  border-color: var(--graphite-border-strong);
+  color: #deebf0;
+  background: #363636;
+}
+
+body.dark-mode .command-center .table-pagination button:hover:not(:disabled) {
+  color: #ffffff;
+  background: #454545;
+}
+
+body.dark-mode .command-center :where(.budget-table-row.row-state-paid, .purchase-table-row.row-state-paid, .fixed-expense-table-row.row-state-paid) {
+  background: rgba(71, 184, 129, 0.08);
+  box-shadow: inset 3px 0 0 var(--graphite-success);
+}
+
+body.dark-mode .command-center :where(.budget-table-row.row-state-docs, .purchase-table-row.row-state-docs, .fixed-expense-table-row.row-state-docs) {
+  background: rgba(210, 168, 93, 0.08);
+  box-shadow: inset 3px 0 0 var(--graphite-warning);
+}
+
+body.dark-mode .command-center :where(.budget-table-row.row-state-waiting, .purchase-table-row.row-state-waiting, .fixed-expense-table-row.row-state-waiting) {
+  background: rgba(161, 161, 170, 0.06);
+  box-shadow: inset 3px 0 0 #9a9a9a;
+}
+
+body.dark-mode .command-center :where(.budget-table-row.row-alert, .purchase-table-row.row-alert) {
+  color: #f1f8fb;
+  background: rgba(210, 168, 93, 0.1);
+  box-shadow: inset 3px 0 0 var(--graphite-warning);
+}
+
+body.dark-mode .command-center :where(.budget-table-row.row-is-flagged, .purchase-table-row.row-is-flagged),
+body.dark-mode .command-center :where(.budget-table-row.row-alert.row-is-flagged, .purchase-table-row.row-alert.row-is-flagged) {
+  color: #f1f8fb;
+  background: rgba(225, 93, 102, 0.1);
+  box-shadow: inset 3px 0 0 var(--graphite-danger);
+}
+
+/* Budget, purchasing, finance and detail views */
+body.dark-mode .command-center :where(
+  .budget-detail-summary article,
+  .budget-block-cards article,
+  .fixed-purchase-summary article,
+  .accounts-payable-breakdown span,
+  .payment-order-history-row,
+  .client-quote-history-row,
+  .document-row,
+  .client-quote-part,
+  .supplier-order-row,
+  .fixed-purchase-order-row,
+  .commission-adjustments-row,
+  .accounts-payable-discount-form,
+  .accounts-payable-discount-row,
+  .supplier-budget-panel,
+  .task-meta div,
+  .task-note
+) {
+  border-color: var(--graphite-border);
+  border-radius: 7px;
+  color: #e5f0f4;
+  background: #1e1e1e;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center :where(
+  .budget-detail h2,
+  .purchase-section h2,
+  .client-quote-module h3,
+  .payment-order-history h4,
+  .price-section h2,
+  .budget-detail-summary strong,
+  .budget-block-cards strong,
+  .fixed-purchase-summary strong,
+  .budget-cost-heading h3,
+  .budget-readonly-heading h3,
+  .budget-block-panel h3,
+  .budget-block-form h4,
+  .budget-financial-panel h3,
+  .document-row strong,
+  .client-quote-history-row strong
+) {
+  color: #f1f8fb;
+}
+
+body.dark-mode .command-center :where(
+  .budget-detail-summary span,
+  .budget-block-cards span,
+  .fixed-purchase-summary span,
+  .budget-cost-heading span,
+  .budget-financial-field span,
+  .payment-order-summary span,
+  .document-row span,
+  .client-quote-history-row span,
+  .accounts-payable-breakdown span
+) {
+  color: #bfbfbf;
+}
+
+body.dark-mode .command-center .accounts-payable-split-title {
+  color: #deebf0;
+}
+
+/* Tasks and reports */
+body.dark-mode .command-center .task-stats-grid {
+  gap: 10px;
+}
+
+body.dark-mode .command-center .task-card {
+  border-left: 3px solid #9a9a9a;
+}
+
+body.dark-mode .command-center .task-card.is-overdue {
+  border-left-color: var(--graphite-danger);
+  background: rgba(225, 93, 102, 0.08);
+}
+
+body.dark-mode .command-center .task-card.is-reminder {
+  border-left-color: var(--graphite-warning);
+  background: rgba(210, 168, 93, 0.08);
+}
+
+body.dark-mode .command-center :where(
+  .task-card h3,
+  .task-card p,
+  .task-note,
+  .task-meta dd,
+  .task-stat-card strong,
+  .task-form-heading h3,
+  .report-card h2,
+  .report-kpi strong
+) {
+  color: #f1f8fb;
+}
+
+body.dark-mode .command-center :where(
+  .task-stat-card span,
+  .task-stat-card small,
+  .task-meta dt,
+  .report-card p,
+  .report-kpi span
+) {
+  color: #bfbfbf;
+}
+
+body.dark-mode .command-center .task-priority.high {
+  border-color: rgba(210, 168, 93, 0.34);
+  color: #e4c994;
+  background: rgba(210, 168, 93, 0.12);
+}
+
+body.dark-mode .command-center .task-priority.urgent {
+  border-color: rgba(225, 93, 102, 0.34);
+  color: #f09aa1;
+  background: rgba(225, 93, 102, 0.12);
+}
+
+body.dark-mode .command-center .task-priority.low {
+  border-color: rgba(71, 184, 129, 0.34);
+  color: #8fd4b2;
+  background: rgba(71, 184, 129, 0.12);
+}
+
+body.dark-mode .command-center .report-bar-row i {
+  background: #deebf0;
+}
+
+/* Overlays, launcher, assistant and modals */
+body.dark-mode .command-center :where(
+  .quick-actions-overlay,
+  .assistant-overlay,
+  .module-launcher,
+  .modal
+) {
+  background: rgba(0, 0, 0, 0.76);
+  backdrop-filter: blur(8px);
+}
+
+body.dark-mode .command-center :where(
+  .quick-actions-panel,
+  .assistant-panel,
+  .module-launcher-panel,
+  .modal-panel
+) {
+  border: 1px solid var(--graphite-border-strong);
+  border-radius: 10px;
+  color: var(--graphite-text);
+  background: #252525;
+  box-shadow: 0 32px 90px rgba(0, 0, 0, 0.58);
+}
+
+body.dark-mode .command-center :where(
+  .quick-actions-search,
+  .assistant-heading,
+  .launcher-heading,
+  .modal-heading,
+  .budget-documents-heading
+) {
+  border-color: var(--graphite-border);
+  background: #292929;
+}
+
+body.dark-mode .command-center :where(
+  .assistant-heading h2,
+  .launcher-heading h1,
+  .modal-heading h2,
+  .budget-documents-heading h3
+) {
+  color: #f1f8fb;
+}
+
+body.dark-mode .command-center :where(
+  .quick-actions-list button,
+  .launcher-card,
+  .assistant-response
+) {
+  border-color: var(--graphite-border);
+  border-radius: 8px;
+  color: #e5f0f4;
+  background: #2b2b2b;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center :where(
+  .quick-actions-list button:hover,
+  .quick-actions-list button:focus-visible,
+  .launcher-card:hover,
+  .launcher-card:focus-visible
+) {
+  border-color: var(--graphite-border-strong);
+  color: #ffffff;
+  background: #383838;
+  transform: none;
+}
+
+body.dark-mode .command-center .quick-actions-list button > span,
+body.dark-mode .command-center .launcher-icon {
+  border: 1px solid #616161;
+  border-radius: 7px;
+  color: #f1f8fb;
+  background: #454545;
+}
+
+body.dark-mode .command-center :where(
+  .launcher-card strong,
+  .quick-actions-list strong
+) {
+  color: #f1f8fb;
+}
+
+body.dark-mode .command-center :where(
+  .launcher-card small,
+  .quick-actions-list small,
+  .quick-actions-body > p
+) {
+  color: #bbbbbb;
+}
+
+body.dark-mode .command-center :where(.launcher-close, .modal-close) {
+  border: 1px solid var(--graphite-border-strong);
+  border-radius: 7px;
+  color: #deebf0;
+  background: #3d3d3d;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center :where(.launcher-close, .modal-close):hover {
+  color: #ffffff;
+  background: #4b4b4b;
+}
+
+body.dark-mode .command-center .global-results {
+  border: 1px solid var(--graphite-border-strong);
+  border-radius: 8px;
+  background: #252525;
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .command-center .search-result {
+  border-color: var(--graphite-border);
+  color: #deebf0;
+}
+
+body.dark-mode .command-center .search-result:hover {
+  background: #363636;
+}
+
+body.dark-mode .command-center .search-result strong,
+body.dark-mode .command-center .search-result span {
+  color: inherit;
+}
+
+body.dark-mode .command-center .quick-actions-search kbd {
+  border-color: var(--graphite-border-strong);
+  color: #c5c5c5;
+  background: #3d3d3d;
+}
+
+body.dark-mode .command-center #userModal .user-access-form {
+  border: 1px solid var(--graphite-border-strong);
+  border-radius: 10px;
+  background: #222222;
+  box-shadow: 0 32px 90px rgba(0, 0, 0, 0.58);
+}
+
+body.dark-mode .command-center #userModal .user-modal-heading,
+body.dark-mode .command-center #userModal .modal-actions {
+  border-color: var(--graphite-border);
+  background: #2b2b2b;
+  backdrop-filter: none;
+}
+
+body.dark-mode .command-center #userModal .user-modal-heading small {
+  color: #bfbfbf;
+}
+
+body.dark-mode .command-center :where(.user-form-section, .user-permission-section) {
+  border: 1px solid var(--graphite-border);
+  border-radius: 8px;
+  color: var(--graphite-text);
+  background: #292929;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center .user-section-title > span {
+  border: 1px solid #5d5d5d;
+  border-radius: 7px;
+  color: #eaf4f7;
+  background: #414141;
+}
+
+body.dark-mode .command-center :where(.user-section-title strong, .user-permission-preview strong, #userModal .check-row span) {
+  color: #f1f8fb;
+}
+
+body.dark-mode .command-center :where(#userModal .check-row, .user-access-meta span) {
+  border-color: var(--graphite-border);
+  color: #deebf0;
+  background: #1e1e1e;
+}
+
+body.dark-mode .command-center .modal-actions {
+  border-top-color: var(--graphite-border);
+}
+
+/* High-specificity directory rules replace legacy module palettes. */
+body.dark-mode .command-center #usuariosModule :where(
+  .users-panel,
+  .user-access-card,
+  .users-summary-grid article
+),
+body.dark-mode .command-center #clientesModule :where(
+  .clients-panel,
+  .client-directory-card
+),
+body.dark-mode .command-center #proveedoresModule :where(
+  .providers-panel,
+  .provider-directory-card
+) {
+  border-color: var(--graphite-border);
+  color: var(--graphite-text);
+  background: var(--graphite-panel);
+  box-shadow: none;
+}
+
+body.dark-mode .command-center #usuariosModule :where(
+  .users-search input,
+  .user-card-body span,
+  .user-access-meta span,
+  .tag
+),
+body.dark-mode .command-center #clientesModule :where(
+  .clients-search input,
+  .client-doc-chip,
+  .client-card-facts span
+),
+body.dark-mode .command-center #proveedoresModule :where(
+  .providers-search input,
+  .provider-doc-chip,
+  .provider-card-facts span
+) {
+  border-color: var(--graphite-border);
+  color: #deebf0;
+  background: #1e1e1e;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center #usuariosModule :where(
+  .user-card h2,
+  .user-card-body b,
+  .users-summary-grid strong
+),
+body.dark-mode .command-center #clientesModule :where(
+  .client-card-title h2,
+  .client-card-facts b
+),
+body.dark-mode .command-center #proveedoresModule :where(
+  .provider-card-title h2,
+  .provider-card-facts b
+) {
+  color: #f1f8fb;
+}
+
+body.dark-mode .command-center #usuariosModule :where(
+  .create-user-button,
+  .edit-user-button
+),
+body.dark-mode .command-center #clientesModule :where(
+  .client-create-button,
+  .edit-client-button
+),
+body.dark-mode .command-center #proveedoresModule :where(
+  .provider-create-button,
+  .edit-provider-button
+) {
+  border: 1px solid #a5a5a5;
+  border-radius: 7px;
+  color: #252525;
+  background: #a5a5a5;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center #clientesModule .client-card-actions .client-docs-button,
+body.dark-mode .command-center #proveedoresModule .provider-card-actions .provider-docs-button {
+  border-color: var(--graphite-border-strong);
+  color: #deebf0;
+  background: #363636;
+}
+
+body.dark-mode .command-center #usuariosModule .user-access-card::before,
+body.dark-mode .command-center #clientesModule .client-directory-card::before,
+body.dark-mode .command-center #proveedoresModule .provider-directory-card::before {
+  background: #616161;
+}
+
+body.dark-mode .command-center #usuariosModule .user-access-card::after,
+body.dark-mode .command-center #clientesModule .client-directory-card::after,
+body.dark-mode .command-center #proveedoresModule .provider-directory-card::after {
+  display: none;
+}
+
+body.dark-mode .command-center #usuariosModule .delete-user-button,
+body.dark-mode .command-center #clientesModule .delete-client-button,
+body.dark-mode .command-center #proveedoresModule .delete-provider-button {
+  border-color: #73363c;
+  color: #ffd8db;
+  background: #9f3841;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center #usuariosModule :where(
+  .user-card-avatar,
+  .user-section-title > span
+),
+body.dark-mode .command-center #clientesModule .client-card-avatar,
+body.dark-mode .command-center #proveedoresModule .provider-card-avatar {
+  border: 1px solid var(--graphite-border-strong);
+  border-radius: 8px;
+  color: #f1f8fb;
+  background: #414141;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center #userModal :where(input, select, textarea) {
+  border-color: var(--graphite-border-strong);
+  color: var(--graphite-text);
+  background: #1e1e1e;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center #userModal :where(input, select, textarea):focus {
+  border-color: #a1a1a1;
+  background: #252525;
+  box-shadow: 0 0 0 3px rgba(165, 165, 165, 0.12);
+}
+
+body.dark-mode .command-center .document-form input[type="file"],
+body.dark-mode .command-center .accounts-receivable-upload-form input[type="file"],
+body.dark-mode .command-center .supplier-order-file-form input[type="file"] {
+  border-color: var(--graphite-border-strong);
+  color: #c5c5c5;
+  background: #1e1e1e;
+}
+
+body.dark-mode .command-center .document-form input[type="file"]:hover,
+body.dark-mode .command-center .document-form input[type="file"]:focus,
+body.dark-mode .command-center .accounts-receivable-upload-form input[type="file"]:hover,
+body.dark-mode .command-center .accounts-receivable-upload-form input[type="file"]:focus,
+body.dark-mode .command-center .supplier-order-file-form input[type="file"]:hover,
+body.dark-mode .command-center .supplier-order-file-form input[type="file"]:focus {
+  border-color: #a1a1a1;
+  background: #252525;
+  box-shadow: 0 0 0 3px rgba(165, 165, 165, 0.12);
+}
+
+body.dark-mode .command-center .price-table-row:nth-child(even),
+body.dark-mode .command-center .fixed-expense-table-row:nth-child(even),
+body.dark-mode .command-center .budget-equipment-row:nth-child(even),
+body.dark-mode .command-center .budget-contractor-row:nth-child(even),
+body.dark-mode .command-center .budget-labor-row:nth-child(even),
+body.dark-mode .command-center .budget-material-row:nth-child(even),
+body.dark-mode .command-center .commission-adjustments-row:nth-child(even),
+body.dark-mode .command-center .budget-readonly-table tr:nth-child(even) td {
+  background: #292929;
+}
+
+body.dark-mode .command-center .purchase-table-row.row-state-paid,
+body.dark-mode .command-center .budget-table-row.row-state-paid,
+body.dark-mode .command-center .fixed-expense-table-row.row-state-paid {
+  color: #f1f8fb;
+  background: rgba(71, 184, 129, 0.08);
+  box-shadow: inset 3px 0 0 var(--graphite-success);
+}
+
+body.dark-mode .command-center .purchase-table-row.row-state-docs,
+body.dark-mode .command-center .budget-table-row.row-state-docs,
+body.dark-mode .command-center .fixed-expense-table-row.row-state-docs {
+  color: #f1f8fb;
+  background: rgba(210, 168, 93, 0.08);
+  box-shadow: inset 3px 0 0 var(--graphite-warning);
+}
+
+body.dark-mode .command-center .purchase-table-row.row-state-waiting,
+body.dark-mode .command-center .budget-table-row.row-state-waiting,
+body.dark-mode .command-center .fixed-expense-table-row.row-state-waiting {
+  color: #f1f8fb;
+  background: rgba(161, 161, 170, 0.06);
+  box-shadow: inset 3px 0 0 #9a9a9a;
+}
+
+body.dark-mode .command-center .budget-table-row.row-alert,
+body.dark-mode .command-center .purchase-table-row.row-alert,
+body.dark-mode .command-center .budget-table-row.row-alert:hover,
+body.dark-mode .command-center .purchase-table-row.row-alert:hover {
+  color: #f1f8fb;
+  background: rgba(210, 168, 93, 0.1);
+  box-shadow: inset 3px 0 0 var(--graphite-warning);
+}
+
+body.dark-mode .command-center .budget-table-row.row-is-flagged,
+body.dark-mode .command-center .purchase-table-row.row-is-flagged,
+body.dark-mode .command-center .budget-table-row.row-is-flagged:hover,
+body.dark-mode .command-center .purchase-table-row.row-is-flagged:hover,
+body.dark-mode .command-center .budget-table-row.row-alert.row-is-flagged,
+body.dark-mode .command-center .purchase-table-row.row-alert.row-is-flagged {
+  color: #f1f8fb;
+  background: rgba(225, 93, 102, 0.1);
+  box-shadow: inset 3px 0 0 var(--graphite-danger);
+}
+
+body.dark-mode .command-center .budget-table-row.is-clickable:hover,
+body.dark-mode .command-center .purchase-table-row.is-clickable:hover {
+  color: #ffffff;
+  background: #363636;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center :where(
+  .budget-equipment-empty,
+  .price-table-empty,
+  .fixed-expense-table-empty,
+  .purchase-table-empty,
+  .budget-table-empty,
+  .budget-documents-empty,
+  .commission-adjustments-empty,
+  .empty-state,
+  .home-empty
+) {
+  border-color: var(--graphite-border);
+  color: #bfbfbf;
+  background: #252525;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center .commission-adjustments-table {
+  border-color: var(--graphite-border);
+  background: #252525;
+  box-shadow: none;
+}
+
+body.dark-mode .command-center .budget-cost-footer {
+  border-top-color: var(--graphite-border);
+}
+
+/* Responsive */
+@media (max-width: 1380px) {
+  body.dark-mode .command-center .home-kpi-card strong {
+    font-size: 28px;
+  }
+
+  body.dark-mode .command-center .home-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1100px) {
+  body.dark-mode .command-center .home-hero {
+    grid-template-columns: 1fr;
+  }
+
+  body.dark-mode .command-center .home-launcher-card {
+    width: min(360px, 100%);
+  }
+
+  body.dark-mode .command-center .task-stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 960px) {
+  body.dark-mode .command-center .topbar,
+  body.dark-mode .command-center.sidebar-expanded .topbar,
+  body.dark-mode .command-center.sidebar-collapsed .topbar {
+    right: 0;
+    left: 0;
+  }
+
+  body.dark-mode .command-center .main-nav {
+    width: min(280px, calc(100vw - 28px));
+    border-right-color: var(--graphite-border);
+  }
+
+  body.dark-mode .command-center.sidebar-expanded::before {
+    background: rgba(0, 0, 0, 0.68);
+    backdrop-filter: blur(5px);
+  }
+
+  body.dark-mode .command-center.sidebar-expanded .workspace,
+  body.dark-mode .command-center.sidebar-collapsed .workspace {
+    width: auto;
+    max-width: none;
+    margin-right: 16px;
+    margin-left: 16px;
+  }
+}
+
+@media (max-width: 680px) {
+  body.dark-mode .command-center .topbar {
+    padding-inline: 10px;
+  }
+
+  body.dark-mode .command-center .topbar-actions {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+  }
+
+  body.dark-mode .command-center .assistant-button,
+  body.dark-mode .command-center .launcher-button {
+    display: none;
+  }
+
+  body.dark-mode .command-center .create-button {
+    display: inline-grid;
+    min-width: 40px;
+    width: 40px;
+    padding: 0;
+    place-items: center;
+    font-size: 0;
+  }
+
+  body.dark-mode .command-center .create-button span {
+    font-size: 20px;
+  }
+
+  body.dark-mode .command-center .home-kpi-grid,
+  body.dark-mode .command-center .task-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.dark-mode .command-center .home-hero {
+    min-height: 0;
+    padding: 25px 22px;
+  }
+
+  body.dark-mode .command-center .home-hero h1 {
+    font-size: 38px;
+  }
+
+  body.dark-mode .command-center .home-kpi-card strong {
+    font-size: 30px;
+  }
+
+  body.dark-mode .command-center .workspace-heading h1 {
+    font-size: 34px;
+  }
+
+  body.dark-mode .command-center .document-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 460px) {
+  body.dark-mode .command-center .theme-toggle {
+    display: inline-grid;
+  }
+
+  body.dark-mode .command-center .global-search kbd {
+    display: none;
+  }
+
+  body.dark-mode .command-center .global-search input {
+    padding-right: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.dark-mode .command-center *,
+  body.dark-mode #loginView * {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* Directory layout shared by both themes. */
+.command-center #clientesModule .clients-card-list,
+.command-center #proveedoresModule .providers-card-list {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: 14px;
+}
+
+.command-center #clientesModule .client-directory-card,
+.command-center #proveedoresModule .provider-directory-card {
+  min-height: 330px;
+}
+
+.command-center #clientesModule .client-card-header,
+.command-center #proveedoresModule .provider-card-header {
+  align-items: start;
+}
+
+.command-center #clientesModule .client-card-title h2,
+.command-center #proveedoresModule .provider-card-title h2 {
+  display: -webkit-box;
+  min-height: 38px;
+  overflow: hidden;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.command-center #clientesModule .client-card-facts span,
+.command-center #proveedoresModule .provider-card-facts span {
+  min-height: 54px;
+  padding: 9px 2px;
+  border-width: 0 0 1px;
+  border-style: solid;
+  border-color: var(--directory-divider);
+  border-radius: 0;
+  background: transparent;
+}
+
+.command-center #clientesModule .client-card-facts b,
+.command-center #proveedoresModule .provider-card-facts b {
+  display: -webkit-box;
+  overflow: hidden;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+body.dark-mode .command-center #clientesModule .client-card-facts span,
+body.dark-mode .command-center #proveedoresModule .provider-card-facts span {
+  border-color: var(--directory-divider);
+  background: transparent;
+}
+
+/*
+ * Semantic table states in dark mode.
+ * Rows stay neutral and use a short wash plus a slim accent instead of a
+ * saturated full-row fill. This keeps dense tables readable without losing
+ * the operational meaning of each state.
+ */
+body.dark-mode .command-center :is(
+  .budget-table-row,
+  .purchase-table-row,
+  .fixed-expense-table-row
+):is(
+  .row-state-paid,
+  .row-state-docs,
+  .row-state-waiting,
+  .row-alert,
+  .row-is-flagged
+) {
+  --table-state-base: #252525;
+  --table-state-accent: #9a9a9a;
+  --table-state-wash: rgba(161, 161, 170, 0.07);
+  --table-state-wash-hover: rgba(161, 161, 170, 0.12);
+  color: #e7e7ea;
+  background:
+    linear-gradient(90deg, var(--table-state-wash) 0, var(--table-state-wash) 72px, transparent 360px),
+    var(--table-state-base);
+  box-shadow: inset 3px 0 0 var(--table-state-accent);
+}
+
+body.dark-mode .command-center :is(
+  .budget-table-row,
+  .purchase-table-row,
+  .fixed-expense-table-row
+):is(
+  .row-state-paid,
+  .row-state-docs,
+  .row-state-waiting,
+  .row-alert,
+  .row-is-flagged
+):nth-child(even) {
+  --table-state-base: #292929;
+}
+
+body.dark-mode .command-center :is(
+  .budget-table-row,
+  .purchase-table-row,
+  .fixed-expense-table-row
+):is(
+  .row-state-paid,
+  .row-state-docs,
+  .row-state-waiting,
+  .row-alert,
+  .row-is-flagged
+):hover {
+  --table-state-base: #343434;
+  --table-state-wash: var(--table-state-wash-hover);
+  color: #ffffff;
+  background:
+    linear-gradient(90deg, var(--table-state-wash) 0, var(--table-state-wash) 88px, transparent 400px),
+    var(--table-state-base);
+  box-shadow: inset 3px 0 0 var(--table-state-accent);
+}
+
+body.dark-mode .command-center :is(
+  .purchase-table-row.row-state-paid,
+  .budget-table-row.row-state-paid,
+  .fixed-expense-table-row.row-state-paid
+) {
+  --table-state-accent: #55b881;
+  --table-state-wash: rgba(85, 184, 129, 0.1);
+  --table-state-wash-hover: rgba(85, 184, 129, 0.16);
+}
+
+body.dark-mode .command-center :is(
+  .purchase-table-row.row-state-docs,
+  .budget-table-row.row-state-docs,
+  .fixed-expense-table-row.row-state-docs
+) {
+  --table-state-accent: #a58bd4;
+  --table-state-wash: rgba(165, 139, 212, 0.1);
+  --table-state-wash-hover: rgba(165, 139, 212, 0.16);
+}
+
+body.dark-mode .command-center :is(
+  .purchase-table-row.row-state-waiting,
+  .budget-table-row.row-state-waiting,
+  .fixed-expense-table-row.row-state-waiting
+) {
+  --table-state-accent: #d0a653;
+  --table-state-wash: rgba(208, 166, 83, 0.1);
+  --table-state-wash-hover: rgba(208, 166, 83, 0.16);
+}
+
+body.dark-mode .command-center :is(
+  .budget-table-row.row-alert,
+  .purchase-table-row.row-alert
+) {
+  --table-state-accent: #d98952;
+  --table-state-wash: rgba(217, 137, 82, 0.11);
+  --table-state-wash-hover: rgba(217, 137, 82, 0.17);
+}
+
+body.dark-mode .command-center :is(
+  .budget-table-row.row-is-flagged,
+  .purchase-table-row.row-is-flagged,
+  .budget-table-row.row-alert.row-is-flagged,
+  .purchase-table-row.row-alert.row-is-flagged
+) {
+  --table-state-accent: #d96d74;
+  --table-state-wash: rgba(217, 109, 116, 0.12);
+  --table-state-wash-hover: rgba(217, 109, 116, 0.18);
+}
+
+body.dark-mode .command-center .row-state-paid .status-pill,
+body.dark-mode .command-center .status-pill.green {
+  border-color: rgba(85, 184, 129, 0.34);
+  color: #a9d9bc;
+  background: rgba(85, 184, 129, 0.12);
+}
+
+body.dark-mode .command-center .row-state-docs .status-pill {
+  border-color: rgba(165, 139, 212, 0.34);
+  color: #d0c0ea;
+  background: rgba(165, 139, 212, 0.12);
+}
+
+body.dark-mode .command-center .row-state-waiting .status-pill {
+  border-color: rgba(208, 166, 83, 0.34);
+  color: #e2c889;
+  background: rgba(208, 166, 83, 0.12);
+}
+
+body.dark-mode .command-center .row-alert .status-pill {
+  border-color: rgba(217, 137, 82, 0.36);
+  color: #e8b28d;
+  background: rgba(217, 137, 82, 0.13);
+}
+
+body.dark-mode .command-center .row-is-flagged .status-pill {
+  border-color: rgba(217, 109, 116, 0.38);
+  color: #e9a7ac;
+  background: rgba(217, 109, 116, 0.13);
+}
+
+/* Login Graphite v2.9 — paleta oscura. */
+body.dark-mode #loginView.shell {
+  color: #f1f8fb;
+  background:
+    linear-gradient(120deg, rgba(7, 7, 7, 0.78), rgba(7, 7, 7, 0.88)),
+    url("../img/fondo dalvosystem.png") center / cover fixed no-repeat;
+}
+
+body.dark-mode #loginView .login-card {
+  border: 1px solid #4c4c4c;
+  background: #1e1e1e;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.42);
+}
+
+body.dark-mode #loginView .brand-panel {
+  color: #f5f5f6;
+  background:
+    linear-gradient(135deg, rgba(8, 8, 8, 0.58), rgba(8, 8, 8, 0.84)),
+    url("../img/fondo-login-dalvo.png") center / cover no-repeat;
+  filter: none;
+}
+
+body.dark-mode #loginView .brand-shade {
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.035), transparent 38%),
+    linear-gradient(180deg, transparent 52%, rgba(0, 0, 0, 0.22));
+}
+
+body.dark-mode #loginView .eyebrow {
+  color: #b7b7bd;
+}
+
+body.dark-mode #loginView .brand-copy h1 {
+  color: #f7fbfd;
+}
+
+body.dark-mode #loginView .brand-accent {
+  background: #8f9198;
+}
+
+body.dark-mode #loginView .brand-copy p:not(.eyebrow) {
+  color: #b5b5bb;
+}
+
+body.dark-mode #loginView .form-panel {
+  border-left: 1px solid #4c4c4c;
+  color: #f1f8fb;
+  background: #252525;
+}
+
+body.dark-mode #loginView .login-logo {
+  content: url("../img/logo letra blancas.png");
+}
+
+body.dark-mode #loginView .form-heading h2,
+body.dark-mode #loginView .login-field input:not([type="checkbox"]),
+body.dark-mode #loginView .remember-session span {
+  color: #f1f8fb;
+}
+
+body.dark-mode #loginView .form-heading p,
+body.dark-mode #loginView .field-label,
+body.dark-mode #loginView .login-security-note {
+  color: #c3c3c3;
+}
+
+body.dark-mode #loginView .login-field {
+  border-color: #585858;
+  background: transparent;
+}
+
+body.dark-mode #loginView .login-field::after {
+  background: #a5a5a5;
+}
+
+body.dark-mode #loginView .login-field input:not([type="checkbox"]),
+body.dark-mode #loginView .login-field input:not([type="checkbox"]):focus {
+  border: 0;
+  color: #f1f8fb;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.dark-mode #loginView .login-field input:focus + .field-label,
+body.dark-mode #loginView .login-field input:not(:placeholder-shown) + .field-label,
+body.dark-mode #loginView .login-field:focus-within .field-icon {
+  color: #a5a5a5;
+}
+
+body.dark-mode #loginView .field-icon,
+body.dark-mode #loginView .password-toggle {
+  color: #cbcbcb;
+}
+
+body.dark-mode #loginView .password-toggle:hover,
+body.dark-mode #loginView .password-toggle:focus-visible {
+  color: #ffffff;
+  background: #363636;
+}
+
+body.dark-mode #loginView .remember-session input {
+  border-color: #727272;
+  background: #2f2f2f;
+}
+
+body.dark-mode #loginView .remember-session input:checked {
+  border-color: #a5a5a5;
+  background: #a5a5a5;
+}
+
+body.dark-mode #loginView .remember-session input:checked::before {
+  border-color: #252525;
+}
+
+body.dark-mode #loginView .remember-session:hover input {
+  border-color: #deebf0;
+}
+
+body.dark-mode #loginView .form-message {
+  color: #ee858d;
+}
+
+body.dark-mode #loginView .login-submit {
+  color: #252525;
+  background: #a5a5a5;
+  box-shadow: none;
+}
+
+body.dark-mode #loginView .login-submit:hover {
+  color: #151515;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+body.dark-mode #loginView .login-security-note {
+  border-top-color: #4c4c4c;
+  background: #1e1e1e;
+}
+
+body.dark-mode #loginView .login-security-note i {
+  color: #d8d8d8;
+}
+
+@media (max-width: 920px) {
+  body.dark-mode #loginView .form-panel {
+    border-top: 1px solid #4c4c4c;
+    border-left: 0;
+  }
+}
+
+
+/* --- Exportaciones dark mode refinement (2026-08-06) --- */
+body.dark-mode .module-filter-panel,
+body.dark-mode .report-export-center {
+  background: var(--graphite-panel);
+  border-color: var(--graphite-border);
+  box-shadow: none;
+}
+
+body.dark-mode .report-export-heading h2,
+body.dark-mode .report-export-toolbar-copy strong,
+body.dark-mode .report-export-preview-summary strong,
+body.dark-mode .report-preview-table td,
+body.dark-mode .report-preview-table th {
+  color: var(--graphite-text);
+}
+
+body.dark-mode .report-export-heading span {
+  color: var(--graphite-action);
+}
+
+body.dark-mode .report-export-heading p,
+body.dark-mode .report-export-toolbar-copy span,
+body.dark-mode .report-export-preview-summary span,
+body.dark-mode .module-filter-footer > span,
+body.dark-mode .report-export-filter-grid label > span,
+body.dark-mode .module-filter-grid label > span,
+body.dark-mode .report-export-loading {
+  color: var(--graphite-muted);
+}
+
+body.dark-mode .report-export-filter-grid input,
+body.dark-mode .report-export-filter-grid select,
+body.dark-mode .module-filter-grid input,
+body.dark-mode .module-filter-grid select {
+  border-color: var(--graphite-border);
+  background: var(--graphite-control);
+  color: var(--graphite-text);
+}
+
+body.dark-mode .report-export-filter-grid input:focus,
+body.dark-mode .report-export-filter-grid select:focus,
+body.dark-mode .module-filter-grid input:focus,
+body.dark-mode .module-filter-grid select:focus {
+  border-color: var(--graphite-action);
+  box-shadow: 0 0 0 3px rgba(165, 165, 165, 0.14);
+}
+
+body.dark-mode .report-export-preview {
+  border-top-color: var(--graphite-border);
+}
+
+body.dark-mode .report-preview-table-shell {
+  border-color: var(--graphite-border);
+  background: var(--graphite-panel);
+}
+
+body.dark-mode .report-preview-table th {
+  background: var(--graphite-raised);
+}
+
+body.dark-mode .report-preview-table td {
+  border-bottom-color: var(--graphite-border);
+}

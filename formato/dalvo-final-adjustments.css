@@ -1,0 +1,2308 @@
+/* Ajustes operativos finales: tema graphite, drawer amplio y acciones financieras. */
+
+body.dark-mode,
+body.dark-mode .command-center,
+body.dark-mode .command-center .workspace {
+  background: #000 !important;
+}
+
+/* PO de cliente compartida entre varios presupuestos */
+.shared-client-po-form {
+  width: min(1180px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+}
+
+.shared-client-po-filters {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.7fr) minmax(260px, 1.3fr) auto auto;
+  align-items: end;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.shared-client-po-filters label {
+  display: grid;
+  gap: 6px;
+}
+
+.shared-client-po-filters label > span {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.shared-client-po-selector-head,
+.shared-client-po-candidate {
+  display: grid;
+  grid-template-columns: 42px minmax(150px, 0.8fr) minmax(280px, 1.5fr) minmax(150px, 0.8fr) 130px;
+  align-items: center;
+  gap: 10px;
+  min-width: 820px;
+}
+
+.shared-client-po-selector-head {
+  padding: 9px 12px;
+  border-radius: 10px 10px 0 0;
+  color: #fff;
+  background: #0f84aa;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.shared-client-po-projects {
+  display: grid;
+  max-height: 360px;
+  margin: 0 0 16px;
+  overflow: auto;
+  border: 1px solid #d7e5ec;
+  border-top: 0;
+  border-radius: 0 0 10px 10px;
+}
+
+.shared-client-po-candidate {
+  padding: 11px 13px;
+  border-top: 1px solid #e2edf2;
+  background: #f7fbfd;
+}
+
+.shared-client-po-candidate:first-child {
+  border-top: 0;
+}
+
+.shared-client-po-candidate.is-disabled {
+  opacity: 0.58;
+}
+
+.shared-client-po-check {
+  display: grid;
+  place-items: center;
+}
+
+.shared-client-po-check input {
+  width: 18px;
+  height: 18px;
+  accent-color: #0f84aa;
+}
+
+.shared-client-po-project-name {
+  display: grid;
+  gap: 3px;
+}
+
+.shared-client-po-project-name small,
+.shared-client-po-candidate > span,
+.client-po-shared-members span,
+.client-po-shared-summary p,
+.client-po-shared-note {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.shared-client-po-file-field {
+  grid-column: 1 / -1;
+}
+
+.shared-client-po-total,
+.client-po-shared-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.shared-client-po-total {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 11px;
+  background: #e9f7fb;
+}
+
+.shared-client-po-total strong {
+  color: #087797;
+  font-size: 1.15rem;
+}
+
+.client-po-shared-summary {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0 16px;
+  padding: 14px;
+  border: 1px solid #9ed8e8;
+  border-radius: 12px;
+  background: #eefafd;
+}
+
+.client-po-shared-summary p,
+.client-po-shared-note {
+  margin: 0;
+}
+
+.client-po-shared-members {
+  display: grid;
+  gap: 6px;
+}
+
+.client-po-shared-members > div {
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.client-po-shared-note {
+  margin-top: 10px;
+  font-style: italic;
+}
+
+body.dark-mode .shared-client-po-projects article,
+body.dark-mode .client-po-shared-members > div {
+  border-color: #2b435d;
+  background: #17283a;
+}
+
+body.dark-mode .shared-client-po-total,
+body.dark-mode .client-po-shared-summary {
+  border-color: #315d70;
+  background: #142d39;
+}
+
+@media (max-width: 700px) {
+  .shared-client-po-form {
+    width: calc(100vw - 18px);
+  }
+
+  .shared-client-po-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .client-po-shared-members > div,
+  .shared-client-po-total,
+  .client-po-shared-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+/* Pago agrupado de comisiones */
+:is(#cuentasPagarModule, #cuentasCobrarModule) .commission-batch-view {
+  --batch-surface: #ffffff;
+  --batch-surface-muted: #f6f8fb;
+  --batch-surface-accent: #eef8fb;
+  --batch-border: #d9e2ea;
+  --batch-border-soft: #e7edf2;
+  --batch-text: #172033;
+  --batch-muted: #5f6d7e;
+  --batch-accent: #126b82;
+  --batch-accent-strong: #0b5367;
+  --batch-success: #16745a;
+  display: grid;
+  gap: 18px;
+  color: var(--batch-text);
+}
+
+:is(#cuentasPagarModule, #cuentasCobrarModule) .commission-batch-view.hidden {
+  display: none;
+}
+
+.commission-batch-heading,
+.commission-batch-sticky-actions,
+.commission-batch-group-heading,
+.commission-batch-linked {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.commission-batch-heading h2,
+.commission-batch-group-heading h3 {
+  margin: 0;
+}
+
+.commission-batch-heading p:not(.eyebrow) {
+  margin: 6px 0 0;
+  color: var(--batch-muted);
+}
+
+.commission-batch-total {
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: var(--batch-accent-strong);
+  color: #fff;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.commission-batch-filters {
+  display: grid;
+  grid-template-columns: minmax(155px, 0.65fr) minmax(210px, 1fr) minmax(240px, 1.35fr) auto auto;
+  align-items: end;
+}
+
+.receivable-batch-filters {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+}
+
+.receivable-batch-filter-section,
+.receivable-batch-setup-section {
+  display: grid;
+  gap: 12px;
+  padding: 15px;
+  border: 1px solid var(--batch-border);
+  border-radius: 13px;
+  background: var(--batch-surface);
+}
+
+.receivable-batch-filter-section {
+  background: color-mix(in srgb, var(--batch-accent) 5%, var(--batch-surface));
+}
+
+.receivable-batch-filter-heading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 18px;
+  color: var(--batch-text);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .045em;
+  text-transform: uppercase;
+}
+
+.receivable-batch-filter-heading small {
+  color: var(--batch-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.receivable-batch-filter-grid,
+.receivable-batch-setup-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(170px, 1fr));
+  gap: 12px;
+  align-items: end;
+}
+
+.receivable-batch-filter-actions,
+.receivable-batch-selection-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 9px;
+}
+
+.receivable-batch-selection-actions > button {
+  min-width: 190px;
+}
+
+.receivable-batch-files-card {
+  border-color: color-mix(in srgb, var(--batch-accent) 28%, var(--batch-border));
+  background: color-mix(in srgb, var(--batch-accent) 4%, var(--batch-surface));
+}
+
+.receivable-batch-files-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.receivable-batch-files-heading h3,
+.receivable-batch-files-heading p {
+  margin: 0;
+}
+
+.receivable-batch-files-heading p {
+  margin-top: 5px;
+}
+
+.receivable-batch-files-heading > strong {
+  display: grid;
+  place-items: center;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 4px 9px;
+  border-radius: 10px;
+  background: var(--batch-accent-strong);
+  color: #fff;
+}
+
+.receivable-batch-files-card .budget-documents-row > span:first-child {
+  display: grid;
+  gap: 3px;
+}
+
+.receivable-batch-files-card .budget-documents-row > span:first-child small {
+  color: var(--batch-muted);
+}
+
+.commission-batch-filters select,
+.commission-batch-filters input,
+.commission-batch-heading select {
+  width: 100%;
+  min-height: 42px;
+}
+
+.commission-batch-candidate-list {
+  display: grid;
+  gap: 9px;
+}
+
+.commission-batch-candidate {
+  display: grid;
+  grid-template-columns: 28px minmax(150px, 0.9fr) minmax(210px, 1.5fr) minmax(150px, 1fr) minmax(120px, 0.6fr);
+  gap: 15px;
+  align-items: center;
+  padding: 14px 16px;
+  border: 1px solid var(--batch-border);
+  border-radius: 14px;
+  background: var(--batch-surface);
+  cursor: pointer;
+}
+
+.commission-batch-candidate:hover,
+.commission-batch-candidate.is-selected {
+  border-color: var(--batch-accent);
+  box-shadow: 0 7px 18px rgba(18, 107, 130, 0.14);
+}
+
+.commission-batch-candidate.is-selected {
+  background: var(--batch-surface-accent);
+}
+
+.commission-batch-candidate.is-linked {
+  grid-template-columns: 28px minmax(150px, 0.85fr) minmax(210px, 1.35fr) minmax(130px, 0.8fr) minmax(105px, 0.5fr) auto;
+  border-color: #e0b84e;
+  background: #fffaf0;
+  cursor: default;
+}
+
+.commission-batch-linked-icon {
+  display: grid !important;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  color: #755200;
+  background: #ffe7a3;
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.commission-batch-linked-action {
+  display: grid;
+  gap: 5px;
+  justify-items: end;
+  min-width: 145px;
+}
+
+.commission-batch-linked-action a,
+.commission-batch-linked-action button,
+.commission-batch-existing-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 7px 12px;
+  border: 1px solid #0f7188;
+  border-radius: 9px;
+  color: #0b596d;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 850;
+  font-family: inherit;
+  line-height: 1.1;
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
+.commission-batch-linked-action a:hover,
+.commission-batch-linked-action button:hover,
+.commission-batch-existing-button:hover {
+  color: #fff;
+  background: #0f7188;
+}
+
+.commission-batch-candidate span {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.commission-batch-candidate small,
+.commission-batch-candidate em,
+.commission-batch-group article small,
+.commission-batch-linked small {
+  color: var(--batch-muted);
+  font-size: 12px;
+  font-style: normal;
+}
+
+.commission-batch-money {
+  text-align: right;
+}
+
+.commission-batch-existing-panel {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 15px;
+  border: 1px solid #e0b84e;
+  border-radius: 15px;
+  background: #fffaf0;
+}
+
+.commission-batch-existing-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.commission-batch-existing-heading > div,
+.commission-batch-existing-card > span:nth-child(2) {
+  display: grid;
+  gap: 3px;
+}
+
+.commission-batch-existing-heading > div > span {
+  font-weight: 900;
+}
+
+.commission-batch-existing-heading small,
+.commission-batch-existing-card small {
+  color: var(--batch-muted);
+}
+
+.commission-batch-existing-heading > strong {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  color: #755200;
+  background: #ffe7a3;
+}
+
+.commission-batch-existing-list {
+  display: grid;
+  gap: 8px;
+}
+
+.commission-batch-existing-card {
+  display: grid;
+  grid-template-columns: 42px minmax(180px, 1fr) auto auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 11px 12px;
+  border: 1px solid #ead7a0;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.commission-batch-existing-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  color: #fff;
+  background: #9a7209;
+  font-size: 11px;
+  font-weight: 950;
+}
+
+.commission-batch-existing-status {
+  padding: 6px 9px;
+  border-radius: 999px;
+  color: #755200;
+  background: #fff0bd;
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.accounts-payable-pending-batches {
+  display: grid;
+  gap: 14px;
+  margin: 18px 0 26px;
+  padding: 18px;
+  border: 1px solid #cbdce5;
+  border-radius: 16px;
+  background: #f4f9fb;
+}
+
+.accounts-payable-pending-batches.hidden {
+  display: none;
+}
+
+.accounts-payable-pending-batches-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.accounts-payable-pending-batches-heading h2,
+.accounts-payable-pending-batches-heading p {
+  margin: 0;
+}
+
+.accounts-payable-pending-batches-heading p:not(.eyebrow) {
+  margin-top: 5px;
+  color: #5f6d7e;
+}
+
+.accounts-payable-pending-batches-heading > strong {
+  display: grid;
+  place-items: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: 10px;
+  color: #fff;
+  background: #0f7188;
+}
+
+.accounts-payable-pending-batches-list {
+  display: grid;
+  gap: 9px;
+}
+
+.accounts-payable-pending-batch-card {
+  display: grid;
+  grid-template-columns: 48px minmax(170px, 1.25fr) minmax(115px, 0.55fr) minmax(135px, 0.7fr) auto auto;
+  gap: 14px;
+  align-items: center;
+  padding: 13px 14px;
+  border: 1px solid #d9e4ea;
+  border-radius: 13px;
+  background: #fff;
+}
+
+.accounts-payable-pending-batch-card > span:not(.accounts-payable-pending-batch-actions):not(.accounts-payable-pending-batch-status):not(.accounts-payable-pending-batch-icon) {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.accounts-payable-pending-batch-card small {
+  color: #657486;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.accounts-payable-pending-batch-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 11px;
+  color: #fff;
+  background: #0f7188;
+  font-size: 11px;
+  font-weight: 950;
+}
+
+.accounts-payable-pending-batch-status {
+  padding: 7px 10px;
+  border-radius: 999px;
+  color: #755200;
+  background: #fff0bd;
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.accounts-payable-pending-batch-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.commission-batch-cancel-button {
+  min-height: 34px;
+  padding: 7px 12px;
+  border: 1px solid #d36a6a;
+  border-radius: 9px;
+  color: #9f2525;
+  background: #fff7f7;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 850;
+  line-height: 1.1;
+  cursor: pointer;
+}
+
+.commission-batch-cancel-button:hover,
+.commission-batch-cancel-button:focus-visible {
+  color: #fff;
+  background: #b93838;
+}
+
+.commission-batch-file-actions {
+  display: grid;
+  gap: 7px;
+  justify-items: stretch;
+}
+
+.commission-batch-sticky-actions {
+  position: sticky;
+  bottom: 12px;
+  z-index: 4;
+  padding: 14px 16px;
+  border: 1px solid var(--batch-border);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--batch-surface) 96%, transparent);
+  box-shadow: 0 12px 28px rgba(18, 32, 51, 0.14);
+}
+
+.commission-batch-group {
+  margin-bottom: 16px;
+  overflow: hidden;
+  border: 1px solid var(--batch-border);
+  border-radius: 16px;
+  background: var(--batch-surface);
+}
+
+.commission-batch-group-heading {
+  padding: 14px 18px;
+  background: var(--batch-surface-muted);
+}
+
+.commission-batch-group article {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.9fr) minmax(240px, 1.5fr) 130px;
+  gap: 16px;
+  align-items: center;
+  padding: 13px 18px;
+  border-top: 1px solid var(--batch-border-soft);
+}
+
+.commission-batch-group article > span:first-child,
+.commission-batch-linked > div {
+  display: grid;
+  gap: 4px;
+}
+
+.commission-batch-group article > strong {
+  text-align: right;
+}
+
+.commission-batch-review-item {
+  grid-template-columns: minmax(180px, 0.9fr) minmax(220px, 1.3fr) 110px auto;
+}
+
+.commission-batch-review-item > span:first-child,
+.commission-batch-review-item > span:nth-child(2) {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.commission-batch-review-item > button,
+.commission-batch-review-item > .batch-proof-picker {
+  grid-column: span 1;
+}
+
+.batch-proof-picker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--batch-border);
+  border-radius: 10px;
+  background: var(--batch-surface);
+  color: var(--batch-text);
+  cursor: pointer;
+}
+
+.batch-proof-picker input[type="file"] {
+  max-width: 220px;
+}
+
+.commission-batch-general-row .batch-proof-picker {
+  width: max-content;
+  max-width: 100%;
+  margin-top: 8px;
+}
+
+.batch-proof-file-link {
+  display: block;
+  margin-top: 5px;
+  color: var(--batch-accent-strong);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.batch-proof-files {
+  flex-basis: 100%;
+  overflow-wrap: anywhere;
+  color: var(--batch-muted);
+  font-size: 12px;
+}
+
+.commission-batch-proof-panel {
+  display: grid;
+  gap: 8px;
+  padding: 16px 18px;
+  border: 1px solid var(--batch-border);
+  border-radius: 14px;
+  background: var(--batch-surface-muted);
+}
+
+.commission-batch-proof-panel.hidden {
+  display: none;
+}
+
+.commission-batch-general-order {
+  overflow: hidden;
+  border: 1px solid var(--batch-border);
+  border-radius: 18px;
+  background: var(--batch-surface);
+  box-shadow: 0 16px 40px rgba(18, 32, 51, 0.1);
+}
+
+.commission-batch-general-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 26px;
+  border-bottom: 1px solid var(--batch-border);
+}
+
+.commission-batch-general-header > div {
+  display: grid;
+  gap: 5px;
+}
+
+.commission-batch-general-header > div:last-child {
+  justify-items: end;
+  text-align: right;
+}
+
+.commission-batch-general-brand {
+  color: var(--batch-accent-strong);
+  font-size: 20px;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+}
+
+.commission-batch-general-header small,
+.commission-batch-general-row small,
+.commission-batch-paid-notice small {
+  color: var(--batch-muted);
+}
+
+.commission-batch-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.commission-batch-status.is-pending {
+  color: #855900;
+  background: #fff4cf;
+}
+
+.commission-batch-status.is-paid {
+  color: #126047;
+  background: #dcf5e9;
+}
+
+.commission-batch-general-table {
+  display: grid;
+}
+
+.commission-batch-general-row {
+  display: grid;
+  grid-template-columns: minmax(135px, 0.75fr) minmax(170px, 1fr) minmax(220px, 1.45fr) minmax(150px, 0.85fr) 120px;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--batch-border-soft);
+}
+
+.commission-batch-general-row > span:first-child {
+  display: grid;
+  gap: 3px;
+}
+
+.commission-batch-general-row > strong:last-child {
+  text-align: right;
+}
+
+.commission-batch-general-row.is-head {
+  color: var(--batch-muted);
+  background: var(--batch-surface-muted);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.commission-batch-general-total {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 28px;
+  padding: 20px 26px;
+  color: #fff;
+  background: var(--batch-accent-strong);
+}
+
+.commission-batch-general-total strong {
+  font-size: 22px;
+}
+
+.receivable-consolidated-project {
+  border-bottom: 1px solid var(--batch-border);
+}
+
+.receivable-consolidated-project > header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 140px 140px;
+  gap: 18px;
+  align-items: center;
+  padding: 14px 20px;
+  background: color-mix(in srgb, var(--batch-accent) 10%, var(--batch-surface));
+}
+
+.receivable-consolidated-project > header > span {
+  display: grid;
+  gap: 3px;
+}
+
+.receivable-consolidated-project > header > span:not(:first-child) {
+  justify-items: end;
+}
+
+.receivable-consolidated-project small {
+  color: var(--batch-muted);
+}
+
+.receivable-consolidated-parts {
+  display: grid;
+  overflow-x: auto;
+}
+
+.receivable-consolidated-parts > div {
+  display: grid;
+  grid-template-columns: minmax(135px, .9fr) 70px 65px minmax(250px, 2fr) 120px 120px;
+  min-width: 840px;
+  border-top: 1px solid var(--batch-border-soft);
+}
+
+.receivable-consolidated-parts > div > span {
+  padding: 10px 12px;
+  overflow-wrap: anywhere;
+}
+
+.receivable-consolidated-parts > div > span:nth-last-child(-n + 2) {
+  text-align: right;
+}
+
+.receivable-consolidated-parts > div:not(.is-head) > span:first-child {
+  white-space: nowrap;
+}
+
+.receivable-consolidated-parts > div.is-head {
+  color: var(--batch-muted);
+  background: var(--batch-surface-muted);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.receivable-consolidated-totals {
+  display: grid;
+  justify-content: end;
+  gap: 8px;
+  padding: 20px 26px;
+  background: var(--batch-surface-muted);
+}
+
+.receivable-consolidated-totals > span {
+  display: grid;
+  grid-template-columns: 145px 145px;
+  gap: 22px;
+  text-align: right;
+}
+
+.receivable-consolidated-totals .grand {
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 2px solid var(--batch-text);
+  color: var(--batch-accent-strong);
+  font-size: 18px;
+}
+
+.commission-batch-paid-notice.is-partial {
+  background: #9a6700;
+}
+
+.receivable-general-files-help {
+  margin: -4px 0 14px;
+  color: var(--batch-muted);
+  font-size: 12px;
+}
+
+.receivable-general-file-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+}
+
+.receivable-general-file-actions .danger-button {
+  min-height: 34px;
+  padding: 6px 11px;
+}
+
+.commission-batch-paid-notice {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 16px 18px;
+  border: 1px solid #9dd8c0;
+  border-radius: 14px;
+  background: #effaf6;
+}
+
+.commission-batch-file-ready {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  padding: 18px 20px;
+  border: 1px solid var(--batch-border);
+  border-radius: 15px;
+  background: var(--batch-surface-muted);
+}
+
+.commission-batch-file-ready > div {
+  display: grid;
+  gap: 4px;
+}
+
+.commission-batch-file-ready small {
+  color: var(--batch-muted);
+}
+
+.commission-batch-open-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 190px;
+  min-height: 48px;
+  padding: 9px 15px;
+  border: 1px solid #0b6177;
+  border-radius: 12px;
+  color: #fff;
+  background: linear-gradient(135deg, #0f7188, #0b596d);
+  box-shadow: 0 7px 18px rgba(11, 89, 109, 0.18);
+  text-decoration: none !important;
+  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+}
+
+.commission-batch-open-button:hover,
+.commission-batch-open-button:focus-visible {
+  color: #fff;
+  background: linear-gradient(135deg, #0b6177, #084858);
+  box-shadow: 0 9px 22px rgba(11, 89, 109, 0.26);
+  text-decoration: none !important;
+  transform: translateY(-1px);
+}
+
+.commission-batch-open-button > span:last-child {
+  display: grid;
+  gap: 1px;
+  text-align: left;
+}
+
+.commission-batch-open-button strong {
+  color: inherit;
+  font-size: 13px;
+  line-height: 1.15;
+}
+
+.commission-batch-open-button small {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1.15;
+}
+
+.commission-batch-open-button-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.14);
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.commission-batch-file-icon {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 13px;
+  color: #fff;
+  background: var(--batch-accent-strong);
+  font-size: 13px;
+  font-weight: 950;
+  letter-spacing: 0.05em;
+}
+
+.commission-batch-paid-notice > span {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--batch-success);
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.commission-batch-paid-notice > div {
+  display: grid;
+  gap: 3px;
+}
+
+.commission-batch-proof-panel h3,
+.commission-batch-proof-panel p {
+  margin: 0;
+}
+
+:is(#cuentasPagarModule, #cuentasCobrarModule) .commission-batch-view :where(input:not([type="checkbox"]):not([type="file"]), select) {
+  border-color: var(--batch-border);
+  background: var(--batch-surface);
+  color: var(--batch-text);
+}
+
+:is(#cuentasPagarModule, #cuentasCobrarModule) .commission-batch-view :where(.primary-button, .small-button, .ghost-button, button) {
+  border-radius: 9px;
+}
+
+:is(#cuentasPagarModule, #cuentasCobrarModule) .commission-batch-view .small-button,
+:is(#cuentasPagarModule, #cuentasCobrarModule) .commission-batch-view .ghost-button {
+  border: 1px solid var(--batch-border);
+  background: var(--batch-surface-muted);
+  color: var(--batch-text);
+}
+
+:is(#cuentasPagarModule, #cuentasCobrarModule) .commission-batch-view .small-button:hover,
+:is(#cuentasPagarModule, #cuentasCobrarModule) .commission-batch-view .ghost-button:hover {
+  border-color: var(--batch-accent);
+  color: var(--batch-accent-strong);
+}
+
+body.dark-mode :is(#cuentasPagarModule, #cuentasCobrarModule) .commission-batch-view .small-button:hover,
+body.dark-mode :is(#cuentasPagarModule, #cuentasCobrarModule) .commission-batch-view .ghost-button:hover {
+  color: var(--batch-accent);
+}
+
+.commission-batch-proof-panel p,
+.commission-batch-proof-panel small,
+.commission-batch-item-info h4 {
+  color: var(--batch-muted);
+}
+
+.commission-batch-item-info {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 8px;
+  padding-top: 10px;
+}
+
+.commission-batch-item-info.hidden {
+  display: none;
+}
+
+.commission-batch-item-summary {
+  display: grid;
+  gap: 3px;
+}
+
+.commission-batch-item-info h4 {
+  margin: 8px 0 0;
+}
+
+.commission-batch-success {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 44px 22px;
+  text-align: center;
+}
+
+.commission-batch-success > span {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--batch-success);
+  color: #fff;
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.commission-batch-linked {
+  margin: 14px 0;
+  padding: 16px 18px;
+  border: 1px solid var(--batch-border);
+  border-radius: 15px;
+  background: var(--batch-surface-muted);
+}
+
+body.dark-mode :is(#cuentasPagarModule, #cuentasCobrarModule) .commission-batch-view {
+  --batch-surface: #151b24;
+  --batch-surface-muted: #1c2531;
+  --batch-surface-accent: #17323c;
+  --batch-border: #344355;
+  --batch-border-soft: #2a3747;
+  --batch-text: #edf3f8;
+  --batch-muted: #afbdca;
+  --batch-accent: #54c4d8;
+  --batch-accent-strong: #236f82;
+  --batch-success: #36a778;
+}
+
+body.dark-mode .commission-batch-candidate,
+body.dark-mode .commission-batch-group,
+body.dark-mode .commission-batch-sticky-actions {
+  border-color: var(--batch-border);
+  background: var(--batch-surface);
+  color: var(--batch-text);
+}
+
+body.dark-mode .commission-batch-candidate.is-selected,
+body.dark-mode .commission-batch-group-heading {
+  background: var(--batch-surface-accent);
+}
+
+body.dark-mode .commission-batch-candidate.is-linked,
+body.dark-mode .commission-batch-existing-panel {
+  border-color: #806a32;
+  background: #2a2518;
+  color: var(--batch-text);
+}
+
+body.dark-mode .commission-batch-existing-card {
+  border-color: #5c5031;
+  background: #1d1b16;
+}
+
+body.dark-mode .accounts-payable-pending-batches {
+  border-color: #344355;
+  background: #111821;
+  color: #edf3f8;
+}
+
+body.dark-mode .accounts-payable-pending-batches-heading p:not(.eyebrow),
+body.dark-mode .accounts-payable-pending-batch-card small {
+  color: #afbdca;
+}
+
+body.dark-mode .accounts-payable-pending-batch-card {
+  border-color: #344355;
+  background: #1b2430;
+  color: #edf3f8;
+}
+
+body.dark-mode .accounts-payable-pending-batch-status {
+  color: #ffd77d;
+  background: #3d3217;
+}
+
+body.dark-mode .commission-batch-linked-action a,
+body.dark-mode .commission-batch-linked-action button,
+body.dark-mode .commission-batch-existing-button {
+  border-color: #54c4d8;
+  color: #9be3ef;
+  background: #151b24;
+}
+
+body.dark-mode .commission-batch-linked-action a:hover,
+body.dark-mode .commission-batch-linked-action button:hover,
+body.dark-mode .commission-batch-existing-button:hover {
+  color: #071225;
+  background: #54c4d8;
+}
+
+body.dark-mode .commission-batch-cancel-button {
+  border-color: #b95b5b;
+  color: #ffb1b1;
+  background: #2b1919;
+}
+
+body.dark-mode .commission-batch-cancel-button:hover,
+body.dark-mode .commission-batch-cancel-button:focus-visible {
+  color: #fff;
+  background: #a93434;
+}
+
+body.dark-mode .commission-batch-linked {
+  border-color: var(--batch-border);
+  background: var(--batch-surface-muted);
+  color: var(--batch-text);
+}
+
+body.dark-mode .commission-batch-heading p:not(.eyebrow),
+body.dark-mode .commission-batch-candidate small,
+body.dark-mode .commission-batch-candidate em,
+body.dark-mode .commission-batch-group article small,
+body.dark-mode .commission-batch-linked small,
+body.dark-mode .commission-batch-proof-panel p,
+body.dark-mode .commission-batch-proof-panel small,
+body.dark-mode .commission-batch-item-info h4 {
+  color: var(--batch-muted);
+}
+
+body.dark-mode .commission-batch-proof-panel {
+  border-color: var(--batch-border);
+  background: var(--batch-surface-muted);
+  color: var(--batch-text);
+}
+
+body.dark-mode .commission-batch-general-order {
+  background: var(--batch-surface);
+  color: var(--batch-text);
+}
+
+body.dark-mode .commission-batch-status.is-pending {
+  color: #ffd77d;
+  background: #3d3217;
+}
+
+body.dark-mode .commission-batch-status.is-paid {
+  color: #8ce1bd;
+  background: #17382c;
+}
+
+body.dark-mode .commission-batch-paid-notice {
+  border-color: #356e59;
+  background: #172d26;
+  color: var(--batch-text);
+}
+
+body.dark-mode .commission-batch-file-ready {
+  border-color: var(--batch-border);
+  background: var(--batch-surface-muted);
+  color: var(--batch-text);
+}
+
+body.dark-mode .commission-batch-open-button {
+  border-color: #4aaabd;
+  background: linear-gradient(135deg, #176f82, #105564);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.32);
+}
+
+body.dark-mode .commission-batch-open-button:hover,
+body.dark-mode .commission-batch-open-button:focus-visible {
+  background: linear-gradient(135deg, #20869a, #146678);
+}
+
+body.dark-mode .commission-batch-group article {
+  border-top-color: var(--batch-border-soft);
+}
+
+@media (max-width: 900px) {
+  .commission-batch-filters,
+  .commission-batch-candidate,
+  .commission-batch-group article,
+  .commission-batch-review-item,
+  .commission-batch-general-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .receivable-batch-filter-grid,
+  .receivable-batch-setup-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .receivable-batch-filter-actions > button,
+  .receivable-batch-selection-actions > button {
+    width: 100%;
+  }
+
+  .commission-batch-candidate {
+    grid-template-columns: 28px minmax(0, 1fr);
+  }
+
+  .commission-batch-candidate.is-linked {
+    grid-template-columns: 28px minmax(0, 1fr);
+  }
+
+  .commission-batch-candidate > span {
+    grid-column: 2;
+  }
+
+  .commission-batch-candidate.is-linked > .commission-batch-linked-icon {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .commission-batch-linked-action {
+    justify-items: stretch;
+  }
+
+  .commission-batch-existing-card {
+    grid-template-columns: 42px minmax(0, 1fr);
+  }
+
+  .accounts-payable-pending-batch-card {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+
+  .accounts-payable-pending-batch-card > span:not(.accounts-payable-pending-batch-icon) {
+    grid-column: 2;
+  }
+
+  .accounts-payable-pending-batch-actions {
+    justify-content: stretch;
+  }
+
+  .accounts-payable-pending-batch-actions button {
+    flex: 1 1 150px;
+  }
+
+  .commission-batch-existing-card > .commission-batch-existing-status,
+  .commission-batch-existing-card > a,
+  .commission-batch-existing-card > button {
+    grid-column: 2;
+  }
+
+  .commission-batch-money,
+  .commission-batch-group article > strong {
+    text-align: left;
+  }
+
+  .commission-batch-review-item > button,
+  .commission-batch-review-item > .batch-proof-picker,
+  .commission-batch-item-info {
+    grid-column: auto;
+  }
+
+  .commission-batch-heading,
+  .commission-batch-sticky-actions,
+  .commission-batch-linked,
+  .commission-batch-general-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .commission-batch-general-header > div:last-child {
+    justify-items: start;
+    text-align: left;
+  }
+
+  .commission-batch-general-row.is-head {
+    display: none;
+  }
+
+  .commission-batch-general-row > strong:last-child {
+    text-align: left;
+  }
+
+  .commission-batch-paid-notice {
+    grid-template-columns: 42px minmax(0, 1fr);
+  }
+
+  .commission-batch-paid-notice > a {
+    grid-column: 1 / -1;
+  }
+
+  .receivable-consolidated-project > header {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .receivable-consolidated-project > header > span:not(:first-child) {
+    justify-items: start;
+  }
+
+  .receivable-consolidated-totals {
+    justify-content: stretch;
+  }
+
+  .receivable-consolidated-totals > span {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .commission-batch-file-ready {
+    grid-template-columns: 58px minmax(0, 1fr);
+  }
+
+  .commission-batch-file-ready > a {
+    grid-column: 1 / -1;
+  }
+
+  .commission-batch-file-ready > .commission-batch-file-actions {
+    grid-column: 1 / -1;
+  }
+}
+
+body.dark-mode .command-center {
+  --graphite-canvas: #000;
+  --graphite-sidebar: #050505;
+  --graphite-panel: #0b0b0b;
+  --graphite-raised: #121212;
+  --graphite-control: #171717;
+  --minimal-bg: #000;
+  --minimal-panel: #0b0b0b;
+  --minimal-panel-soft: #121212;
+  --hybrid-panel: #050505;
+}
+
+body.dark-mode .command-center .topbar,
+body.dark-mode .command-center.sidebar-expanded .topbar,
+body.dark-mode .command-center.sidebar-collapsed .topbar,
+body.dark-mode .command-center .primary-nav,
+body.dark-mode .command-center .main-nav {
+  background: rgba(0, 0, 0, 0.98) !important;
+}
+
+body.dark-mode .command-center :where(
+  .home-hero,
+  .home-kpi-card,
+  .home-panel,
+  .home-launcher-card,
+  .module-card,
+  .users-panel,
+  .clients-panel,
+  .providers-panel,
+  .report-card,
+  .report-kpi,
+  .report-export-center,
+  .budget-detail-card,
+  .client-quote-module,
+  .accounts-payable-panel,
+  .purchase-table,
+  .module-toolbar
+) {
+  border-color: #272727 !important;
+  background: #0b0b0b !important;
+}
+
+body.dark-mode .command-center :where(input, select, textarea) {
+  border-color: #303030 !important;
+  background: #111 !important;
+}
+
+.command-center .main-nav,
+.command-center.sidebar-collapsed .main-nav,
+.command-center.sidebar-expanded .main-nav {
+  width: min(370px, 92vw);
+  padding-inline: 24px;
+}
+
+.accounts-payable-main-pay-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  margin-top: 4px;
+  padding: 5px 13px;
+  border: 0;
+  border-radius: 9px;
+  color: #fff;
+  background: #101317;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.accounts-payable-main-pay-button:hover {
+  background: #087d9f;
+}
+
+.budget-deletion-lock {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 6px 12px;
+  border: 1px solid rgba(244, 183, 64, 0.42);
+  border-radius: 10px;
+  color: #8a5a00;
+  background: rgba(244, 183, 64, 0.13);
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+body.dark-mode .budget-deletion-lock {
+  color: #ffd77d;
+}
+
+.report-profitability-table {
+  overflow-x: auto;
+}
+
+.report-profitability-table .report-table-head,
+.report-profitability-table .report-table-row {
+  min-width: 1460px;
+  grid-template-columns: 150px 150px 115px minmax(240px, 1.5fr) repeat(5, 140px) 90px;
+}
+
+.report-profitability-table .is-negative {
+  color: #c33346;
+}
+
+@media (max-width: 680px) {
+  .command-center .main-nav,
+  .command-center.sidebar-collapsed .main-nav,
+  .command-center.sidebar-expanded .main-nav {
+    width: min(340px, 94vw);
+    padding-inline: 18px;
+  }
+}
+
+
+/* Presupuesto: tablas de costos realmente responsivas (2026-08-31) */
+#budgetModal .budget-form,
+.budget-inline-form,
+.budget-costs-panel,
+.budget-cost-card,
+.budget-equipment-table {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.budget-equipment-table {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable;
+}
+
+.budget-responsive-field {
+  min-width: 0;
+  margin: 0;
+}
+
+.budget-responsive-label {
+  display: none;
+}
+
+.budget-responsive-field > input,
+.budget-responsive-field > select {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.budget-responsive-field--value b {
+  display: block;
+  min-width: 0;
+}
+
+@media (max-width: 1280px) {
+  .budget-equipment-table {
+    overflow: visible;
+  }
+
+  .budget-equipment-head {
+    display: none;
+  }
+
+  .budget-equipment-row,
+  .budget-contractor-row,
+  .budget-labor-row,
+  .budget-material-row {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    min-width: 0 !important;
+    gap: 12px;
+    align-items: end;
+    margin: 10px;
+    padding: 14px;
+    border: 1px solid #dce8ee;
+    border-radius: 12px;
+  }
+
+  .budget-equipment-empty {
+    min-width: 0 !important;
+  }
+
+  .budget-responsive-field {
+    display: grid;
+    gap: 6px;
+  }
+
+  .budget-responsive-label {
+    display: block;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .05em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .budget-responsive-field--wide {
+    grid-column: span 2;
+  }
+
+  .budget-responsive-field--value b {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 10px;
+    border: 1px solid #dce8ee;
+    border-radius: 8px;
+    background: rgba(247, 250, 252, .86);
+  }
+
+  .budget-responsive-field--action .icon-button {
+    width: 100%;
+    min-width: 44px;
+  }
+
+  body.dark-mode .budget-responsive-field--value b {
+    border-color: rgba(255,255,255,.13);
+    background: rgba(255,255,255,.04);
+  }
+}
+
+@media (max-width: 860px) {
+  .budget-equipment-row,
+  .budget-contractor-row,
+  .budget-labor-row,
+  .budget-material-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .budget-responsive-field--wide {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .budget-cost-heading,
+  .budget-cost-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .budget-equipment-row,
+  .budget-contractor-row,
+  .budget-labor-row,
+  .budget-material-row {
+    grid-template-columns: minmax(0, 1fr) !important;
+    margin: 8px;
+    padding: 12px;
+  }
+
+  .budget-responsive-field--wide {
+    grid-column: auto;
+  }
+
+  .budget-responsive-field--action .icon-button {
+    width: 100%;
+  }
+}
+
+/* Presupuesto: layout completo responsivo (2026-08-31 rev2) */
+#budgetForm,
+#budgetForm .budget-header-grid,
+#budgetForm .budget-documents-card,
+#budgetForm .budget-documents-table,
+#budgetForm .modal-actions {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Esta tabla del formulario de presupuesto tiene 3 columnas reales: Tipo, Nombre, Acción. */
+#budgetForm > .budget-documents-card .budget-documents-head,
+#budgetForm > .budget-documents-card .budget-documents-row {
+  grid-template-columns: minmax(150px, .45fr) minmax(240px, 1.35fr) minmax(120px, .35fr);
+  min-width: 0;
+  width: 100%;
+}
+
+#budgetForm > .budget-documents-card .budget-documents-row > span,
+#budgetForm > .budget-documents-card .budget-documents-head > span {
+  min-width: 0;
+}
+
+#budgetForm > .budget-documents-card .budget-documents-row > span:nth-child(2) {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+#budgetForm > .budget-documents-card .budget-documents-row > span:last-child {
+  display: flex;
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+/* El botón de Guardar no debe convertirse en una barra de ancho completo dentro del formulario inline. */
+#budgetForm.budget-inline-form > .modal-actions {
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-top: 16px;
+  border-top: 1px solid #dce8ee;
+}
+
+#budgetForm.budget-inline-form > .modal-actions .primary-button,
+#budgetForm.budget-inline-form > .modal-actions .ghost-button {
+  width: auto;
+  min-width: 150px;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 1180px) {
+  #budgetForm .budget-header-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #budgetForm .budget-header-grid .wide-field {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 820px) {
+  #budgetForm.budget-inline-form {
+    padding: 16px;
+    overflow-x: hidden;
+  }
+
+  #budgetForm .budget-documents-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  #budgetForm .budget-documents-heading .file-upload-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  #budgetForm > .budget-documents-card .budget-documents-head {
+    display: none;
+  }
+
+  #budgetForm > .budget-documents-card .budget-documents-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    min-width: 0;
+    padding: 12px 14px;
+    border-top: 1px solid #e2edf2;
+  }
+
+  #budgetForm > .budget-documents-card .budget-documents-row > span:nth-child(1)::before {
+    content: "Tipo";
+  }
+
+  #budgetForm > .budget-documents-card .budget-documents-row > span:nth-child(2)::before {
+    content: "Nombre";
+  }
+
+  #budgetForm > .budget-documents-card .budget-documents-row > span:nth-child(3)::before {
+    content: "Acción";
+  }
+
+  #budgetForm > .budget-documents-card .budget-documents-row > span::before {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+  }
+}
+
+@media (max-width: 620px) {
+  #budgetForm .budget-header-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #budgetForm .budget-header-grid .wide-field {
+    grid-column: auto;
+  }
+
+  #budgetForm.budget-inline-form > .modal-actions {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+
+  #budgetForm.budget-inline-form > .modal-actions .primary-button,
+  #budgetForm.budget-inline-form > .modal-actions .ghost-button {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* Presupuesto: contenedor exterior y formulario sin desbordes (2026-08-31 rev3)
+   El panel gris no debe conservar anchos intrínsecos ni recortar el formulario blanco. */
+#presupuestoModule,
+#presupuestoModule .users-panel,
+#presupuestoModule .budgets-panel,
+#presupuestoModule #budgetsListView,
+#presupuestoModule #budgetDetailView,
+#presupuestoModule #budgetDetailContent,
+#presupuestoModule #budgetForm,
+#presupuestoModule .budget-costs-panel,
+#presupuestoModule .budget-cost-card,
+#presupuestoModule .budget-documents-card,
+#presupuestoModule .budget-documents-table,
+#presupuestoModule .budget-equipment-table {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* .budgets-panel tenía overflow:hidden + contain:inline-size. Eso podía recortar
+   el formulario inline cuando sus tablas cambiaban de layout. */
+#presupuestoModule .users-panel.budgets-panel {
+  contain: none;
+  overflow: visible;
+  padding: clamp(10px, 1.35vw, 20px);
+}
+
+#presupuestoModule #budgetDetailView,
+#presupuestoModule #budgetDetailContent {
+  grid-template-columns: minmax(0, 1fr);
+  overflow: visible;
+}
+
+/* El formulario conserva la clase modal-panel aun cuando se mueve al detalle.
+   Forzamos geometría inline para que no herede límites propios del modal. */
+#presupuestoModule #budgetForm.budget-inline-form.modal-panel,
+#presupuestoModule #budgetForm.budget-inline-form {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 0;
+  max-height: none;
+  margin: 0;
+  padding: clamp(12px, 1.55vw, 22px);
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+/* Cada bloque blanco se encoge con el panel gris, en vez de empujarlo. */
+#presupuestoModule .budget-cost-card,
+#presupuestoModule .budget-documents-card {
+  overflow: hidden;
+}
+
+#presupuestoModule .budget-cost-heading,
+#presupuestoModule .budget-cost-footer,
+#presupuestoModule .budget-documents-heading {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* En anchuras de laptop/tablet preferimos el layout responsivo antes de llegar
+   a un desborde horizontal dentro del panel exterior. */
+@media (max-width: 1480px) {
+  #presupuestoModule .budget-equipment-table {
+    overflow: visible;
+  }
+
+  #presupuestoModule .budget-equipment-head {
+    display: none;
+  }
+
+  #presupuestoModule .budget-equipment-row,
+  #presupuestoModule .budget-contractor-row,
+  #presupuestoModule .budget-labor-row,
+  #presupuestoModule .budget-material-row {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    width: auto;
+    max-width: calc(100% - 20px);
+    min-width: 0 !important;
+    margin: 10px;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 980px) {
+  #presupuestoModule .users-panel.budgets-panel {
+    padding: 12px;
+  }
+
+  #presupuestoModule #budgetForm.budget-inline-form {
+    padding: 14px;
+  }
+
+  #presupuestoModule .budget-equipment-row,
+  #presupuestoModule .budget-contractor-row,
+  #presupuestoModule .budget-labor-row,
+  #presupuestoModule .budget-material-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 620px) {
+  #presupuestoModule .users-panel.budgets-panel {
+    padding: 8px;
+    border-radius: 12px;
+  }
+
+  #presupuestoModule #budgetForm.budget-inline-form {
+    padding: 10px;
+    border-radius: 12px;
+  }
+
+  #presupuestoModule .budget-cost-card,
+  #presupuestoModule .budget-documents-card {
+    border-radius: 10px;
+  }
+
+  #presupuestoModule .budget-equipment-row,
+  #presupuestoModule .budget-contractor-row,
+  #presupuestoModule .budget-labor-row,
+  #presupuestoModule .budget-material-row {
+    grid-template-columns: minmax(0, 1fr) !important;
+    max-width: calc(100% - 12px);
+    margin: 6px;
+    padding: 10px;
+  }
+}
+
+/* Cuentas por cobrar: detalle completamente responsivo (2026-08-31)
+   Evita que el panel exterior recorte el contenido cuando cambia el ancho de la ventana. */
+#cuentasCobrarModule,
+#cuentasCobrarModule .users-panel,
+#cuentasCobrarModule .budgets-panel,
+#cuentasCobrarModule #accountsReceivableListView,
+#cuentasCobrarModule #accountsReceivableDetailView,
+#cuentasCobrarModule #accountsReceivableDetailContent,
+#cuentasCobrarModule #accountsReceivableDetailContent > *,
+#cuentasCobrarModule .budget-detail-card,
+#cuentasCobrarModule .client-quote-module,
+#cuentasCobrarModule .budget-documents-table,
+#cuentasCobrarModule .accounts-quote-table {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* El panel gris no debe imponer el ancho intrínseco de tablas internas. */
+#cuentasCobrarModule .users-panel.budgets-panel {
+  contain: none;
+  overflow: visible;
+  padding: clamp(10px, 1.35vw, 20px);
+}
+
+#cuentasCobrarModule #accountsReceivableDetailView,
+#cuentasCobrarModule #accountsReceivableDetailContent {
+  grid-template-columns: minmax(0, 1fr);
+  overflow: visible;
+}
+
+#cuentasCobrarModule #accountsReceivableDetailContent {
+  display: grid;
+  gap: 16px;
+}
+
+/* Encabezado del detalle: el botón nunca debe quedar fuera del panel. */
+#cuentasCobrarModule .accounts-receivable-detail-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: visible;
+}
+
+#cuentasCobrarModule .accounts-receivable-detail-toolbar h3 {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+#cuentasCobrarModule .accounts-receivable-detail-toolbar .success-button {
+  flex: 0 0 auto;
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
+}
+
+/* Las tarjetas se adaptan; solo las tablas internas pueden desplazarse horizontalmente. */
+#cuentasCobrarModule #accountsReceivableDetailContent .budget-detail-card,
+#cuentasCobrarModule #accountsReceivableDetailContent .client-quote-module {
+  overflow: hidden;
+}
+
+#cuentasCobrarModule #accountsReceivableDetailContent .budget-detail-grid {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+}
+
+#cuentasCobrarModule #accountsReceivableDetailContent .budget-detail-grid label,
+#cuentasCobrarModule #accountsReceivableDetailContent .budget-detail-grid input,
+#cuentasCobrarModule #accountsReceivableDetailContent .budget-detail-grid select,
+#cuentasCobrarModule #accountsReceivableDetailContent .budget-detail-grid textarea {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+#cuentasCobrarModule .accounts-receivable-billing-table,
+#cuentasCobrarModule .accounts-receivable-quote .accounts-quote-table,
+#cuentasCobrarModule #accountsReceivableDetailContent .budget-documents-table {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* La tabla mantiene sus columnas en escritorio, pero el scroll se queda dentro de la tarjeta. */
+#cuentasCobrarModule .accounts-receivable-quote .accounts-quote-table .purchase-table-head,
+#cuentasCobrarModule .accounts-receivable-quote .accounts-quote-table .purchase-table-row {
+  min-width: 720px;
+}
+
+#cuentasCobrarModule .accounts-receivable-partiality-form {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+#cuentasCobrarModule .accounts-receivable-partiality-form > *,
+#cuentasCobrarModule .accounts-receivable-upload-form > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 1280px) {
+  #cuentasCobrarModule .users-panel.budgets-panel {
+    padding: 14px;
+  }
+
+  #cuentasCobrarModule #accountsReceivableDetailContent .budget-detail-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  #cuentasCobrarModule #accountsReceivableDetailContent .budget-detail-grid .wide-field {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 980px) {
+  #cuentasCobrarModule .users-panel.budgets-panel {
+    padding: 12px;
+  }
+
+  #cuentasCobrarModule #accountsReceivableDetailContent .budget-detail-card,
+  #cuentasCobrarModule #accountsReceivableDetailContent .client-quote-module {
+    padding: 14px;
+  }
+
+  #cuentasCobrarModule #accountsReceivableDetailContent .budget-detail-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #cuentasCobrarModule #accountsReceivableDetailContent .budget-detail-grid .wide-field {
+    grid-column: span 2;
+  }
+
+  #cuentasCobrarModule .accounts-receivable-detail-toolbar {
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 680px) {
+  #cuentasCobrarModule .users-panel.budgets-panel {
+    padding: 8px;
+    border-radius: 12px;
+  }
+
+  #cuentasCobrarModule #accountsReceivableDetailView {
+    gap: 12px;
+  }
+
+  #cuentasCobrarModule #accountsReceivableDetailContent .budget-detail-card,
+  #cuentasCobrarModule #accountsReceivableDetailContent .client-quote-module {
+    margin-block: 10px;
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  #cuentasCobrarModule #accountsReceivableDetailContent .budget-detail-grid,
+  #cuentasCobrarModule .accounts-receivable-partiality-form,
+  #cuentasCobrarModule .accounts-receivable-upload-form {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  #cuentasCobrarModule #accountsReceivableDetailContent .budget-detail-grid .wide-field,
+  #cuentasCobrarModule .accounts-receivable-partiality-form .wide-field,
+  #cuentasCobrarModule .accounts-receivable-partiality-preview,
+  #cuentasCobrarModule .accounts-receivable-partiality-button {
+    grid-column: auto;
+  }
+
+  #cuentasCobrarModule .accounts-receivable-detail-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #cuentasCobrarModule .accounts-receivable-detail-toolbar .success-button {
+    width: 100%;
+  }
+
+  #cuentasCobrarModule .client-quote-total-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  #cuentasCobrarModule .client-quote-total {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+
+/* Presupuesto: cintillo visual para registros cerrados (2026-09-17) */
+#presupuestoModule .budget-table-row.budget-is-closed {
+  position: relative;
+  overflow: visible;
+  border-top: 3px solid #69727b;
+}
+
+#presupuestoModule .budget-table-row .budget-closed-ribbon {
+  position: absolute;
+  z-index: 4;
+  top: -12px;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 23px;
+  padding: 3px 10px;
+  border: 1px solid #59626b;
+  border-radius: 999px;
+  background: #69727b;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(16, 24, 40, 0.16);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  line-height: 1;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+#presupuestoModule .budget-table-row .budget-closed-ribbon > span {
+  display: grid;
+  width: 15px;
+  height: 15px;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 0.65rem;
+}
+
+#presupuestoModule .budget-detail-card.budget-is-closed {
+  position: relative;
+  overflow: hidden;
+  padding-top: 0;
+  border-top: 0;
+}
+
+#presupuestoModule .budget-closed-detail-ribbon {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: calc(100% + 32px);
+  margin: 0 -16px 16px;
+  padding: 9px 16px;
+  box-sizing: border-box;
+  background: #69727b;
+  color: #fff;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+}
+
+#presupuestoModule .budget-closed-detail-ribbon > span {
+  display: grid;
+  flex: 0 0 auto;
+  width: 21px;
+  height: 21px;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  font-weight: 900;
+}
+
+#presupuestoModule .budget-closed-detail-ribbon strong {
+  font-size: 0.76rem;
+  letter-spacing: 0.11em;
+}
+
+#presupuestoModule .budget-closed-detail-ribbon small {
+  opacity: 0.88;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+body.dark-mode #presupuestoModule .budget-table-row.budget-is-closed {
+  border-top-color: #89929a;
+}
+
+body.dark-mode #presupuestoModule .budget-table-row .budget-closed-ribbon,
+body.dark-mode #presupuestoModule .budget-closed-detail-ribbon {
+  background: #363c42;
+  border-color: #69727b;
+}
+
+@media (max-width: 700px) {
+  #presupuestoModule .budget-table-row .budget-closed-ribbon {
+    right: 6px;
+  }
+
+  #presupuestoModule .budget-closed-detail-ribbon {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  #presupuestoModule .budget-closed-detail-ribbon small {
+    flex: 1 1 100%;
+    padding-left: 30px;
+  }
+}

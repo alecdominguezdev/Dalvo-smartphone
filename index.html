@@ -1,0 +1,3129 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dalvo System</title>
+    <link rel="icon" href="img/favicon.ico" />
+    <link rel="stylesheet" href="formato/style.css?v=20260919-estilos-completos-1" />
+    <link rel="stylesheet" href="formato/dark-graphite.css?v=20260919-estilos-completos-1" />
+    <link rel="stylesheet" href="formato/light-graphite.css?v=20260919-estilos-completos-1" />
+    <link rel="stylesheet" href="formato/hybrid-command-center.css?v=20260919-estilos-completos-1" />
+    <link rel="stylesheet" href="formato/client-directory-list.css?v=20260919-estilos-completos-1" />
+    <link rel="stylesheet" href="formato/dalvo-final-adjustments.css?v=20260919-estilos-completos-1" />
+    <script src="app/app.js?v=20260919-complemento-consolidado-1" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
+  </head>
+  <body class="dark-mode">
+    <main class="shell" id="loginView">
+      <section class="login-card" aria-label="Inicio de sesion Dalvo System">
+        <aside class="brand-panel">
+          <div class="brand-shade"></div>
+          <div class="brand-content">
+            <div class="brand-mark">
+              <img src="img/Logo dalvo blanco.png" alt="Dalvo" />
+              <span>Dalvo System</span>
+            </div>
+            <div class="brand-copy">
+              <h1>Log in</h1>
+            </div>
+          </div>
+        </aside>
+
+        <section class="form-panel">
+          <form class="login-form" id="loginForm" novalidate>
+            <img class="login-logo" src="img/Logo dalvo system.png" alt="Dalvo System" />
+            <div class="form-heading">
+              <h2>Bienvenido</h2>
+              <p>Ingresa a tu espacio de trabajo</p>
+            </div>
+
+            <label class="login-field">
+              <input id="username" name="username" autocomplete="username" placeholder=" " required />
+              <span class="field-label">Usuario</span>
+              <i class="ri-user-3-line field-icon" aria-hidden="true"></i>
+            </label>
+
+            <label class="login-field password-field">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                placeholder=" "
+                required
+              />
+              <span class="field-label">Contraseña</span>
+              <button class="password-toggle" id="passwordToggle" type="button" aria-label="Mostrar contraseña" aria-pressed="false">
+                <i class="ri-eye-line" aria-hidden="true"></i>
+              </button>
+            </label>
+
+            <label class="remember-session">
+              <input type="checkbox" name="rememberSession" />
+              <span>Mantener sesión iniciada</span>
+            </label>
+
+            <p class="form-message" id="loginMessage" role="status" aria-live="polite"></p>
+            <button class="primary-button login-submit" type="submit" id="loginButton">Iniciar sesión</button>
+
+            <div class="login-security-note">
+              <i class="ri-shield-check-line" aria-hidden="true"></i>
+              <span>Acceso exclusivo para personal autorizado</span>
+            </div>
+          </form>
+        </section>
+      </section>
+    </main>
+
+    <main class="command-center hidden" id="appView">
+      <header class="topbar">
+        <div class="topbar-brand">
+          <button class="sidebar-toggle" id="sidebarToggleButton" type="button" aria-label="Abrir menú de módulos" aria-controls="mainNav" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <img class="topbar-logo" src="img/Logo dalvo system.png" alt="Dalvo System" />
+          <span class="topbar-product">Command Center</span>
+        </div>
+
+        <div class="topbar-actions">
+          <form class="global-search" id="globalSearchForm" role="search">
+            <label for="globalSearchInput">Buscar</label>
+            <input
+              id="globalSearchInput"
+              name="globalSearch"
+              type="search"
+              placeholder="Buscar en todo el sistema"
+              autocomplete="off"
+            />
+            <kbd>Ctrl K</kbd>
+            <div class="global-results hidden" id="globalSearchResults"></div>
+          </form>
+
+          <div class="topbar-tools">
+            <button class="create-button" id="quickCreateButton" type="button"><span>+</span> Crear</button>
+            <button class="theme-toggle" id="themeToggleButton" type="button" aria-label="Cambiar modo visual">◐</button>
+            <button class="assistant-button" id="assistantButton" type="button" aria-label="Abrir asistente Dalvo">
+              <i class="ri-sparkling-2-line" aria-hidden="true"></i>
+            </button>
+            <button class="launcher-button" id="launcherButton" type="button" aria-label="Abrir centro de módulos">
+              <span></span><span></span><span></span><span></span>
+            </button>
+          </div>
+
+          <div class="topbar-session sidebar-session-box">
+            <div>
+              <strong id="sessionName">Usuario Dalvo</strong>
+              <span id="sessionRole">Operaciones</span>
+            </div>
+            <button class="ghost-button sidebar-logout-button" id="logoutButton" type="button">Salir</button>
+          </div>
+        </div>
+      </header>
+
+      <nav class="primary-nav" aria-label="Módulos frecuentes">
+        <button class="nav-item primary-nav-item active" type="button" data-module="inicio">Inicio</button>
+        <button class="nav-item primary-nav-item" type="button" data-module="presupuesto">Presupuesto</button>
+        <button class="nav-item primary-nav-item" type="button" data-module="compras">Compras</button>
+        <button class="nav-item primary-nav-item" type="button" data-module="cuentas-pagar">Cuentas por pagar</button>
+        <button class="nav-item primary-nav-item" type="button" data-module="cuentas-cobrar">Cuentas por cobrar</button>
+        <button class="nav-item primary-nav-item" type="button" data-module="tareas">Tareas</button>
+        <button class="nav-item primary-nav-item" type="button" data-module="inventario">Inventario</button>
+        <button class="nav-item primary-nav-item" type="button" data-module="reportes">Reportes</button>
+        <button class="nav-item primary-nav-item" type="button" data-module="exportaciones">Exportaciones</button>
+        <button class="primary-more-button" type="button" data-open-sidebar>
+          <i class="ri-apps-2-line" aria-hidden="true"></i>
+          Todos los módulos
+        </button>
+      </nav>
+
+      <button class="sidebar-scrim" id="sidebarScrim" type="button" aria-label="Cerrar menú de módulos"></button>
+
+      <section class="quick-actions-overlay hidden" id="quickCreateOverlay" aria-label="Acciones rápidas Dalvo">
+        <div class="quick-actions-panel">
+          <div class="quick-actions-search">
+            <span>⌕</span>
+            <input id="quickCreateSearch" type="search" placeholder="Busca módulos o acciones..." autocomplete="off" />
+            <kbd>ESC</kbd>
+          </div>
+          <div class="quick-actions-body">
+            <p>Acciones sugeridas</p>
+            <div class="quick-actions-list" id="quickCreateList">
+              <button type="button" data-quick-module="presupuesto" data-quick-action="new-budget" data-search="crear nuevo presupuesto cotizacion proyecto">
+                <span>+</span>
+                <strong>Crear presupuesto</strong>
+                <small>Cotización y costos de proyecto</small>
+              </button>
+              <button type="button" data-quick-module="clientes" data-search="clientes directorio comercial">
+                <span>C</span>
+                <strong>Ver clientes</strong>
+                <small>Directorio comercial</small>
+              </button>
+              <button type="button" data-quick-module="proveedores" data-search="proveedores compras directorio">
+                <span>P</span>
+                <strong>Ver proveedores</strong>
+                <small>Directorio de compras</small>
+              </button>
+              <button type="button" data-quick-module="compras" data-search="compras ocp orden compra proveedor">
+                <span>O</span>
+                <strong>Crear OCP</strong>
+                <small>Órdenes de compra proveedor</small>
+              </button>
+              <button type="button" data-quick-module="gastos-fijos" data-search="gastos fijos ocgf servicios">
+                <span>G</span>
+                <strong>Gastos fijos</strong>
+                <small>Servicios y OCGF</small>
+              </button>
+              <button type="button" data-quick-module="cuentas-cobrar" data-search="cuentas cobrar factura cobranza clientes">
+                <span>$</span>
+                <strong>Cuentas por cobrar</strong>
+                <small>Facturación y cobranza</small>
+              </button>
+              <button type="button" data-quick-module="cuentas-pagar" data-search="cuentas pagar pagos proveedores">
+                <span>↗</span>
+                <strong>Cuentas por pagar</strong>
+                <small>Pagos a proveedores</small>
+              </button>
+              <button type="button" data-quick-module="comisiones" data-search="comisiones supervisores vendedores pagos">
+                <span>%</span>
+                <strong>Comisiones</strong>
+                <small>Supervisores y pagos</small>
+              </button>
+              <button type="button" data-quick-module="tareas" data-quick-action="new-task" data-search="crear tarea nota seguimiento recordatorio alerta">
+                <span>T</span>
+                <strong>Crear tarea</strong>
+                <small>Notas y recordatorios</small>
+              </button>
+              <button type="button" data-quick-module="reportes" data-search="reportes indicadores dashboard">
+                <span>R</span>
+                <strong>Reportes</strong>
+                <small>Indicadores ejecutivos</small>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="assistant-overlay hidden" id="assistantOverlay" aria-label="Asistente Dalvo">
+        <div class="assistant-panel">
+          <div class="assistant-heading">
+            <div>
+              <p class="eyebrow">Asistente Dalvo</p>
+              <h2>Pregúntale al sistema</h2>
+            </div>
+            <button class="launcher-close" id="assistantCloseButton" type="button" aria-label="Cerrar asistente">
+              x
+            </button>
+          </div>
+          <div class="assistant-response" id="assistantResponse">
+            Puedo responder sobre presupuestos por aprobar, cuentas por cobrar, cuentas por pagar y proyectos activos.
+          </div>
+          <form class="assistant-form" id="assistantForm">
+            <label>
+              <span>Pregunta</span>
+              <input id="assistantQuestion" type="text" placeholder="Ej. ¿Cuántos presupuestos tengo por aprobar?" autocomplete="off" />
+            </label>
+            <button class="small-button assistant-voice-button" type="button" id="assistantVoiceButton" aria-label="Dictar pregunta" title="Dictar pregunta">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 14.5a3.5 3.5 0 0 0 3.5-3.5V6a3.5 3.5 0 0 0-7 0v5a3.5 3.5 0 0 0 3.5 3.5Z"></path>
+                <path d="M19 10.5a7 7 0 0 1-14 0"></path>
+                <path d="M12 17.5V21"></path>
+                <path d="M8.5 21h7"></path>
+              </svg>
+            </button>
+            <button class="success-button" type="submit" id="assistantAskButton">Preguntar</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="module-launcher hidden" id="moduleLauncher" aria-label="Centro de módulos">
+        <div class="module-launcher-panel">
+          <div class="launcher-heading">
+            <div>
+              <p class="eyebrow">Dalvo System</p>
+              <h1>Centro de módulos</h1>
+            </div>
+            <button class="launcher-close" id="launcherCloseButton" type="button" aria-label="Cerrar centro de módulos">
+              x
+            </button>
+          </div>
+          <label class="launcher-search">
+            <span>Buscar módulo</span>
+            <input id="moduleLauncherSearch" type="search" placeholder="Buscar un módulo..." autocomplete="off" />
+          </label>
+          <div class="launcher-grid" id="moduleLauncherGrid">
+            <button class="launcher-card" type="button" data-module="inicio" data-search="inicio resumen indicadores">
+              <span class="launcher-icon teal">IN</span>
+              <strong>Inicio</strong>
+              <small>Resumen e indicadores</small>
+            </button>
+            <button class="launcher-card" type="button" data-module="usuarios" data-search="usuarios equipo accesos roles">
+              <span class="launcher-icon blue">US</span>
+              <strong>Usuarios</strong>
+              <small>Equipo, accesos y roles</small>
+            </button>
+            <button class="launcher-card" type="button" data-module="prestamos" data-search="prestamos préstamos adeudos abonos saldos pagos">
+              <span class="launcher-icon orange">PT</span>
+              <strong>Préstamos</strong>
+              <small>Préstamos, abonos e historial</small>
+            </button>
+            <button class="launcher-card" type="button" data-module="sucursales" data-search="sucursales gto slp qro ubicaciones">
+              <span class="launcher-icon teal">SU</span>
+              <strong>Sucursales</strong>
+            </button>
+            <button class="launcher-card" type="button" data-module="empresas" data-search="empresas clientes corporativos sucursal">
+              <span class="launcher-icon green">EM</span>
+              <strong>Empresas</strong>
+            </button>
+            <button class="launcher-card" type="button" data-module="clientes" data-search="clientes usuarios contactos empresas">
+              <span class="launcher-icon blue">CL</span>
+              <strong>Clientes / Usuarios</strong>
+            </button>
+            <button class="launcher-card" type="button" data-module="proveedores" data-search="proveedores directorio compras">
+              <span class="launcher-icon green">PR</span>
+              <strong>Proveedores</strong>
+              <small>Directorio y compras</small>
+            </button>
+            <button class="launcher-card" type="button" data-module="lista-precios" data-search="lista precios catalogo partidas">
+              <span class="launcher-icon gold">LP</span>
+              <strong>Lista de Precios</strong>
+              <small>Catálogo de partidas</small>
+            </button>
+            <button class="launcher-card" type="button" data-module="gastos-fijos" data-search="gastos fijos servicios ocgf">
+              <span class="launcher-icon teal">GF</span>
+              <strong>Gastos fijos</strong>
+              <small>Servicios y OCGF</small>
+            </button>
+            <button class="launcher-card" type="button" data-module="presupuesto" data-search="presupuesto cotizaciones proyectos">
+              <span class="launcher-icon purple">PS</span>
+              <strong>Presupuesto</strong>
+              <small>Cotizaciones y proyectos</small>
+            </button>
+            <button class="launcher-card" type="button" data-module="compras" data-search="compras ocp proveedores">
+              <span class="launcher-icon orange">CO</span>
+              <strong>Compras</strong>
+              <small>OCP y proveedores</small>
+            </button>
+            <button class="launcher-card" type="button" data-module="cuentas-cobrar" data-search="cuentas cobrar pagos clientes">
+              <span class="launcher-icon blue">CC</span>
+              <strong>Cuentas por cobrar</strong>
+              <small>Pagos de clientes</small>
+            </button>
+            <button class="launcher-card" type="button" data-module="cuentas-pagar" data-search="cuentas pagar pagos proveedores">
+              <span class="launcher-icon green">CP</span>
+              <strong>Cuentas por pagar</strong>
+              <small>Pagos a proveedores</small>
+            </button>
+            <button class="launcher-card" type="button" data-module="comisiones" data-search="comisiones supervisores vendedores pagos">
+              <span class="launcher-icon gold">CM</span>
+              <strong>Comisiones</strong>
+              <small>Pago a supervisores</small>
+            </button>
+            <button class="launcher-card" type="button" data-module="tareas" data-search="tareas notas seguimiento recordatorios alertas">
+              <span class="launcher-icon blue">TA</span>
+              <strong>Tareas</strong>
+              <small>Notas y seguimientos</small>
+            </button>
+            <button class="launcher-card" type="button" data-module="inventario" data-search="inventario existencias movimientos">
+              <span class="launcher-icon gold">IV</span>
+              <strong>Inventario</strong>
+              <small>Existencias y movimientos</small>
+            </button>
+            <button class="launcher-card" type="button" data-module="nomina" data-search="nomina personal pagos">
+              <span class="launcher-icon purple">NO</span>
+              <strong>Nómina</strong>
+              <small>Personal y pagos</small>
+            </button>
+            <button class="launcher-card" type="button" data-module="reportes" data-search="reportes indicadores inteligencia operativa">
+              <span class="launcher-icon blue">RP</span>
+              <strong>Reportes</strong>
+              <small>Indicadores operativos</small>
+            </button>
+            <button class="launcher-card" type="button" data-module="exportaciones" data-search="exportaciones excel pdf filtros reportes">
+              <span class="launcher-icon teal">EX</span>
+              <strong>Exportaciones</strong>
+              <small>Excel, PDF y filtros</small>
+            </button>
+            <button class="launcher-card" type="button" data-module="recuperacion-documental" data-search="recuperacion documental archivos proyectos respaldo conciliacion">
+              <span class="launcher-icon teal">RD</span>
+              <strong>Recuperación documental</strong>
+              <small>Respaldos y archivos faltantes</small>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="modal hidden" id="userModal" aria-label="Formulario de usuario">
+        <form class="modal-panel user-form user-access-form" id="userForm" novalidate>
+          <div class="modal-heading user-modal-heading">
+            <div>
+              <p class="eyebrow">Usuarios</p>
+              <h2 id="userModalTitle">Crear nuevo usuario</h2>
+            </div>
+            <button class="modal-close" id="userModalClose" type="button" aria-label="Cerrar formulario">
+              x
+            </button>
+          </div>
+          <span class="modal-status" id="userFormStatus"></span>
+
+          <section class="user-form-section">
+            <div class="user-section-title">
+              <span><i class="ri-user-line" aria-hidden="true"></i></span>
+              <div>
+                <strong>Datos de acceso</strong>
+              </div>
+            </div>
+            <div class="form-grid user-form-grid">
+              <label>
+                <span>Nombre</span>
+                <input name="nombre" autocomplete="given-name" required />
+              </label>
+              <label>
+                <span>Apellido</span>
+                <input name="apellido" autocomplete="family-name" required />
+              </label>
+              <label>
+                <span>Usuario</span>
+                <input name="usuario" autocomplete="off" required />
+              </label>
+              <label>
+                <span>Contraseña</span>
+                <input name="password" type="password" autocomplete="new-password" />
+              </label>
+            </div>
+          </section>
+
+          <section class="user-form-section">
+            <div class="user-section-title">
+              <span><i class="ri-shield-user-line" aria-hidden="true"></i></span>
+              <div>
+                <strong>Rol y datos administrativos</strong>
+              </div>
+            </div>
+            <div class="form-grid user-form-grid">
+              <label>
+                <span>Rol</span>
+                <select name="rolId" id="roleSelect" required></select>
+              </label>
+              <label>
+                <span>Comisión Supervisor (%)</span>
+                <input name="comisionSupervisor" type="number" min="0" max="100" step="0.01" value="0" />
+              </label>
+              <label>
+                <span>Banco</span>
+                <input name="banco" autocomplete="off" />
+              </label>
+              <label>
+                <span>Cuenta</span>
+                <input name="cuenta" autocomplete="off" inputmode="numeric" />
+              </label>
+              <label class="is-wide">
+                <span>CLABE</span>
+                <input name="clabe" autocomplete="off" inputmode="numeric" />
+              </label>
+            </div>
+          </section>
+
+          <section class="user-permissions-layout">
+            <fieldset class="user-permission-section">
+              <legend>Menús visibles</legend>
+              <div class="check-grid" id="specialPermissions"></div>
+            </fieldset>
+
+            <fieldset class="user-permission-section">
+              <legend>Operaciones permitidas</legend>
+              <div class="check-grid" id="operationPermissions"></div>
+            </fieldset>
+
+            <fieldset class="user-permission-section">
+              <legend>Roles adicionales temporales</legend>
+              <div class="check-grid" id="temporaryRoles"></div>
+            </fieldset>
+
+            <fieldset class="user-permission-section">
+              <legend>Permisos independientes por sucursal</legend>
+              <p class="form-helper">Abre una sucursal y elige los módulos y acciones que este usuario podrá manejar únicamente dentro de ella.</p>
+              <div id="branchAccessScopes"></div>
+            </fieldset>
+          </section>
+
+          <div class="modal-actions">
+            <button class="ghost-button hidden" id="cancelUserButton" type="button">Cancelar</button>
+            <button class="primary-button" id="createUserButton" type="submit">Guardar usuario</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="modal hidden" id="userCreditModal" aria-label="Registrar préstamo o adeudo">
+        <form class="modal-panel user-credit-form" id="userCreditForm">
+          <div class="modal-heading">
+            <div>
+              <p class="eyebrow">Préstamos</p>
+              <h2>Registrar préstamo o adeudo</h2>
+            </div>
+            <button class="modal-close" id="userCreditModalClose" type="button" aria-label="Cerrar formulario">x</button>
+          </div>
+          <span class="modal-status" id="userCreditFormStatus"></span>
+          <div class="form-grid user-credit-form-grid">
+            <label>
+              <span>Persona</span>
+              <select name="usuarioId" id="userCreditUserSelect" required></select>
+            </label>
+            <label>
+              <span>Tipo</span>
+              <select name="tipo" required>
+                <option value="PRESTAMO">Préstamo</option>
+                <option value="ADEUDO">Adeudo</option>
+              </select>
+            </label>
+            <label>
+              <span>Monto original</span>
+              <input class="budget-money-input" name="monto" value="$0.00" required />
+            </label>
+            <label>
+              <span>Fecha</span>
+              <input name="fechaOtorgamiento" type="date" required />
+            </label>
+            <label class="wide-field">
+              <span>Concepto</span>
+              <input name="concepto" maxlength="500" placeholder="Ej. Préstamo personal, reposición de herramienta..." required />
+            </label>
+            <label class="wide-field">
+              <span>Notas</span>
+              <textarea name="notas" rows="3" maxlength="4000" placeholder="Información adicional (opcional)"></textarea>
+            </label>
+          </div>
+          <div class="credit-rule-note">
+            <strong>Control de saldo</strong>
+            <span>Cada abono se guarda en el historial y actualiza automáticamente el saldo pendiente.</span>
+          </div>
+          <div class="modal-actions">
+            <button class="ghost-button" id="cancelUserCreditButton" type="button">Cancelar</button>
+            <button class="primary-button" id="saveUserCreditButton" type="submit">Registrar</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="modal hidden" id="userCreditPaymentModal" aria-label="Registrar abono">
+        <form class="modal-panel user-credit-payment-form" id="userCreditPaymentForm">
+          <div class="modal-heading">
+            <div>
+              <p class="eyebrow">Préstamos</p>
+              <h2>Registrar abono</h2>
+            </div>
+            <button class="modal-close" id="userCreditPaymentModalClose" type="button" aria-label="Cerrar formulario">x</button>
+          </div>
+          <div class="credit-payment-balance" id="userCreditPaymentBalance"></div>
+          <span class="modal-status" id="userCreditPaymentStatus"></span>
+          <div class="form-grid">
+            <label>
+              <span>Monto del abono</span>
+              <input class="budget-money-input" name="monto" value="$0.00" required />
+            </label>
+            <label>
+              <span>Referencia</span>
+              <input name="referencia" maxlength="120" placeholder="Transferencia, efectivo, folio..." />
+            </label>
+            <label class="wide-field">
+              <span>Motivo o detalle</span>
+              <input name="detalle" maxlength="500" placeholder="Ej. Abono transferencia" required />
+            </label>
+          </div>
+          <div class="modal-actions">
+            <button class="ghost-button" id="cancelUserCreditPaymentButton" type="button">Cancelar</button>
+            <button class="primary-button" id="saveUserCreditPaymentButton" type="submit">Guardar abono</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="modal hidden" id="clientModal" aria-label="Formulario de cliente">
+        <form class="modal-panel client-form" id="clientForm">
+          <div class="modal-heading">
+            <div>
+              <p class="eyebrow">Empresas</p>
+              <h2 id="clientModalTitle">Nuevo contacto</h2>
+            </div>
+            <button class="modal-close" id="clientModalClose" type="button" aria-label="Cerrar formulario">
+              x
+            </button>
+          </div>
+          <span class="modal-status" id="clientFormStatus"></span>
+
+          <div class="client-form-grid">
+            <label>
+              <span>Empresa</span>
+              <select name="empresa" id="clientCompanyInput" required>
+                <option value="">Selecciona una empresa</option>
+              </select>
+            </label>
+            <label>
+              <span>Sucursal</span>
+              <select name="sucursalId" id="clientBranchSelect" required>
+                <option value="">Selecciona una ubicación registrada</option>
+              </select>
+            </label>
+            <label>
+              <span>Cliente / usuario (contacto)</span>
+              <input name="nombre" required placeholder="Persona de contacto de la empresa" />
+            </label>
+            <label>
+              <span>Teléfono</span>
+              <input name="telefono" />
+            </label>
+            <label>
+              <span>Email</span>
+              <input name="email" type="email" />
+            </label>
+          </div>
+
+          <div class="modal-actions">
+            <button class="ghost-button" id="cancelClientButton" type="button">Cancelar</button>
+            <button class="primary-button" id="saveClientButton" type="submit">Guardar contacto</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="modal hidden" id="locationCatalogModal" aria-label="Catálogo de sucursales">
+        <form class="modal-panel client-form" id="locationCatalogForm">
+          <div class="modal-heading">
+            <div>
+              <p class="eyebrow">Sucursales</p>
+              <h2 id="locationCatalogModalTitle">Nueva sucursal</h2>
+            </div>
+            <button class="modal-close" id="locationCatalogModalClose" type="button" aria-label="Cerrar formulario">x</button>
+          </div>
+          <span class="modal-status" id="locationCatalogFormStatus"></span>
+          <div class="client-form-grid">
+            <label>
+              <span>Nombre de sucursal</span>
+              <input name="nombre" id="locationCatalogNameInput" autocomplete="off" required placeholder="Ej. S.L.P." />
+            </label>
+          </div>
+          <div class="modal-actions">
+            <button class="ghost-button" id="cancelLocationCatalogButton" type="button">Cancelar</button>
+            <button class="primary-button" id="saveLocationCatalogButton" type="submit">Guardar sucursal</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="modal hidden" id="clientBranchModal" aria-label="Formulario de empresa">
+        <form class="modal-panel client-form" id="clientBranchForm">
+          <div class="modal-heading">
+            <div>
+              <p class="eyebrow">Empresas</p>
+              <h2 id="clientBranchModalTitle">Nueva empresa</h2>
+            </div>
+            <button class="modal-close" id="clientBranchModalClose" type="button" aria-label="Cerrar formulario">x</button>
+          </div>
+          <span class="modal-status" id="clientBranchFormStatus"></span>
+          <div class="client-form-grid">
+            <label>
+              <span>Empresa</span>
+              <select name="empresaExistente" id="clientBranchCompanyInput" required>
+                <option value="">Selecciona una empresa</option>
+              </select>
+            </label>
+            <label class="hidden" id="clientBranchNewCompanyField">
+              <span>Nueva empresa</span>
+              <input name="empresaNueva" id="clientBranchNewCompanyInput" autocomplete="off" placeholder="Ej. BMW" />
+            </label>
+            <label>
+              <span>Sucursal</span>
+              <select name="ubicacionId" id="clientBranchLocationCatalogSelect" required>
+                <option value="">Selecciona una sucursal del catálogo</option>
+              </select>
+            </label>
+            <label class="wide-field">
+              <span>Dirección física de la sucursal (opcional)</span>
+              <input name="direccion" autocomplete="off" placeholder="Dirección física de la ubicación" />
+            </label>
+            <label>
+              <span>RFC de la empresa</span>
+              <input name="empresaRfc" autocomplete="off" />
+            </label>
+            <label>
+              <span>Dirección fiscal de la empresa</span>
+              <input name="empresaDireccion" autocomplete="off" />
+            </label>
+            <label>
+              <span>Email de la empresa</span>
+              <input name="empresaEmail" type="email" autocomplete="off" />
+            </label>
+            <label>
+              <span>Uso del CFDI</span>
+              <input name="empresaUsoCfdi" autocomplete="off" />
+            </label>
+            <label>
+              <span>Factor de venta</span>
+              <input name="empresaValorVenta" type="number" min="0.0001" step="0.0001" required placeholder="Ej. 1.65" />
+            </label>
+            <label>
+              <span>Método de pago</span>
+              <select name="empresaMetodoPago">
+                <option value="contado">Contado</option>
+                <option value="credito">Crédito</option>
+              </select>
+            </label>
+            <label id="clientCompanyCreditDaysField">
+              <span>Días de crédito</span>
+              <input name="empresaDiasCredito" type="number" min="0" step="1" value="0" />
+            </label>
+          </div>
+          <label>
+            <span>Notas o condiciones especiales de la empresa</span>
+            <textarea name="empresaNotas"></textarea>
+          </label>
+          <div class="modal-actions">
+            <button class="ghost-button" id="cancelClientBranchButton" type="button">Cancelar</button>
+            <button class="primary-button" id="saveClientBranchButton" type="submit">Guardar sucursal</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="modal hidden" id="clientDocsModal" aria-label="Documentos de cliente">
+        <div class="modal-panel">
+          <div class="modal-heading">
+            <div>
+              <p class="eyebrow">Documentos</p>
+              <h2 id="clientDocsTitle">Documentos del cliente</h2>
+            </div>
+            <button class="modal-close" id="clientDocsClose" type="button" aria-label="Cerrar documentos">
+              x
+            </button>
+          </div>
+          <form class="document-form" id="clientDocumentForm">
+            <label>
+              <span>Tipo de documento</span>
+              <input name="tipo" placeholder="Constancia, contrato, identificación..." />
+            </label>
+            <label>
+              <span>Archivo</span>
+              <input name="documento" type="file" required />
+            </label>
+            <button class="primary-button" id="uploadClientDocButton" type="submit">Cargar documento</button>
+          </form>
+          <div class="documents-list" id="clientDocumentsList"></div>
+        </div>
+      </section>
+
+      <section class="modal hidden" id="providerModal" aria-label="Formulario de proveedor">
+        <form class="modal-panel client-form" id="providerForm">
+          <div class="modal-heading">
+            <div>
+              <p class="eyebrow">Proveedores</p>
+              <h2 id="providerModalTitle">Nuevo proveedor</h2>
+            </div>
+            <button class="modal-close" id="providerModalClose" type="button" aria-label="Cerrar formulario">
+              x
+            </button>
+          </div>
+          <span class="modal-status" id="providerFormStatus"></span>
+
+          <div class="client-form-grid">
+            <label>
+              <span>Empresa</span>
+              <input name="empresa" required />
+            </label>
+            <label>
+              <span>RFC</span>
+              <input name="rfc" />
+            </label>
+            <label>
+              <span>Dirección</span>
+              <input name="direccion" />
+            </label>
+            <label>
+              <span>Teléfono</span>
+              <input name="telefono" />
+            </label>
+            <label>
+              <span>Correo</span>
+              <input name="correo" type="email" />
+            </label>
+            <label>
+              <span>Contacto de ventas</span>
+              <input name="contactoVentas" />
+            </label>
+            <label>
+              <span>Contacto de compras</span>
+              <input name="contactoCompras" />
+            </label>
+            <label>
+              <span>Contacto de contabilidad</span>
+              <input name="contactoContabilidad" />
+            </label>
+          </div>
+
+          <section class="payment-box">
+            <h3>Datos de pago</h3>
+            <div class="client-form-grid">
+              <label>
+                <span>Pago</span>
+                <select name="pago">
+                  <option value="contado">Contado</option>
+                  <option value="credito">Crédito</option>
+                </select>
+              </label>
+              <label id="providerCreditDaysField" class="hidden">
+                <span>Días de crédito</span>
+                <input name="diasCredito" type="number" min="0" step="1" value="30" />
+              </label>
+              <label>
+                <span>Banco</span>
+                <input name="banco" />
+              </label>
+              <label>
+                <span>Cuenta</span>
+                <input name="cuenta" />
+              </label>
+              <label>
+                <span>CLABE</span>
+                <input name="clabe" />
+              </label>
+              <label>
+                <span>SPEI</span>
+                <input name="spei" />
+              </label>
+            </div>
+          </section>
+
+          <div class="modal-actions">
+            <button class="ghost-button" id="cancelProviderButton" type="button">Cancelar</button>
+            <button class="primary-button" id="saveProviderButton" type="submit">Guardar proveedor</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="modal hidden" id="providerDocsModal" aria-label="Documentos de proveedor">
+        <div class="modal-panel">
+          <div class="modal-heading">
+            <div>
+              <p class="eyebrow">Documentos</p>
+              <h2 id="providerDocsTitle">Documentos del proveedor</h2>
+            </div>
+            <button class="modal-close" id="providerDocsClose" type="button" aria-label="Cerrar documentos">
+              x
+            </button>
+          </div>
+          <form class="document-form" id="providerDocumentForm">
+            <label>
+              <span>Tipo de documento</span>
+              <input name="tipo" placeholder="Constancia, contrato, datos bancarios..." />
+            </label>
+            <label>
+              <span>Archivo</span>
+              <input name="documento" type="file" required />
+            </label>
+            <button class="primary-button" id="uploadProviderDocButton" type="submit">Cargar documento</button>
+          </form>
+          <div class="documents-list" id="providerDocumentsList"></div>
+        </div>
+      </section>
+
+      <section class="modal hidden" id="fixedExpenseModal" aria-label="Formulario de gasto fijo">
+        <form class="modal-panel fixed-expense-form" id="fixedExpenseForm">
+          <div class="modal-heading">
+            <div>
+              <p class="eyebrow">Gastos fijos</p>
+              <h2 id="fixedExpenseModalTitle">Nuevo gasto fijo</h2>
+            </div>
+            <button class="modal-close" id="fixedExpenseModalClose" type="button" aria-label="Cerrar formulario">
+              x
+            </button>
+          </div>
+          <span class="modal-status" id="fixedExpenseFormStatus"></span>
+
+          <div class="fixed-expense-form-grid">
+            <label>
+              <span>Gasto</span>
+              <input name="gasto" autocomplete="off" required />
+            </label>
+            <label>
+              <span>Proveedor</span>
+              <select name="proveedorId" id="fixedExpenseProviderSelect">
+                <option value="">Selecciona proveedor</option>
+              </select>
+            </label>
+            <label>
+              <span>Sucursal</span>
+              <select name="sucursal" id="fixedExpenseBranchSelect" required>
+                <option value="">Selecciona sucursal</option>
+              </select>
+            </label>
+            <label>
+              <span>Recurrencia</span>
+              <select name="recurrencia">
+                <option value="mensual">Mensual</option>
+                <option value="bimestral">Bimestral</option>
+                <option value="trimestral">Trimestral</option>
+                <option value="semestral">Semestral</option>
+                <option value="anual">Anual</option>
+              </select>
+            </label>
+            <label>
+              <span>Estado del registro</span>
+              <select name="estadoRegistro">
+                <option value="Activo">Activo</option>
+                <option value="Suspendido">Suspendido</option>
+                <option value="Finalizado">Finalizado</option>
+              </select>
+            </label>
+            <label class="fixed-expense-toggle-field">
+              <span>Generación automática</span>
+              <span class="inline-checkbox">
+                <input name="generacionAutomatica" id="fixedExpenseAutomaticToggle" type="checkbox" />
+                <span>Crear OCGF editable en cada periodo</span>
+              </span>
+            </label>
+            <label class="wide-field">
+              <span>Descripción para la OCGF automática</span>
+              <input name="descripcionAutomatica" maxlength="500" placeholder="Renta mensual, pago de vehículo..." />
+            </label>
+            <label data-fixed-expense-auto-field>
+              <span>Día de generación</span>
+              <input name="diaGeneracion" type="number" min="1" max="28" value="1" />
+            </label>
+            <label data-fixed-expense-auto-field>
+              <span>Fecha inicial</span>
+              <input name="fechaInicio" type="date" />
+            </label>
+            <label data-fixed-expense-auto-field>
+              <span>Fecha final (opcional)</span>
+              <input name="fechaFin" type="date" />
+            </label>
+            <label>
+              <span>Presupuesto asignado</span>
+              <input name="presupuesto" id="fixedExpenseBudget" inputmode="decimal" placeholder="$0.00" required />
+            </label>
+            <label>
+              <span>Presupuesto adicional</span>
+              <input name="presupuestoAdicional" id="fixedExpenseAdditionalBudget" inputmode="decimal" placeholder="$0.00" />
+            </label>
+            <label>
+              <span>Presupuesto disponible</span>
+              <input id="fixedExpenseAvailableBudget" value="$0.00" readonly />
+            </label>
+          </div>
+          <div class="fixed-expense-budget-summary fixed-purchase-summary">
+            <article><span>Asignado</span><strong id="fixedExpenseAssignedSummary">$0.00</strong></article>
+            <article><span>Presupuesto adicional</span><strong id="fixedExpenseAdditionalSummary">$0.00</strong></article>
+            <article><span>Disponible</span><strong id="fixedExpenseAvailableSummary">$0.00</strong></article>
+          </div>
+
+          <div class="modal-actions">
+            <button class="ghost-button" id="cancelFixedExpenseButton" type="button">Cancelar</button>
+            <button class="primary-button" id="saveFixedExpenseButton" type="submit">
+              Guardar gasto fijo
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="modal hidden" id="budgetModal" aria-label="Formulario de presupuesto">
+        <form class="modal-panel budget-form" id="budgetForm">
+          <div class="modal-heading">
+            <div>
+              <p class="eyebrow">Presupuesto</p>
+              <h2 id="budgetModalTitle">Nuevo presupuesto</h2>
+            </div>
+            <button class="modal-close" id="budgetModalClose" type="button" aria-label="Cerrar formulario">
+              x
+            </button>
+          </div>
+          <span class="modal-status" id="budgetFormStatus"></span>
+
+          <section class="budget-header-grid">
+            <label>
+              <span>Empresa</span>
+              <select name="clienteId" id="budgetCompanySelect" required>
+                <option value="">Selecciona empresa</option>
+              </select>
+            </label>
+            <label>
+              <span>Sucursal</span>
+              <select name="sucursal" id="budgetBranchInput" required disabled>
+                <option value="">Selecciona empresa primero</option>
+              </select>
+            </label>
+            <label>
+              <span>Cliente/Usuario</span>
+              <input name="clienteUsuario" id="budgetClientUserInput" list="budgetClientUserOptions" autocomplete="off" placeholder="Haz clic o escribe para seleccionar..." />
+              <datalist id="budgetClientUserOptions"></datalist>
+            </label>
+            <label>
+              <span>Área</span>
+              <input name="area" autocomplete="off" />
+            </label>
+            <label>
+              <span>Responsable interno</span>
+              <select name="responsableId" id="budgetOwnerSelect" required>
+                <option value="">Selecciona responsable</option>
+              </select>
+            </label>
+            <label class="wide-field">
+              <span>Título del proyecto</span>
+              <input name="tituloProyecto" autocomplete="off" required />
+            </label>
+            <label>
+              <span>Folio</span>
+              <input name="folio" id="budgetFolioPreview" readonly placeholder="Automático" />
+            </label>
+            <label class="inline-check-field">
+              <input id="budgetManualFolioToggle" name="folioManual" type="checkbox" />
+              <span>Agregar folio manual</span>
+            </label>
+          </section>
+
+          <div class="budget-cost-toggle-row">
+            <button class="secondary-action-button" id="toggleBudgetCostsButton" type="button">
+              Agregar costos
+            </button>
+          </div>
+
+          <section class="budget-costs-panel hidden" id="budgetCostsPanel">
+            <div class="budget-cost-card">
+              <div class="budget-cost-heading">
+                <div>
+                  <span>Costos</span>
+                  <h3>Equipos de elevación e izaje</h3>
+                </div>
+              </div>
+
+              <div
+                class="budget-equipment-table resizable-grid-table"
+                id="budgetEquipmentTable"
+                data-grid-table
+                style="--grid-columns: minmax(220px, 1.4fr) minmax(92px, .45fr) minmax(92px, .45fr) minmax(82px, .38fr) minmax(130px, .58fr) minmax(110px, .48fr) minmax(130px, .58fr) 42px;"
+              >
+                <div class="budget-equipment-head">
+                  <span class="grid-th" data-sort-key="item">
+                    <button class="sortable-column" type="button">Item</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="cantidadEquipos">
+                    <button class="sortable-column" type="button">Cant. Equipos</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="cantidadUm">
+                    <button class="sortable-column" type="button">Cant. UM</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="unidadMedida">
+                    <button class="sortable-column" type="button">U.M.</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="costoUnitario">
+                    <button class="sortable-column" type="button">Costo unitario</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="flete">
+                    <button class="sortable-column" type="button">Flete</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="subtotal">
+                    <button class="sortable-column" type="button">Subtotal</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th action-th">Acción</span>
+                </div>
+                <div class="budget-equipment-body" id="budgetEquipmentRows"></div>
+              </div>
+              <div class="budget-cost-footer">
+                <button class="small-button" id="addBudgetEquipmentRowButton" type="button">
+                  + Agregar
+                </button>
+                <strong id="budgetEquipmentTotal">$0.00</strong>
+              </div>
+            </div>
+
+            <div class="budget-cost-card">
+              <div class="budget-cost-heading">
+                <div>
+                  <span>Costos</span>
+                  <h3>Contratista a destajo</h3>
+                </div>
+              </div>
+
+              <div
+                class="budget-equipment-table resizable-grid-table"
+                id="budgetContractorTable"
+                data-grid-table
+                style="--grid-columns: minmax(280px, 1.5fr) minmax(120px, .48fr) minmax(140px, .58fr) minmax(140px, .58fr) 42px;"
+              >
+                <div class="budget-equipment-head">
+                  <span class="grid-th" data-sort-key="descripcion">
+                    <button class="sortable-column" type="button">Descripción</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="cantidad">
+                    <button class="sortable-column" type="button">Cantidad</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="costo">
+                    <button class="sortable-column" type="button">Costo</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="subtotal">
+                    <button class="sortable-column" type="button">Subtotal</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th action-th">Acción</span>
+                </div>
+                <div class="budget-equipment-body" id="budgetContractorRows"></div>
+              </div>
+              <div class="budget-cost-footer">
+                <button class="small-button" id="addBudgetContractorRowButton" type="button">
+                  + Agregar
+                </button>
+                <strong id="budgetContractorTotal">$0.00</strong>
+              </div>
+            </div>
+
+            <div class="budget-cost-card">
+              <div class="budget-cost-heading">
+                <div>
+                  <span>Costos</span>
+                  <h3>Mano de obra externa / interna</h3>
+                </div>
+              </div>
+
+              <div
+                class="budget-equipment-table resizable-grid-table"
+                id="budgetLaborTable"
+                data-grid-table
+                style="--grid-columns: minmax(220px, 1.2fr) minmax(92px, .42fr) minmax(92px, .42fr) minmax(110px, .48fr) minmax(130px, .58fr) minmax(92px, .42fr) minmax(130px, .58fr) minmax(140px, .62fr) 42px;"
+              >
+                <div class="budget-equipment-head">
+                  <span class="grid-th" data-sort-key="descripcion">
+                    <button class="sortable-column" type="button">Descripción</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="personas">
+                    <button class="sortable-column" type="button">Personas</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="horas">
+                    <button class="sortable-column" type="button">Horas</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="horasTotal">
+                    <button class="sortable-column" type="button">Horas total</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="costoHora">
+                    <button class="sortable-column" type="button">Costo/hora</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="comidas">
+                    <button class="sortable-column" type="button">Comidas</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="costoComida">
+                    <button class="sortable-column" type="button">Costo comida</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="subtotal">
+                    <button class="sortable-column" type="button">Subtotal</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th action-th">Acción</span>
+                </div>
+                <div class="budget-equipment-body" id="budgetLaborRows"></div>
+              </div>
+              <div class="budget-cost-footer">
+                <button class="small-button" id="addBudgetLaborRowButton" type="button">
+                  + Agregar
+                </button>
+                <strong id="budgetLaborTotal">$0.00</strong>
+              </div>
+            </div>
+
+            <div class="budget-cost-card">
+              <div class="budget-cost-heading">
+                <div>
+                  <span>Costos</span>
+                  <h3>Materiales</h3>
+                </div>
+              </div>
+
+              <div
+                class="budget-equipment-table resizable-grid-table"
+                id="budgetMaterialsTable"
+                data-grid-table
+                style="--grid-columns: minmax(280px, 1.5fr) minmax(120px, .48fr) minmax(120px, .48fr) minmax(140px, .58fr) minmax(140px, .58fr) 42px;"
+              >
+                <div class="budget-equipment-head">
+                  <span class="grid-th" data-sort-key="descripcion">
+                    <button class="sortable-column" type="button">Descripción</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="cantidad">
+                    <button class="sortable-column" type="button">Cantidad</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="unidad">
+                    <button class="sortable-column" type="button">Unidad</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="costo">
+                    <button class="sortable-column" type="button">Costo</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th" data-sort-key="subtotal">
+                    <button class="sortable-column" type="button">Subtotal</button>
+                    <i class="column-resizer" aria-hidden="true"></i>
+                  </span>
+                  <span class="grid-th action-th">Acción</span>
+                </div>
+                <div class="budget-equipment-body" id="budgetMaterialsRows"></div>
+              </div>
+              <div class="budget-cost-footer">
+                <div class="budget-cost-footer-actions">
+                  <button class="small-button" id="downloadMaterialsTemplateButton" type="button">
+                    Exportar Excel
+                  </button>
+                  <button class="small-button" id="uploadMaterialsExcelButton" type="button">
+                    Cargar Excel
+                  </button>
+                  <button class="small-button" id="addBudgetMaterialRowButton" type="button">
+                    + Agregar
+                  </button>
+                  <input
+                    class="hidden"
+                    id="materialsExcelInput"
+                    type="file"
+                    accept=".xlsx,.xls,.csv"
+                  />
+                </div>
+                <strong id="budgetMaterialsTotal">$0.00</strong>
+              </div>
+            </div>
+
+            <label class="budget-warranty-check">
+              <input id="budgetSinWarrantyToggle" name="sinGarantia" type="checkbox" />
+              <span>Sin garantía</span>
+            </label>
+
+          </section>
+
+          <div class="budget-documents-card">
+            <div class="budget-documents-heading">
+              <div>
+                <span>Archivos</span>
+                <h3>Cotización proveedor</h3>
+              </div>
+              <label class="file-upload-button">
+                Cargar archivo
+                <input id="supplierQuoteInput" type="file" multiple />
+              </label>
+            </div>
+            <div class="budget-documents-table">
+              <div class="budget-documents-head">
+                <span>Tipo</span>
+                <span>Nombre</span>
+                <span>Acción</span>
+              </div>
+              <div id="supplierQuoteRows"></div>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button class="ghost-button" id="cancelBudgetButton" type="button">Cancelar</button>
+            <button class="primary-button" id="saveBudgetButton" type="submit">Guardar presupuesto</button>
+          </div>
+        </form>
+      </section>
+
+      <nav class="main-nav" id="mainNav" aria-label="Modulos principales">
+        <div class="sidebar-brand">
+          <img src="img/Logo dalvo system.png" alt="Dalvo System" />
+          <span>Command Center</span>
+        </div>
+        <div class="sidebar-nav-scroll">
+          <section class="sidebar-nav-group">
+            <p class="sidebar-nav-label">Principal</p>
+            <button class="nav-item active" type="button" data-module="inicio" title="Inicio"><i class="ri-home-5-line" aria-hidden="true"></i><span>Inicio</span></button>
+          </section>
+
+          <section class="sidebar-nav-group">
+            <p class="sidebar-nav-label">Operación</p>
+            <button class="nav-item" type="button" data-module="usuarios" title="Usuarios"><i class="ri-team-line" aria-hidden="true"></i><span>Usuarios</span></button>
+            <button class="nav-item" type="button" data-module="sucursales" title="Sucursales"><i class="ri-map-pin-2-line" aria-hidden="true"></i><span>Sucursales</span></button>
+            <button class="nav-item" type="button" data-module="empresas" title="Empresas"><i class="ri-building-line" aria-hidden="true"></i><span>Empresas</span></button>
+            <button class="nav-item" type="button" data-module="clientes" title="Clientes / Usuarios"><i class="ri-contacts-line" aria-hidden="true"></i><span>Clientes / Usuarios</span></button>
+            <button class="nav-item" type="button" data-module="proveedores" title="Proveedores"><i class="ri-truck-line" aria-hidden="true"></i><span>Proveedores</span></button>
+            <button class="nav-item" type="button" data-module="presupuesto" title="Presupuesto"><i class="ri-file-chart-line" aria-hidden="true"></i><span>Presupuesto</span></button>
+            <button class="nav-item" type="button" data-module="compras" title="Compras"><i class="ri-shopping-bag-3-line" aria-hidden="true"></i><span>Compras</span></button>
+          </section>
+
+          <section class="sidebar-nav-group">
+            <p class="sidebar-nav-label">Finanzas</p>
+            <button class="nav-item" type="button" data-module="cuentas-pagar" title="Cuentas por pagar"><i class="ri-bank-card-line" aria-hidden="true"></i><span>Cuentas por pagar</span></button>
+            <button class="nav-item" type="button" data-module="cuentas-cobrar" title="Cuentas por cobrar"><i class="ri-hand-coin-line" aria-hidden="true"></i><span>Cuentas por cobrar</span></button>
+            <button class="nav-item" type="button" data-module="prestamos" title="Préstamos"><i class="ri-hand-heart-line" aria-hidden="true"></i><span>Préstamos</span></button>
+            <button class="nav-item" type="button" data-module="comisiones" title="Comisiones"><i class="ri-percent-line" aria-hidden="true"></i><span>Comisiones</span></button>
+            <button class="nav-item" type="button" data-module="gastos-fijos" title="Gastos fijos"><i class="ri-receipt-line" aria-hidden="true"></i><span>Gastos fijos</span></button>
+          </section>
+
+          <section class="sidebar-nav-group">
+            <p class="sidebar-nav-label">Sistema</p>
+            <button class="nav-item" type="button" data-module="lista-precios" title="Lista de Precios"><i class="ri-price-tag-3-line" aria-hidden="true"></i><span>Lista de Precios</span></button>
+            <button class="nav-item" type="button" data-module="tareas" title="Tareas"><i class="ri-task-line" aria-hidden="true"></i><span>Tareas</span></button>
+            <button class="nav-item" type="button" data-module="inventario" title="Inventario"><i class="ri-archive-stack-line" aria-hidden="true"></i><span>Inventario</span></button>
+            <button class="nav-item" type="button" data-module="nomina" title="Nómina"><i class="ri-wallet-3-line" aria-hidden="true"></i><span>Nómina</span></button>
+            <button class="nav-item" type="button" data-module="reportes" title="Reportes"><i class="ri-bar-chart-box-line" aria-hidden="true"></i><span>Reportes</span></button>
+            <button class="nav-item" type="button" data-module="exportaciones" title="Exportaciones"><i class="ri-file-download-line" aria-hidden="true"></i><span>Exportaciones</span></button>
+            <button class="nav-item" type="button" data-module="recuperacion-documental" title="Recuperación documental"><i class="ri-folder-search-line" aria-hidden="true"></i><span>Recuperación documental</span></button>
+          </section>
+        </div>
+      </nav>
+
+      <section class="workspace">
+        <section class="module-view active" id="inicioModule" data-module-panel="inicio">
+          <section class="home-command" id="homeCommandCenter">
+            <div class="home-hero">
+              <div>
+                <p class="eyebrow">Command Center</p>
+                <h1 id="homeGreeting">Dalvo Command Center</h1>
+                <p>Datos críticos para decidir, aprobar y avanzar desde un solo lugar.</p>
+              </div>
+              <button class="home-launcher-card" type="button" data-home-action="launcher">
+                <span class="home-launcher-icon">⌘</span>
+                <strong>Explorar módulos</strong>
+                <small id="homeAllowedModules">Herramientas disponibles</small>
+              </button>
+            </div>
+
+            <section class="home-kpi-grid" aria-label="Indicadores ejecutivos">
+              <article class="home-kpi-card home-kpi-link-card" data-home-module="presupuesto" data-home-filter="active">
+                <i class="ri-briefcase-4-line" aria-hidden="true"></i>
+                <span>Proyectos activos</span>
+                <strong id="homeActiveProjects">0</strong>
+                <button type="button" data-home-module="presupuesto" data-home-filter="active">Ver activos</button>
+              </article>
+              <article class="home-kpi-card home-kpi-link-card" data-home-module="cuentas-cobrar" data-home-filter="collected-month">
+                <i class="ri-bank-card-line" aria-hidden="true"></i>
+                <span>Cobrado este mes</span>
+                <strong id="homeMonthCollected">$0.00</strong>
+                <button type="button" data-home-module="cuentas-cobrar" data-home-filter="collected-month">Ver cobros del mes</button>
+              </article>
+              <article class="home-kpi-card home-kpi-link-card" data-home-module="reportes" data-home-filter="paid-month">
+                <i class="ri-funds-box-line" aria-hidden="true"></i>
+                <span>Utilidad real del mes</span>
+                <strong id="homeRealProfitMonth">$0.00</strong>
+                <button type="button" data-home-module="reportes" data-home-filter="paid-month">Ver proyectos pagados</button>
+              </article>
+              <article class="home-kpi-card home-kpi-link-card" data-home-module="cuentas-cobrar" data-home-filter="pending">
+                <i class="ri-alarm-warning-line" aria-hidden="true"></i>
+                <span>Pendiente por cobrar</span>
+                <strong id="homeReceivablePending">$0.00</strong>
+                <button type="button" data-home-module="cuentas-cobrar" data-home-filter="pending">Revisar pendientes</button>
+              </article>
+            </section>
+
+            <section class="home-layout">
+              <div class="home-panel home-activity-panel">
+                <div class="home-panel-heading">
+                  <span>Actividad</span>
+                  <h2>Movimientos recientes</h2>
+                </div>
+                <div class="home-activity-list" id="homeActivityList">
+                  <div class="home-empty">Cargando actividad...</div>
+                </div>
+              </div>
+
+              <aside class="home-side-stack">
+                <div class="home-panel home-priority-panel">
+                  <div class="home-panel-heading">
+                    <span>Prioridad de hoy</span>
+                    <h2>Resumen de pendientes</h2>
+                  </div>
+                  <div class="home-pending-list" id="homePendingList"></div>
+                </div>
+              </aside>
+            </section>
+
+            <details class="home-more">
+              <summary>
+                <span>
+                  <small>Información secundaria</small>
+                  <strong>Pagos y accesos rápidos</strong>
+                </span>
+                <span class="home-more-action">Mostrar más <i class="ri-arrow-down-s-line" aria-hidden="true"></i></span>
+              </summary>
+              <div class="home-more-grid">
+                <div class="home-panel home-payable-card">
+                  <div class="home-panel-heading">
+                    <span>Por pagar</span>
+                    <h2>Pagos pendientes</h2>
+                  </div>
+                  <strong class="home-money" id="homePayablePending">$0.00</strong>
+                  <button class="home-link-button" type="button" data-home-module="cuentas-pagar" data-home-filter="pending">Revisar egresos pendientes</button>
+                </div>
+                <div class="home-panel">
+                  <div class="home-panel-heading">
+                    <span>Acciones frecuentes</span>
+                    <h2>¿Qué quieres hacer?</h2>
+                  </div>
+                  <div class="home-quick-actions">
+                    <button type="button" data-home-module="presupuesto">+ Nuevo presupuesto</button>
+                    <button type="button" data-home-module="compras">Compras</button>
+                    <button type="button" data-home-module="cuentas-cobrar">Cobranza</button>
+                    <button type="button" data-home-module="reportes">Reportes</button>
+                    <button type="button" data-home-module="exportaciones">Exportaciones</button>
+                    <button type="button" data-home-module="recuperacion-documental">Recuperación documental</button>
+                  </div>
+                </div>
+              </div>
+            </details>
+          </section>
+        </section>
+
+        <section class="module-view" id="usuariosModule" data-module-panel="usuarios">
+          <div class="workspace-heading users-hero-heading">
+            <div>
+              <p class="eyebrow">Usuarios</p>
+              <h1>Accesos y permisos</h1>
+              <p>Alta de usuarios, rol principal, permisos especiales y roles adicionales temporales.</p>
+            </div>
+          </div>
+
+          <div class="users-panel">
+            <div class="module-toolbar">
+              <label class="module-search users-search">
+                <span>Buscar usuarios</span>
+                <input
+                  id="usersSearch"
+                  type="search"
+                  placeholder="Nombre, usuario, rol o permiso..."
+                  autocomplete="off"
+                />
+              </label>
+              <div class="module-toolbar-actions">
+                <button class="secondary-action-button" id="toggleProjectOwnerAuditButton" type="button">
+                  <i class="ri-user-search-line" aria-hidden="true"></i>
+                  Depurar responsables
+                </button>
+                <button class="create-user-button" id="openUserModalButton" type="button">
+                  <i class="ri-user-add-line" aria-hidden="true"></i>
+                  Crear usuario
+                </button>
+              </div>
+            </div>
+
+            <section class="project-owner-audit-panel hidden" id="projectOwnerAuditPanel">
+              <div class="section-heading-inline">
+                <div>
+                  <p class="eyebrow">Asignación de proyectos</p>
+                  <h2>Consolidar responsables duplicados</h2>
+                  <p>Revisa nombres históricos o usuarios duplicados, elige el usuario oficial y transfiere únicamente los proyectos seleccionados.</p>
+                </div>
+              </div>
+              <span class="modal-status" id="projectOwnerAuditStatus"></span>
+              <div class="project-owner-audit-grid">
+                <label>
+                  <span>Nombre / usuario a corregir</span>
+                  <select id="projectOwnerSourceSelect">
+                    <option value="">Selecciona un registro</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Usuario principal</span>
+                  <select id="projectOwnerTargetSelect">
+                    <option value="">Selecciona el usuario correcto</option>
+                  </select>
+                </label>
+              </div>
+              <div class="project-owner-audit-options">
+                <label class="inline-check-field">
+                  <input id="projectOwnerNormalizeLegacy" type="checkbox" checked />
+                  <span>Normalizar también el nombre histórico del responsable</span>
+                </label>
+                <label class="inline-check-field" id="projectOwnerDeactivateSourceField">
+                  <input id="projectOwnerDeactivateSource" type="checkbox" />
+                  <span>Desactivar el usuario duplicado si queda sin proyectos</span>
+                </label>
+              </div>
+              <div class="project-owner-project-list" id="projectOwnerProjectList">
+                <div class="empty-state">Selecciona un nombre o usuario para revisar sus proyectos.</div>
+              </div>
+              <div class="project-owner-audit-actions">
+                <button class="primary-button" id="applyProjectOwnerAuditButton" type="button">Aplicar consolidación</button>
+              </div>
+            </section>
+
+            <div class="users-card-list" id="usersCardList"></div>
+          </div>
+        </section>
+
+        <section class="module-view" id="prestamosModule" data-module-panel="prestamos">
+          <div id="userCreditsListView">
+            <div class="workspace-heading users-hero-heading">
+              <div>
+                <p class="eyebrow">Finanzas</p>
+                <h1>Préstamos</h1>
+                <p>Registra préstamos o adeudos por persona, controla abonos y consulta el historial completo.</p>
+              </div>
+            </div>
+
+            <div class="users-panel user-credits-ledger-panel">
+              <div class="credit-summary-grid" id="userCreditsSummary">
+                <article><span>Saldo pendiente</span><strong>$0.00</strong></article>
+                <article><span>Total recuperado</span><strong>$0.00</strong></article>
+                <article><span>Personas con saldo</span><strong>0</strong></article>
+                <article><span>Registros activos</span><strong>0</strong></article>
+              </div>
+
+              <div class="section-heading-inline">
+                <div>
+                  <p class="eyebrow">Control general</p>
+                  <h2>Préstamos y adeudos registrados</h2>
+                </div>
+                <div class="user-credit-toolbar-actions">
+                  <button class="create-user-button" id="openUserCreditModalButton" type="button">
+                    <i class="ri-hand-coin-line" aria-hidden="true"></i>
+                    Registrar préstamo
+                  </button>
+                </div>
+              </div>
+
+              <div class="credit-ledger-filters">
+                <input id="userCreditsSearch" type="search" placeholder="Buscar persona o concepto..." autocomplete="off" />
+                <select id="userCreditsStatusFilter">
+                  <option value="active">Pendientes</option>
+                  <option value="paid">Liquidados</option>
+                  <option value="all">Todos</option>
+                </select>
+              </div>
+
+              <div class="user-credits-table" id="userCreditsList"></div>
+            </div>
+          </div>
+
+          <div class="hidden" id="userCreditDetailView">
+            <div class="detail-view-toolbar user-detail-toolbar">
+              <button class="ghost-button" id="backToUserCreditsButton" type="button">
+                <i class="ri-arrow-left-line" aria-hidden="true"></i>
+                Volver a préstamos
+              </button>
+            </div>
+            <div id="userCreditDetailContent"></div>
+          </div>
+        </section>
+
+        <section class="module-view" id="sucursalesModule" data-module-panel="sucursales">
+          <div class="workspace-heading">
+            <p class="eyebrow">Catálogo maestro</p>
+            <h1>Sucursales</h1>
+          </div>
+          <div class="users-panel clients-panel">
+            <section class="client-branch-directory">
+              <div class="section-heading-inline">
+                <div>
+                  <p class="eyebrow">Sucursales oficiales</p>
+                  <h2>GTO · SLP · QRO</h2>
+                </div>
+                <button class="secondary-action-button" id="openLocationCatalogModalButton" type="button">+ Nueva sucursal</button>
+              </div>
+              <div class="client-branch-location-list location-catalog-list" id="locationCatalogList"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="module-view" id="empresasModule" data-module-panel="empresas">
+          <div class="workspace-heading">
+            <p class="eyebrow">Catálogo comercial</p>
+            <h1>Empresas</h1>
+          </div>
+          <div class="users-panel clients-panel">
+            <section class="client-branch-directory">
+              <div class="section-heading-inline">
+                <div>
+                  <p class="eyebrow">Empresas</p>
+                  <h2>Empresas y sucursal asignada</h2>
+                </div>
+                <button class="secondary-action-button" id="openClientBranchModalButton" type="button">+ Nueva empresa</button>
+              </div>
+              <div class="client-branch-location-list" id="clientBranchLocationsList"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="module-view" id="clientesModule" data-module-panel="clientes">
+          <div class="workspace-heading">
+            <p class="eyebrow">Clientes / Usuarios</p>
+            <h1>Clientes / usuarios</h1>
+          </div>
+          <div class="users-panel clients-panel">
+            <div class="module-toolbar clients-toolbar">
+              <label class="module-search clients-search">
+                <span>Buscar clientes / usuarios</span>
+                <input id="clientsSearch" type="search" placeholder="Buscar empresa, sucursal, contacto o RFC..." autocomplete="off" />
+              </label>
+              <button class="create-user-button client-create-button" id="openClientModalButton" type="button">+ Nuevo cliente / usuario</button>
+            </div>
+            <div class="section-heading-inline client-contacts-heading">
+              <div><p class="eyebrow">Contactos</p><h2>Clientes / usuarios por empresa</h2></div>
+            </div>
+            <div class="users-card-list clients-card-list" id="clientsCardList"></div>
+          </div>
+        </section>
+
+        <section class="module-view" id="proveedoresModule" data-module-panel="proveedores">
+          <div class="workspace-heading">
+            <p class="eyebrow">Proveedores</p>
+            <h1>Directorio y pagos</h1>
+            <p>Alta de proveedores, contactos, datos bancarios y documentos asociados.</p>
+          </div>
+
+          <div class="users-panel providers-panel">
+            <div class="module-toolbar providers-toolbar">
+              <label class="module-search providers-search">
+                <span>Buscar proveedores</span>
+                <input
+                  id="providersSearch"
+                  type="search"
+                  placeholder="Buscar empresa, RFC o correo..."
+                  autocomplete="off"
+                />
+              </label>
+              <button class="create-user-button provider-create-button" id="openProviderModalButton" type="button">
+                + Nuevo proveedor
+              </button>
+            </div>
+
+            <div class="users-card-list providers-card-list" id="providersCardList"></div>
+          </div>
+        </section>
+
+        <section class="module-view" id="listaPreciosModule" data-module-panel="lista-precios">
+          <div class="workspace-heading">
+            <p class="eyebrow">Lista de precios</p>
+            <h1>Catálogo de costos</h1>
+            <p>Registra costos base por tipo para presupuestos y cotizaciones.</p>
+          </div>
+
+          <div class="users-panel price-panel">
+            <form class="price-form" id="priceForm">
+              <label>
+                <span>Tipo</span>
+                <select name="tipo" id="priceType">
+                  <option value="Equipos de elevación e izaje">Equipos de elevación e izaje</option>
+                  <option value="Mano de obra">Mano de obra</option>
+                </select>
+              </label>
+              <label>
+                <span>Item</span>
+                <input name="item" id="priceItem" placeholder="Nombre del item" autocomplete="off" required />
+              </label>
+              <label>
+                <span>Costo</span>
+                <input name="costo" id="priceCost" inputmode="decimal" placeholder="$0.00" required />
+              </label>
+              <button class="primary-button" id="addPriceButton" type="submit">Agregar</button>
+            </form>
+            <span class="modal-status" id="priceFormStatus"></span>
+
+            <div class="module-toolbar price-toolbar">
+              <label class="module-search">
+                <span>Buscar precios</span>
+                <input id="pricesSearch" type="search" placeholder="Buscar tipo o item..." autocomplete="off" />
+              </label>
+            </div>
+
+            <div class="price-board" id="priceList">
+              <section class="price-category-card">
+                <div class="price-category-heading">
+                  <div>
+                    <span>Tipo</span>
+                    <h2>Equipos de elevación e izaje</h2>
+                  </div>
+                  <button class="columns-button" type="button">Columnas</button>
+                </div>
+                <div class="price-table">
+                  <div class="price-table-head">
+                    <span>Item</span>
+                    <span>Costo unitario</span>
+                    <span>Acción</span>
+                  </div>
+                  <div class="price-table-body" id="priceEquipmentList"></div>
+                </div>
+              </section>
+
+              <section class="price-category-card">
+                <div class="price-category-heading">
+                  <div>
+                    <span>Tipo</span>
+                    <h2>Mano de obra</h2>
+                  </div>
+                  <button class="columns-button" type="button">Columnas</button>
+                </div>
+                <div class="price-table">
+                  <div class="price-table-head">
+                    <span>Item</span>
+                    <span>Costo por hora</span>
+                    <span>Acción</span>
+                  </div>
+                  <div class="price-table-body" id="priceLaborList"></div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section class="module-view" id="gastosFijosModule" data-module-panel="gastos-fijos">
+          <div class="workspace-heading">
+            <p class="eyebrow">Gastos fijos</p>
+            <h1>Servicios recurrentes</h1>
+          </div>
+
+          <div class="users-panel fixed-expenses-panel">
+            <div class="module-toolbar">
+              <label class="module-search">
+                <span>Buscar gastos fijos</span>
+                <input
+                  id="fixedExpensesSearch"
+                  type="search"
+                  placeholder="Buscar gasto o recurrencia..."
+                  autocomplete="off"
+                />
+              </label>
+              <button class="small-button" id="generateFixedExpensesButton" type="button">
+                Generar pendientes
+              </button>
+              <button class="create-user-button" id="openFixedExpenseModalButton" type="button">
+                + Nuevo Gasto Fijo
+              </button>
+            </div>
+
+            <div class="fixed-expense-table-shell">
+              <div class="fixed-expense-table-actions">
+                <button class="columns-button" type="button">Columnas</button>
+              </div>
+              <div
+                class="fixed-expense-table resizable-grid-table"
+                id="fixedExpensesTable"
+                data-grid-table
+                style="--grid-columns: minmax(180px, 1.1fr) minmax(170px, .9fr) 110px 105px 130px 130px 135px 140px 135px 150px;"
+              >
+                <div class="fixed-expense-table-head">
+                  <span class="grid-th" data-sort-key="gasto"><button class="sortable-column" type="button">Gasto</button><i class="column-resizer" aria-hidden="true"></i></span>
+                  <span class="grid-th" data-sort-key="proveedorNombre"><button class="sortable-column" type="button">Proveedor</button><i class="column-resizer" aria-hidden="true"></i></span>
+                  <span class="grid-th" data-sort-key="recurrencia"><button class="sortable-column" type="button">Recurrencia</button><i class="column-resizer" aria-hidden="true"></i></span>
+                  <span class="grid-th" data-sort-key="estadoRegistro"><button class="sortable-column" type="button">Estado</button><i class="column-resizer" aria-hidden="true"></i></span>
+                  <span class="grid-th" data-sort-key="generacionAutomatica"><button class="sortable-column" type="button">Automática</button><i class="column-resizer" aria-hidden="true"></i></span>
+                  <span class="grid-th" data-sort-key="proximaGeneracion"><button class="sortable-column" type="button">Próxima OCGF</button><i class="column-resizer" aria-hidden="true"></i></span>
+                  <span class="grid-th" data-sort-key="presupuesto"><button class="sortable-column" type="button">Asignado</button><i class="column-resizer" aria-hidden="true"></i></span>
+                  <span class="grid-th" data-sort-key="presupuestoAdicional"><button class="sortable-column" type="button">Adicional</button><i class="column-resizer" aria-hidden="true"></i></span>
+                  <span class="grid-th" data-sort-key="disponible"><button class="sortable-column" type="button">Disponible</button><i class="column-resizer" aria-hidden="true"></i></span>
+                  <span class="grid-th action-th">Acción</span>
+                </div>
+                <div class="fixed-expense-table-body" id="fixedExpensesList"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="module-view" id="presupuestoModule" data-module-panel="presupuesto">
+          <div class="workspace-heading">
+            <p class="eyebrow">Presupuesto</p>
+            <h1>Cotizaciones y proyectos</h1>
+            <p>Genera presupuestos con folio automático, cabecera comercial y costos del proyecto.</p>
+          </div>
+
+          <div class="users-panel budgets-panel">
+            <div id="budgetsListView">
+              <div class="module-toolbar">
+                <label class="module-search">
+                  <span>Buscar presupuestos</span>
+                  <input
+                    id="budgetsSearch"
+                    type="search"
+                    placeholder="Buscar folio, empresa o proyecto..."
+                    autocomplete="off"
+                  />
+                </label>
+              <button class="create-user-button" id="openBudgetModalButton" type="button">
+                  + Nuevo presupuesto
+                </button>
+                <button class="success-button" id="openSharedClientPoButton" type="button">
+                  Asignar PO compartida
+                </button>
+                <div class="module-export-actions">
+                  <button class="small-button" id="budgetsExportExcelButton" type="button">Excel</button>
+                  <button class="small-button" id="budgetsExportPdfButton" type="button">PDF</button>
+                </div>
+              </div>
+
+              <section class="budget-approval-queue hidden" id="budgetApprovalQueue">
+                <h2>Presupuestos pendientes de aprobación</h2>
+                <div class="budgets-table-shell">
+                  <div
+                    class="budgets-table resizable-grid-table"
+                    id="budgetApprovalTable"
+                    data-grid-table
+                    style="--grid-columns: 54px 132px 118px 100px 70px 168px 108px 118px 82px 128px 96px 108px 74px;"
+                  >
+                    <div class="budgets-table-head">
+                      <span class="grid-th row-flag-th">Marca</span>
+                      <span class="grid-th" data-sort-key="empresa">
+                        <button class="sortable-column" type="button">Empresa</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="clienteUsuario">
+                        <button class="sortable-column" type="button">Cliente/Usuario</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="folio">
+                        <button class="sortable-column" type="button">Folio</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="po">
+                        <button class="sortable-column" type="button">PO</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="tituloProyecto">
+                        <button class="sortable-column" type="button">Proyecto</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="createdAt">
+                        <button class="sortable-column" type="button">Fecha de creación</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="updatedAt">
+                        <button class="sortable-column" type="button">Fecha de modificación</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="estado">
+                        <button class="sortable-column" type="button">Estado</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="estatus">
+                        <button class="sortable-column" type="button">Estatus</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="precioVenta">
+                        <button class="sortable-column" type="button">Monto</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="owner">
+                        <button class="sortable-column" type="button">Owner</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th action-th">Acción</span>
+                    </div>
+                    <div id="budgetApprovalRows"></div>
+                  </div>
+                </div>
+              </section>
+
+              <div class="budgets-table-shell">
+                <div
+                  class="budgets-table resizable-grid-table"
+                  id="budgetsTable"
+                  data-grid-table
+                  style="--grid-columns: 54px 132px 118px 100px 70px 168px 108px 118px 82px 128px 96px 108px 74px;"
+                >
+                  <div class="budgets-table-head">
+                    <span class="grid-th row-flag-th">Marca</span>
+                    <span class="grid-th" data-sort-key="empresa">
+                      <button class="sortable-column" type="button">Empresa</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="clienteUsuario">
+                      <button class="sortable-column" type="button">Cliente/Usuario</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="folio">
+                      <button class="sortable-column" type="button">Folio</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="po">
+                      <button class="sortable-column" type="button">PO</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="tituloProyecto">
+                      <button class="sortable-column" type="button">Proyecto</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="createdAt">
+                      <button class="sortable-column" type="button">Fecha de creación</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="updatedAt">
+                      <button class="sortable-column" type="button">Fecha de modificación</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="estado">
+                      <button class="sortable-column" type="button">Estado</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="estatus">
+                      <button class="sortable-column" type="button">Estatus</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="precioVenta">
+                      <button class="sortable-column" type="button">Monto</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="owner">
+                      <button class="sortable-column" type="button">Owner</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th action-th">Acción</span>
+                  </div>
+                  <div id="budgetsCardList"></div>
+                </div>
+              </div>
+            </div>
+
+            <section class="budget-detail hidden" id="budgetDetailView">
+              <button class="ghost-button" id="backToBudgetsButton" type="button">← Volver</button>
+              <h2>Presupuesto</h2>
+              <div class="budget-detail-actions hidden" id="budgetDetailActions">
+                <button class="small-button budget-detail-status-button" type="button" data-action="approve">
+                  Aprobar
+                </button>
+                <button class="small-button danger-button budget-detail-status-button" type="button" data-action="reject">
+                  No aprobar
+                </button>
+                <button class="small-button budget-detail-status-button" type="button" data-action="close">
+                  Cerrar orden
+                </button>
+                <button class="small-button danger-button" id="deleteBudgetDetailButton" type="button">
+                  Eliminar
+                </button>
+              </div>
+              <div id="budgetDetailContent"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="modal hidden" id="sharedClientPoModal" aria-label="Asignar PO compartida">
+          <form class="modal-panel shared-client-po-form" id="sharedClientPoForm">
+            <div class="modal-heading">
+              <div>
+                <p class="eyebrow">Presupuestos</p>
+                <h2>Asignar PO compartida</h2>
+                <p>Busca y selecciona los proyectos que pertenecen a una misma PO.</p>
+              </div>
+              <button class="modal-close" id="sharedClientPoModalClose" type="button" aria-label="Cerrar">x</button>
+            </div>
+
+            <div class="shared-client-po-filters">
+              <label>
+                <span>Empresa</span>
+                <select id="sharedClientPoCompanyFilter">
+                  <option value="">Todas las empresas</option>
+                </select>
+              </label>
+              <label>
+                <span>Buscar proyecto</span>
+                <input id="sharedClientPoProjectFilter" type="search" placeholder="Folio, nombre, cliente o PO" autocomplete="off" />
+              </label>
+              <button class="small-button" id="sharedClientPoSelectVisibleButton" type="button">Seleccionar visibles</button>
+              <button class="ghost-button" id="sharedClientPoClearButton" type="button">Limpiar selección</button>
+            </div>
+
+            <div class="shared-client-po-selector-head">
+              <span></span>
+              <span>Empresa</span>
+              <span>Folio / proyecto</span>
+              <span>Estatus</span>
+              <span>Monto</span>
+            </div>
+            <div class="shared-client-po-projects" id="sharedClientPoProjects">
+              <div class="client-quote-empty">Cargando proyectos...</div>
+            </div>
+
+            <div class="client-form-grid">
+              <label>
+                <span>Número de PO</span>
+                <input name="numeroPo" placeholder="Ej. 3000339893" autocomplete="off" required />
+              </label>
+              <label>
+                <span>Monto total de la PO</span>
+                <input name="montoTotal" type="number" min="0.01" step="0.01" required />
+              </label>
+              <label class="shared-client-po-file-field">
+                <span>Archivo de PO</span>
+                <input name="poArchivo" type="file" accept=".pdf,image/*" required />
+              </label>
+            </div>
+
+            <div class="shared-client-po-total" id="sharedClientPoCalculatedTotal">
+              <span>0 proyectos seleccionados</span><strong>$0.00</strong>
+            </div>
+            <span class="modal-status" id="sharedClientPoStatus"></span>
+            <div class="modal-actions">
+              <button class="ghost-button" id="cancelSharedClientPoButton" type="button">Cancelar</button>
+              <button class="success-button" id="saveSharedClientPoButton" type="submit">Asignar PO y crear CxC</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="module-view" id="comprasModule" data-module-panel="compras">
+          <div class="workspace-heading">
+            <p class="eyebrow">Compras</p>
+            <h1>Órdenes de compra proveedor</h1>
+            <p>Convierte presupuestos aceptados por cliente en OCP para proveedores.</p>
+          </div>
+          
+          <div class="users-panel budgets-panel">
+            <div id="purchasesListView">
+              <div class="module-toolbar purchase-ocp-toolbar">
+                <h2>OCP</h2>
+                <label class="module-search">
+                  <span>Buscar OCP</span>
+                  <input
+                    id="purchaseSearch"
+                    type="search"
+                    placeholder="Buscar por empresa, DLV, PO, proyecto, proveedor, partida o estatus..."
+                    autocomplete="off"
+                  />
+                </label>
+                <button class="create-button purchase-create-ocp-button" id="purchaseCreateOcpButton" type="button">
+                  <span>+</span> Crear
+                </button>
+                <div class="module-export-actions">
+                  <button class="small-button" id="purchaseExportExcelButton" type="button">Excel</button>
+                  <button class="small-button" id="purchaseExportPdfButton" type="button">PDF</button>
+                </div>
+              </div>
+
+              <section class="module-filter-panel" aria-label="Filtros de compras">
+                <div class="module-filter-grid">
+                  <label><span>Tipo</span><select id="purchaseFilterType"><option value="all">Todos</option><option value="pending">OCP pendientes</option><option value="created">OCP creadas</option><option value="ocgf">OCGF</option></select></label>
+                  <label><span>Empresa / sucursal</span><select id="purchaseFilterCompany"><option value="">Todas</option></select></label>
+                  <label><span>Proveedor</span><select id="purchaseFilterProvider"><option value="">Todos</option></select></label>
+                  <label><span>Estatus</span><select id="purchaseFilterStatus"><option value="">Todos</option></select></label>
+                  <label><span>Desde</span><input id="purchaseFilterDateFrom" type="date" /></label>
+                  <label><span>Hasta</span><input id="purchaseFilterDateTo" type="date" /></label>
+                </div>
+                <div class="module-filter-footer">
+                  <span id="purchaseFilterSummary">Mostrando todos los registros</span>
+                  <button class="ghost-button" id="purchaseClearFiltersButton" type="button">Limpiar filtros</button>
+                </div>
+              </section>
+
+              <section class="purchase-section" data-purchase-section="pending">
+                <h2>OCPs Pendientes de creación</h2>
+                <div class="budgets-table-shell">
+                  <div
+                    class="purchase-table purchase-pending-table resizable-grid-table"
+                    id="purchasePendingTable"
+                    data-grid-table
+                    style="--grid-columns: 54px 150px 110px 110px 240px 260px 170px 120px 132px;"
+                  >
+                    <div class="purchase-table-head">
+                      <span class="grid-th row-flag-th">Marca</span>
+                      <span class="grid-th" data-sort-key="empresa"><button class="sortable-column" type="button">Empresa</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="dlv"><button class="sortable-column" type="button">DLV</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="po"><button class="sortable-column" type="button">PO</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="proyecto"><button class="sortable-column" type="button">Proyecto</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="partidasPendientes"><button class="sortable-column" type="button">Partidas pendientes</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="estatus"><button class="sortable-column" type="button">Estatus</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="createdAt"><button class="sortable-column" type="button">Fecha de creación</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="updatedAt"><button class="sortable-column" type="button">Fecha de modificación</button><i class="column-resizer" aria-hidden="true"></i></span>
+                    </div>
+                    <div id="purchasePendingRows"></div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="purchase-section" data-purchase-section="created">
+                <h2>Listado de OCP Creadas</h2>
+                <div class="budgets-table-shell">
+                  <div
+                    class="purchase-table purchase-created-table resizable-grid-table"
+                    id="purchaseCreatedTable"
+                    data-grid-table
+                    style="--grid-columns: 54px 150px 110px 120px 180px 240px 130px 150px 190px 130px 170px;"
+                  >
+                    <div class="purchase-table-head">
+                      <span class="grid-th row-flag-th">Marca</span>
+                      <span class="grid-th" data-sort-key="empresa"><button class="sortable-column" type="button">Empresa</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="dlv"><button class="sortable-column" type="button">DLV</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="ocp"><button class="sortable-column" type="button">OCP</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="proveedor"><button class="sortable-column" type="button">Proveedor</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="proyecto"><button class="sortable-column" type="button">Proyecto</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="createdAt"><button class="sortable-column" type="button">Fecha de creación</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="owner"><button class="sortable-column" type="button">Owner</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="updatedAt"><button class="sortable-column" type="button">Última modificación</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="monto"><button class="sortable-column" type="button">Monto</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="estatus"><button class="sortable-column" type="button">Estatus</button><i class="column-resizer" aria-hidden="true"></i></span>
+                    </div>
+                    <div id="purchaseCreatedRows"></div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="purchase-section fixed-purchase-section" data-purchase-section="ocgf">
+                <div class="module-toolbar">
+                  <h2>Gastos Fijos</h2>
+                  <label class="module-search">
+                    <span>Buscar gastos fijos</span>
+                    <input
+                      id="purchaseFixedExpenseSearch"
+                      type="search"
+                      placeholder="Buscar por GF, proveedor, contacto, área o estatus..."
+                      autocomplete="off"
+                    />
+                  </label>
+                  <button class="create-user-button" id="openPurchaseFixedExpenseButton" type="button">
+                    + Nuevo Gasto Fijo
+                  </button>
+                </div>
+                <div class="budgets-table-shell">
+                  <div
+                    class="purchase-table fixed-purchase-table resizable-grid-table"
+                    id="purchaseFixedExpenseTable"
+                    data-grid-table
+                    style="--grid-columns: 54px 150px 96px 130px 190px 260px 128px 150px 190px 150px 150px 150px 110px 76px;"
+                  >
+                    <div class="purchase-table-head">
+                      <span class="grid-th row-flag-th">Marca</span>
+                      <span class="grid-th" data-sort-key="gasto"><button class="sortable-column" type="button">Gasto</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="folio"><button class="sortable-column" type="button">OCGF</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="sucursal"><button class="sortable-column" type="button">Sucursal</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="proveedorNombre"><button class="sortable-column" type="button">Proveedor</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="descripcion"><button class="sortable-column" type="button">Descripción</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="createdAt"><button class="sortable-column" type="button">Fecha de creación</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="owner"><button class="sortable-column" type="button">Owner</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="updatedAt"><button class="sortable-column" type="button">Última modificación</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="estado"><button class="sortable-column" type="button">Estado</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="presupuestoAsignado"><button class="sortable-column" type="button">Presupuesto asignado</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="presupuestoDisponible"><button class="sortable-column" type="button">Presupuesto disponible</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="monto"><button class="sortable-column" type="button">Monto</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th action-th">Acción</span>
+                    </div>
+                    <div id="purchaseFixedExpenseRows"></div>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <section class="budget-detail hidden" id="purchaseDetailView">
+              <button class="ghost-button" id="backToPurchasesButton" type="button">← Volver</button>
+              <h2>Orden de Compra Proveedor</h2>
+              <div id="purchaseDetailContent"></div>
+            </section>
+
+            <section class="budget-detail hidden" id="purchaseFixedExpenseDetailView">
+              <button class="ghost-button" id="backToPurchaseFixedExpensesButton" type="button">← Volver</button>
+              <h2>Gastos fijos</h2>
+              <div id="purchaseFixedExpenseDetailContent"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="module-view" id="cuentasCobrarModule" data-module-panel="cuentas-cobrar">
+          <div class="workspace-heading">
+            <p class="eyebrow">Cuentas por cobrar</p>
+            <h1>Facturación y cobranza</h1>
+            <p>Da seguimiento a cotizaciones aprobadas, factura, comprobantes y complementos de pago.</p>
+          </div>
+
+          <div class="users-panel budgets-panel">
+            <div id="accountsReceivableListView">
+              <div class="module-toolbar">
+                <h2>Cuentas por cobrar</h2>
+                <label class="module-search">
+                  <span>Buscar cuentas por cobrar</span>
+                  <input
+                    id="accountsReceivableSearch"
+                    type="search"
+                    placeholder="Buscar por empresa, cliente, folio, PO, proyecto, estado, pendiente o monto..."
+                    autocomplete="off"
+                  />
+                </label>
+                <div class="module-export-actions">
+                  <button class="primary-button" id="openReceivableBatchSelectorButton" type="button">Seleccionar cobros</button>
+                  <button class="small-button" id="accountsReceivableExportExcelButton" type="button">Excel</button>
+                  <button class="small-button" id="accountsReceivableExportPdfButton" type="button">PDF</button>
+                </div>
+              </div>
+              <section class="module-filter-panel" aria-label="Filtros de cuentas por cobrar">
+                <div class="module-filter-grid">
+                  <label><span>Empresa</span><select id="accountsReceivableFilterCompany"><option value="">Todas</option></select></label>
+                  <label><span>Estado</span><select id="accountsReceivableFilterStatus"><option value="">Todos</option></select></label>
+                  <label><span>Cobranza</span><select id="accountsReceivableFilterCollection"><option value="all">Todas</option><option value="pending">Pendientes</option><option value="collected">Cobradas</option><option value="overdue">Vencidas</option></select></label>
+                  <label><span>Saldo por cobrar</span><select id="accountsReceivableFilterBalance"><option value="all">Todos</option><option value="with">Con saldo</option><option value="without">Sin saldo</option></select></label>
+                  <label><span>Desde</span><input id="accountsReceivableFilterDateFrom" type="date" /></label>
+                  <label><span>Hasta</span><input id="accountsReceivableFilterDateTo" type="date" /></label>
+                </div>
+                <div class="module-filter-footer">
+                  <span id="accountsReceivableFilterSummary">Mostrando todos los registros</span>
+                  <button class="ghost-button" id="accountsReceivableClearFiltersButton" type="button">Limpiar filtros</button>
+                </div>
+              </section>
+              <section class="accounts-payable-pending-batches hidden" id="accountsReceivablePendingBatchesPanel" aria-labelledby="accountsReceivablePendingBatchesTitle">
+                <div class="accounts-payable-pending-batches-heading">
+                  <div>
+                    <p class="eyebrow">Cobros consolidados</p>
+                    <h2 id="accountsReceivablePendingBatchesTitle">Cobros generales pendientes</h2>
+                    <p>Continúa un cobro general ya preparado sin volver a seleccionar los proyectos.</p>
+                  </div>
+                  <strong id="accountsReceivablePendingBatchesCount">0</strong>
+                </div>
+                <div class="accounts-payable-pending-batches-list" id="accountsReceivablePendingBatchesRows"></div>
+              </section>
+              <section class="purchase-section">
+                <h2>Cuentas por cobrar</h2>
+                <div class="budgets-table-shell">
+                  <div
+                    class="purchase-table accounts-receivable-table resizable-grid-table"
+                    id="accountsReceivableTable"
+                    data-grid-table
+                    style="--grid-columns: 54px 150px 150px 110px 110px 220px 108px 118px 140px 180px 92px 120px 120px 125px 125px 130px;"
+                  >
+                    <div class="purchase-table-head">
+                      <span class="grid-th row-flag-th">Marca</span>
+                      <span class="grid-th" data-sort-key="empresa">
+                        <button class="sortable-column" type="button">Empresa</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="clienteUsuario">
+                        <button class="sortable-column" type="button">Cliente/Usuario</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="folio">
+                        <button class="sortable-column" type="button">Folio</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="po">
+                        <button class="sortable-column" type="button">PO</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="proyecto">
+                        <button class="sortable-column" type="button">Proyecto</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="fecha">
+                        <button class="sortable-column" type="button">Fecha de creación</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="updatedAt">
+                        <button class="sortable-column" type="button">Fecha de modificación</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="estado">
+                        <button class="sortable-column" type="button">Estado</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="pendiente">
+                        <button class="sortable-column" type="button">Pendiente</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="diasPago">
+                        <button class="sortable-column" type="button">Días de pago</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="fechaPago">
+                        <button class="sortable-column" type="button">Fecha para pago</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="fechaCobro">
+                        <button class="sortable-column" type="button">Fecha de cobro</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="montoOriginal">
+                        <button class="sortable-column" type="button">Monto original</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="monto">
+                        <button class="sortable-column" type="button">Monto a cobrar</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="saldoCobrar">
+                        <button class="sortable-column" type="button">Saldo por cobrar</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                    </div>
+                    <div id="accountsReceivableRows"></div>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <section class="budget-detail hidden" id="accountsReceivableDetailView">
+              <button class="ghost-button" id="backToAccountsReceivableButton" type="button">← Volver</button>
+              <h2>Cuenta por cobrar</h2>
+              <div id="accountsReceivableDetailContent"></div>
+            </section>
+
+            <section class="budget-detail commission-batch-view hidden" id="accountsReceivableBatchSelectView">
+              <button class="ghost-button" id="backFromReceivableBatchSelectButton" type="button">← Volver</button>
+              <div class="commission-batch-heading">
+                <div>
+                  <p class="eyebrow">Cobro múltiple</p>
+                  <h2>Seleccionar cobros</h2>
+                  <p>Selecciona varios proyectos del mismo cliente para crear un cobro general.</p>
+                </div>
+                <div class="commission-batch-total" id="receivableBatchSelectionSummary">0 seleccionadas · $0.00</div>
+              </div>
+              <div class="module-toolbar commission-batch-filters receivable-batch-filters">
+                <section class="receivable-batch-filter-section">
+                  <div class="receivable-batch-filter-heading"><span>Filtros para localizar cuentas</span><small id="receivableBatchFilterSummary">Mostrando todas las cuentas</small></div>
+                  <div class="receivable-batch-filter-grid">
+                    <label class="module-search"><span>Empresa</span><input id="receivableBatchCompanyFilter" type="search" list="receivableBatchCompanyOptions" placeholder="Todas las empresas..." autocomplete="off" /><datalist id="receivableBatchCompanyOptions"></datalist></label>
+                    <label class="module-search"><span>PO del cliente</span><input id="receivableBatchPoFilter" type="search" list="receivableBatchPoOptions" placeholder="Buscar número de PO..." autocomplete="off" /><datalist id="receivableBatchPoOptions"></datalist></label>
+                    <label class="module-search"><span>Nombre, proyecto, folio o cotización</span><input id="receivableBatchProjectFilter" type="search" placeholder="Buscar nombre o folio..." /></label>
+                    <label class="module-search"><span>Disponibilidad</span><select id="receivableBatchAvailabilityFilter"><option value="all">Todas</option><option value="available">Disponibles para seleccionar</option><option value="grouped">Ya incluidas en un cobro</option></select></label>
+                  </div>
+                  <div class="receivable-batch-filter-actions"><button class="ghost-button" id="receivableBatchClearFiltersButton" type="button">Limpiar filtros</button></div>
+                </section>
+                <section class="receivable-batch-setup-section">
+                  <div class="receivable-batch-filter-heading"><span>Datos del nuevo cobro</span><small>Estos campos no modifican los filtros anteriores.</small></div>
+                  <div class="receivable-batch-setup-grid">
+                    <label class="module-search"><span>Pagador / intermediario</span><input id="receivableBatchIntermediary" type="text" placeholder="Ej. RAISA" /></label>
+                    <label class="module-search"><span>Referencia del cobro nuevo</span><input id="receivableBatchReference" type="text" placeholder="Ej. OC-11714-26" /></label>
+                    <label class="module-search"><span>Descuento (%)</span><input id="receivableBatchDiscount" type="number" min="0" max="99.99" step="0.01" value="0" /></label>
+                    <label class="module-search"><span>Total autorizado (opcional)</span><input id="receivableBatchAuthorizedTotal" type="number" min="0.01" step="0.01" placeholder="Se calcula automáticamente" /></label>
+                  </div>
+                </section>
+                <div class="receivable-batch-selection-actions"><button class="secondary-button" id="receivableBatchSelectVisibleButton" type="button">Seleccionar visibles</button><button class="ghost-button" id="receivableBatchClearButton" type="button">Limpiar selección</button></div>
+              </div>
+              <section class="commission-batch-existing-panel hidden" id="receivableBatchExistingPanel">
+                <div class="commission-batch-existing-heading">
+                  <div><span>Cobros generales existentes</span><small>Abre la gestión para registrar el cobro y adjuntar sus comprobantes.</small></div>
+                  <strong id="receivableBatchExistingCount">0</strong>
+                </div>
+                <div class="commission-batch-existing-list" id="receivableBatchExistingRows"></div>
+              </section>
+              <div class="commission-batch-candidate-list" id="receivableBatchCandidateRows"></div>
+              <div class="commission-batch-sticky-actions">
+                <span id="receivableBatchSelectionHint">Selecciona al menos dos cuentas.</span>
+                <button class="primary-button" id="receivableBatchContinueButton" type="button" disabled>Continuar</button>
+              </div>
+            </section>
+
+            <section class="budget-detail commission-batch-view hidden" id="accountsReceivableBatchReviewView">
+              <button class="ghost-button" id="backFromReceivableBatchReviewButton" type="button">← Volver</button>
+              <div class="commission-batch-heading">
+                <div>
+                  <p class="eyebrow" id="receivableBatchReviewEyebrow">Cobro general</p>
+                  <h2 id="receivableBatchReviewTitle">Cobranza consolidada</h2>
+                  <p id="receivableBatchReviewDescription">Revisa los proyectos y registra el cobro en una sola operación.</p>
+                </div>
+              </div>
+              <section class="commission-batch-proof-panel hidden" id="receivableBatchProofPanel">
+                <h3>Documentación general</h3>
+                <p>El documento que cargues aquí se ligará automáticamente a todos los proyectos. El comprobante registra el pago; el cobro se completa hasta cargar también el complemento.</p>
+                <label class="field"><span>Tipo de documento</span><select id="receivableBatchGeneralFileType"><option value="Factura">Factura</option><option value="GR">GR</option><option value="Track ID">Track ID</option><option value="Comprobante de pago">Comprobante de pago</option><option value="Complemento de pago">Complemento de pago</option></select></label>
+                <label class="batch-proof-picker"><span>Seleccionar archivo general</span><input id="receivableBatchGeneralProofInput" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.xml" /><small id="receivableBatchGeneralProofStatus" class="batch-proof-files">Ningún archivo seleccionado</small></label>
+                <button class="secondary-button hidden" id="receivableBatchUploadProofButton" type="button">Guardar documento general</button>
+              </section>
+              <div id="receivableBatchReviewContent"></div>
+              <div class="commission-batch-sticky-actions">
+                <span id="receivableBatchReviewSummary"></span>
+                <button class="primary-button hidden" id="receivableBatchDoneButton" type="button">Volver a cuentas por cobrar</button>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="module-view" id="cuentasPagarModule" data-module-panel="cuentas-pagar">
+          <div class="workspace-heading">
+            <p class="eyebrow">Cuentas por pagar</p>
+            <h1>Pagos a proveedores</h1>
+            <p>Da seguimiento a OCP aprobadas, facturas de proveedor, pagos y complementos.</p>
+          </div>
+
+          <div class="users-panel budgets-panel">
+            <div id="accountsPayableListView">
+              <div class="module-toolbar">
+                <h2>Cuentas por pagar</h2>
+                <label class="module-search">
+                  <span>Buscar cuentas por pagar</span>
+                  <input
+                    id="accountsPayableSearch"
+                    type="search"
+                    placeholder="Buscar por sucursal, proveedor, OCP, OCGF, PO, cliente, estatus, pendiente o monto..."
+                    autocomplete="off"
+                  />
+                </label>
+                <div class="module-export-actions">
+                  <button class="primary-button" id="openCommissionBatchSelectorButton" type="button">Seleccionar pagos</button>
+                  <button class="small-button" id="accountsPayableExportExcelButton" type="button">Excel</button>
+                  <button class="small-button" id="accountsPayableExportPdfButton" type="button">PDF</button>
+                </div>
+              </div>
+              <section class="module-filter-panel" aria-label="Filtros de cuentas por pagar">
+                <div class="module-filter-grid">
+                  <label><span>Origen</span><select id="accountsPayableFilterSource"><option value="all">OCP, OCGF y OCCOM</option><option value="ocp">OCP</option><option value="ocgf">OCGF</option><option value="occom">OCCOM</option></select></label>
+                  <label><span>Proveedor</span><select id="accountsPayableFilterProvider"><option value="">Todos</option></select></label>
+                  <label><span>Sucursal</span><select id="accountsPayableFilterBranch"><option value="">Todas</option></select></label>
+                  <label><span>Condición</span><select id="accountsPayableFilterTerms"><option value="all">Contado y crédito</option><option value="cash">Contado</option><option value="credit">Crédito</option></select></label>
+                  <label><span>Pago</span><select id="accountsPayableFilterPayment"><option value="all">Todos</option><option value="pending">Pendiente</option><option value="partial">Pago parcial</option><option value="paid">Pagada</option></select></label>
+                  <label><span>Desde</span><input id="accountsPayableFilterDateFrom" type="date" /></label>
+                  <label><span>Hasta</span><input id="accountsPayableFilterDateTo" type="date" /></label>
+                </div>
+                <div class="module-filter-footer">
+                  <span id="accountsPayableFilterSummary">Mostrando todos los registros</span>
+                  <button class="ghost-button" id="accountsPayableClearFiltersButton" type="button">Limpiar filtros</button>
+                </div>
+              </section>
+              <section class="accounts-payable-pending-batches hidden" id="accountsPayablePendingBatchesPanel" aria-labelledby="accountsPayablePendingBatchesTitle">
+                <div class="accounts-payable-pending-batches-heading">
+                  <div>
+                    <p class="eyebrow">Órdenes consolidadas</p>
+                    <h2 id="accountsPayablePendingBatchesTitle">OCP agrupadas pendientes de pago</h2>
+                    <p>Continúa una OCP general ya preparada sin crearla nuevamente.</p>
+                  </div>
+                  <strong id="accountsPayablePendingBatchesCount">0</strong>
+                </div>
+                <div class="accounts-payable-pending-batches-list" id="accountsPayablePendingBatchesRows"></div>
+              </section>
+              <section class="purchase-section" data-payable-section="ocp-pending">
+                <h2>OCP Pendientes de pago</h2>
+                <div class="budgets-table-shell">
+                  <div
+                    class="purchase-table accounts-payable-table resizable-grid-table"
+                    id="accountsPayablePendingTable"
+                    data-grid-table
+                    style="--grid-columns: 54px 130px 170px 110px 120px 110px 150px 220px 120px 180px 96px 120px 108px 118px 110px 110px 110px;"
+                  >
+                    <div class="purchase-table-head">
+                      <span class="grid-th row-flag-th">Marca</span>
+                      <span class="grid-th" data-sort-key="sucursal">
+                        <button class="sortable-column" type="button">Sucursal</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="proveedor">
+                        <button class="sortable-column" type="button">Proveedor</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="folio">
+                        <button class="sortable-column" type="button">Folio</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="ocp">
+                        <button class="sortable-column" type="button">OCP</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="po">
+                        <button class="sortable-column" type="button">PO</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="cliente">
+                        <button class="sortable-column" type="button">Cliente</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="proyecto">
+                        <button class="sortable-column" type="button">Título del proyecto</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="estado">
+                        <button class="sortable-column" type="button">Estatus</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="pendiente">
+                        <button class="sortable-column" type="button">Pendiente</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="diasPago">
+                        <button class="sortable-column" type="button">Días para pago</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="fechaPago">
+                        <button class="sortable-column" type="button">Fecha de pago</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="createdAt">
+                        <button class="sortable-column" type="button">Fecha de creación</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="updatedAt">
+                        <button class="sortable-column" type="button">Fecha de modificación</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="montoTotal"><button class="sortable-column" type="button">Monto total</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="totalPagado"><button class="sortable-column" type="button">Pagado</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="saldoRestante"><button class="sortable-column" type="button">Restante</button><i class="column-resizer" aria-hidden="true"></i></span>
+                    </div>
+                    <div id="accountsPayablePendingRows"></div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="purchase-section" data-payable-section="ocp-paid">
+                <h2>OCP Pagadas</h2>
+                <div class="budgets-table-shell">
+                  <div
+                    class="purchase-table accounts-payable-table resizable-grid-table"
+                    id="accountsPayablePaidTable"
+                    data-grid-table
+                    style="--grid-columns: 54px 130px 170px 110px 120px 110px 150px 220px 120px 180px 96px 120px 108px 118px 110px 110px 110px;"
+                  >
+                    <div class="purchase-table-head">
+                      <span class="grid-th row-flag-th">Marca</span>
+                      <span class="grid-th" data-sort-key="sucursal">
+                        <button class="sortable-column" type="button">Sucursal</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="proveedor">
+                        <button class="sortable-column" type="button">Proveedor</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="folio">
+                        <button class="sortable-column" type="button">Folio</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="ocp">
+                        <button class="sortable-column" type="button">OCP</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="po">
+                        <button class="sortable-column" type="button">PO</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="cliente">
+                        <button class="sortable-column" type="button">Cliente</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="proyecto">
+                        <button class="sortable-column" type="button">Título del proyecto</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="estado">
+                        <button class="sortable-column" type="button">Estatus</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="pendiente">
+                        <button class="sortable-column" type="button">Pendiente</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="diasPago">
+                        <button class="sortable-column" type="button">Días para pago</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="fechaPago">
+                        <button class="sortable-column" type="button">Fecha de pago</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="createdAt">
+                        <button class="sortable-column" type="button">Fecha de creación</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="updatedAt">
+                        <button class="sortable-column" type="button">Fecha de modificación</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="montoTotal"><button class="sortable-column" type="button">Monto total</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="totalPagado"><button class="sortable-column" type="button">Pagado</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="saldoRestante"><button class="sortable-column" type="button">Restante</button><i class="column-resizer" aria-hidden="true"></i></span>
+                    </div>
+                    <div id="accountsPayablePaidRows"></div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="purchase-section" data-payable-section="ocgf-pending">
+                <h2>OCGF Pendientes de pago</h2>
+                <div class="budgets-table-shell">
+                  <div
+                    class="purchase-table accounts-payable-ocgf-table resizable-grid-table"
+                    id="accountsPayableOcgfPendingTable"
+                    data-grid-table
+                    style="--grid-columns: 54px 190px 120px 120px 120px 180px 96px 120px 108px 118px 150px 150px 110px 110px 110px;"
+                  >
+                    <div class="purchase-table-head">
+                      <span class="grid-th row-flag-th">Marca</span>
+                      <span class="grid-th" data-sort-key="proveedor">
+                        <button class="sortable-column" type="button">Proveedor</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="ocgf">
+                        <button class="sortable-column" type="button">OCGF</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="estado">
+                        <button class="sortable-column" type="button">Estado</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="estatus">
+                        <button class="sortable-column" type="button">Estatus</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="pendiente">
+                        <button class="sortable-column" type="button">Pendiente</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="diasPago">
+                        <button class="sortable-column" type="button">Días para pago</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="fechaPago">
+                        <button class="sortable-column" type="button">Fecha de pago</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="createdAt">
+                        <button class="sortable-column" type="button">Fecha de creación</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="updatedAt">
+                        <button class="sortable-column" type="button">Fecha de modificación</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="presupuestoAsignado">
+                        <button class="sortable-column" type="button">Presupuesto asignado</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="presupuestoDisponible">
+                        <button class="sortable-column" type="button">Presupuesto disponible</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="montoTotal"><button class="sortable-column" type="button">Monto total</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="totalPagado"><button class="sortable-column" type="button">Pagado</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="saldoRestante"><button class="sortable-column" type="button">Restante</button><i class="column-resizer" aria-hidden="true"></i></span>
+                    </div>
+                    <div id="accountsPayableOcgfPendingRows"></div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="purchase-section" data-payable-section="ocgf-paid">
+                <h2>OCGF Pagadas</h2>
+                <div class="budgets-table-shell">
+                  <div
+                    class="purchase-table accounts-payable-ocgf-table resizable-grid-table"
+                    id="accountsPayableOcgfPaidTable"
+                    data-grid-table
+                    style="--grid-columns: 54px 190px 120px 120px 120px 180px 96px 120px 108px 118px 150px 150px 110px 110px 110px;"
+                  >
+                    <div class="purchase-table-head">
+                      <span class="grid-th row-flag-th">Marca</span>
+                      <span class="grid-th" data-sort-key="proveedor">
+                        <button class="sortable-column" type="button">Proveedor</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="ocgf">
+                        <button class="sortable-column" type="button">OCGF</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="estado">
+                        <button class="sortable-column" type="button">Estado</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="estatus">
+                        <button class="sortable-column" type="button">Estatus</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="pendiente">
+                        <button class="sortable-column" type="button">Pendiente</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="diasPago">
+                        <button class="sortable-column" type="button">Días para pago</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="fechaPago">
+                        <button class="sortable-column" type="button">Fecha de pago</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="createdAt">
+                        <button class="sortable-column" type="button">Fecha de creación</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="updatedAt">
+                        <button class="sortable-column" type="button">Fecha de modificación</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="presupuestoAsignado">
+                        <button class="sortable-column" type="button">Presupuesto asignado</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="presupuestoDisponible">
+                        <button class="sortable-column" type="button">Presupuesto disponible</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="montoTotal"><button class="sortable-column" type="button">Monto total</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="totalPagado"><button class="sortable-column" type="button">Pagado</button><i class="column-resizer" aria-hidden="true"></i></span>
+                      <span class="grid-th" data-sort-key="saldoRestante"><button class="sortable-column" type="button">Restante</button><i class="column-resizer" aria-hidden="true"></i></span>
+                    </div>
+                    <div id="accountsPayableOcgfPaidRows"></div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="purchase-section" data-payable-section="occom-pending">
+                <h2>OCCOM Pendientes de pago</h2>
+                <div class="module-toolbar">
+                  <label class="module-search compact-filter">
+                    <span>Mes OCCOM</span>
+                    <input id="accountsPayableCommissionMonth" type="month" />
+                  </label>
+                </div>
+                <div class="budgets-table-shell">
+                  <div
+                    class="purchase-table accounts-payable-commission-table resizable-grid-table"
+                    id="accountsPayableCommissionPendingTable"
+                    data-grid-table
+                    style="--grid-columns: 54px 190px 130px 120px 150px 220px 130px 180px 108px 118px 110px;"
+                  >
+                    <div class="purchase-table-head">
+                      <span class="grid-th row-flag-th">Marca</span>
+                      <span class="grid-th" data-sort-key="supervisor">
+                        <button class="sortable-column" type="button">Supervisor</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="occom">
+                        <button class="sortable-column" type="button">OCCOM</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="folio">
+                        <button class="sortable-column" type="button">Folio</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="empresa">
+                        <button class="sortable-column" type="button">Empresa</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="proyecto">
+                        <button class="sortable-column" type="button">Proyecto</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="estado">
+                        <button class="sortable-column" type="button">Estado</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="pendiente">
+                        <button class="sortable-column" type="button">Pendiente</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="createdAt">
+                        <button class="sortable-column" type="button">Fecha de creación</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="updatedAt">
+                        <button class="sortable-column" type="button">Fecha de modificación</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="monto">
+                        <button class="sortable-column" type="button">Monto</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                    </div>
+                    <div id="accountsPayableCommissionPendingRows"></div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="purchase-section" data-payable-section="occom-paid">
+                <h2>OCCOM Pagadas</h2>
+                <div class="budgets-table-shell">
+                  <div
+                    class="purchase-table accounts-payable-commission-table resizable-grid-table"
+                    id="accountsPayableCommissionPaidTable"
+                    data-grid-table
+                    style="--grid-columns: 54px 190px 130px 120px 150px 220px 130px 180px 108px 118px 110px;"
+                  >
+                    <div class="purchase-table-head">
+                      <span class="grid-th row-flag-th">Marca</span>
+                      <span class="grid-th" data-sort-key="supervisor">
+                        <button class="sortable-column" type="button">Supervisor</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="occom">
+                        <button class="sortable-column" type="button">OCCOM</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="folio">
+                        <button class="sortable-column" type="button">Folio</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="empresa">
+                        <button class="sortable-column" type="button">Empresa</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="proyecto">
+                        <button class="sortable-column" type="button">Proyecto</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="estado">
+                        <button class="sortable-column" type="button">Estado</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="pendiente">
+                        <button class="sortable-column" type="button">Pendiente</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="createdAt">
+                        <button class="sortable-column" type="button">Fecha de creación</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="updatedAt">
+                        <button class="sortable-column" type="button">Fecha de modificación</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                      <span class="grid-th" data-sort-key="monto">
+                        <button class="sortable-column" type="button">Monto</button>
+                        <i class="column-resizer" aria-hidden="true"></i>
+                      </span>
+                    </div>
+                    <div id="accountsPayableCommissionPaidRows"></div>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <section class="budget-detail hidden" id="accountsPayableDetailView">
+              <button class="ghost-button" id="backToAccountsPayableButton" type="button">← Volver</button>
+              <h2>Cuenta por pagar</h2>
+              <div id="accountsPayableDetailContent"></div>
+            </section>
+
+            <section class="budget-detail commission-batch-view hidden" id="accountsPayableCommissionBatchSelectView">
+              <button class="ghost-button" id="backFromCommissionBatchSelectButton" type="button">← Volver</button>
+              <div class="commission-batch-heading">
+                <div>
+                  <p class="eyebrow">Pago múltiple</p>
+                  <h2>Seleccionar pagos</h2>
+                  <p>Filtra proveedores o supervisores y elige pagos OCP, OCGF u OCCOM.</p>
+                </div>
+                <div class="commission-batch-total" id="commissionBatchSelectionSummary">0 seleccionadas · $0.00</div>
+              </div>
+              <div class="module-toolbar commission-batch-filters">
+                <label class="module-search"><span>Mes OCCOM</span><input id="commissionBatchMonthFilter" type="month" /><small>Las OCP y OCGF pendientes se incluyen sin limitar por mes.</small></label>
+                <label class="module-search"><span>Buscar persona</span><input id="commissionBatchPersonFilter" type="search" list="commissionBatchPersonOptions" placeholder="Todas las personas..." autocomplete="off" /><datalist id="commissionBatchPersonOptions"></datalist></label>
+                <label class="module-search"><span>Proyecto</span><input id="commissionBatchProjectFilter" type="search" placeholder="Buscar proyecto..." /></label>
+                <button class="secondary-button" id="commissionBatchSelectVisibleButton" type="button">Seleccionar visibles</button>
+                <button class="ghost-button" id="commissionBatchClearButton" type="button">Limpiar</button>
+              </div>
+              <section class="commission-batch-existing-panel hidden" id="commissionBatchExistingPanel">
+                <div class="commission-batch-existing-heading">
+                  <div><span>OCP generales existentes</span><small>Entra a la gestión para pagar la orden y después adjuntar sus comprobantes.</small></div>
+                  <strong id="commissionBatchExistingCount">0</strong>
+                </div>
+                <div class="commission-batch-existing-list" id="commissionBatchExistingRows"></div>
+              </section>
+              <div class="commission-batch-candidate-list" id="commissionBatchCandidateRows"></div>
+              <div class="commission-batch-sticky-actions">
+                <span id="commissionBatchSelectionHint">Selecciona uno o más pagos.</span>
+                <button class="primary-button" id="commissionBatchContinueButton" type="button" disabled>Continuar</button>
+              </div>
+            </section>
+
+            <section class="budget-detail commission-batch-view hidden" id="accountsPayableCommissionBatchReviewView">
+              <button class="ghost-button" id="backFromCommissionBatchReviewButton" type="button">← Volver</button>
+              <div class="commission-batch-heading">
+                <div>
+                  <p class="eyebrow" id="commissionBatchReviewEyebrow">OCP general</p>
+                  <h2 id="commissionBatchReviewTitle">Orden de compra general</h2>
+                  <p id="commissionBatchReviewDescription">Revisa los proyectos seleccionados y paga el total en una sola operación.</p>
+                </div>
+                <label class="module-search compact-filter"><span>Agrupar vista por</span><select id="commissionBatchGroupMode"><option value="persona">Persona</option><option value="proyecto">Proyecto</option></select></label>
+              </div>
+              <section class="commission-batch-proof-panel hidden" id="commissionBatchProofPanel">
+                <h3>Comprobantes del pago</h3>
+                <p>El pago general ya fue registrado. Puedes adjuntar un comprobante para todo el lote o uno distinto por proyecto.</p>
+                <label class="batch-proof-picker"><span>Adjuntar comprobante general</span><input id="commissionBatchGeneralProofInput" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.xml" /><small id="commissionBatchGeneralProofStatus" class="batch-proof-files">Ningún archivo seleccionado</small></label>
+                <button class="secondary-button hidden" id="commissionBatchUploadProofButton" type="button">Guardar comprobantes</button>
+              </section>
+              <div id="commissionBatchReviewContent"></div>
+              <div class="commission-batch-sticky-actions">
+                <span id="commissionBatchReviewSummary"></span>
+                <button class="primary-button" id="commissionBatchConfirmButton" type="button">Pagar todo</button>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="module-view" id="comisionesModule" data-module-panel="comisiones">
+          <div class="workspace-heading">
+            <p class="eyebrow">Comisiones</p>
+            <h1>Pago a supervisores</h1>
+            <p>Genera y consulta OCCOM calculadas sobre el precio de venta original del proyecto.</p>
+          </div>
+
+          <div class="users-panel budgets-panel" id="commissionsListView">
+            <div class="module-toolbar">
+              <h2>Comisiones</h2>
+              <label class="module-search">
+                <span>Buscar comisiones</span>
+                <input
+                  id="commissionsSearch"
+                  type="search"
+                  placeholder="Buscar por supervisor, proyecto, empresa, folio o monto..."
+                  autocomplete="off"
+                />
+              </label>
+              <label class="commission-toolbar-filter">
+                <span>Periodo</span>
+                <select id="commissionsPeriodFilter">
+                  <option value="today">Hoy</option>
+                  <option value="week">Semana actual</option>
+                  <option value="month" selected>Mes actual</option>
+                  <option value="quarter">Trimestre actual</option>
+                  <option value="year">Año actual</option>
+                  <option value="all">Todo</option>
+                  <option value="custom">Personalizado</option>
+                </select>
+              </label>
+              <label class="commission-toolbar-filter commission-date-filter">
+                <span>Desde</span>
+                <input id="commissionsDateFromFilter" type="date" />
+              </label>
+              <label class="commission-toolbar-filter commission-date-filter">
+                <span>Hasta</span>
+                <input id="commissionsDateToFilter" type="date" />
+              </label>
+              <label class="commission-toolbar-filter">
+                <span>Estado de cobro</span>
+                <select id="commissionsCollectionFilter">
+                  <option value="all">Todas</option>
+                  <option value="collected" selected>Cobradas</option>
+                </select>
+              </label>
+              <label class="commission-toolbar-filter">
+                <span>Supervisor</span>
+                <select id="commissionsSupervisorFilter">
+                  <option value="">Todos los supervisores</option>
+                </select>
+              </label>
+              <button class="create-button" id="createManualCommissionButton" type="button">+ Crear</button>
+            </div>
+
+            <section class="purchase-section">
+              <h2>Comisiones pendientes de crear</h2>
+              <div class="budgets-table-shell">
+                <div
+                  class="purchase-table commissions-table resizable-grid-table"
+                  id="commissionsPendingTable"
+                  data-grid-table
+                  style="--grid-columns: 190px 220px 130px 160px 130px 140px 116px 150px;"
+                >
+                  <div class="purchase-table-head">
+                    <span class="grid-th" data-sort-key="supervisorNombre">
+                      <button class="sortable-column" type="button">Supervisor</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="nombreProyecto">
+                      <button class="sortable-column" type="button">Proyecto</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="folioPresupuesto">
+                      <button class="sortable-column" type="button">Folio</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="empresa">
+                      <button class="sortable-column" type="button">Empresa</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="fechaPago">
+                      <button class="sortable-column" type="button">Fecha de pago</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="montoProyecto">
+                      <button class="sortable-column" type="button">Monto Proyecto</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="porcentajeComision">
+                      <button class="sortable-column" type="button">% Comisión</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="montoComision">
+                      <button class="sortable-column" type="button">Monto comisión</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                  </div>
+                  <div id="commissionsPendingRows"></div>
+                </div>
+              </div>
+            </section>
+
+            <section class="purchase-section">
+              <h2>Comisiones creadas</h2>
+              <div class="budgets-table-shell">
+                <div
+                  class="purchase-table commissions-table resizable-grid-table"
+                  id="commissionsCreatedTable"
+                  data-grid-table
+                  style="--grid-columns: 190px 220px 130px 160px 116px 150px 140px 110px;"
+                >
+                  <div class="purchase-table-head">
+                    <span class="grid-th" data-sort-key="supervisorNombre">
+                      <button class="sortable-column" type="button">Supervisor</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="nombreProyecto">
+                      <button class="sortable-column" type="button">Proyecto</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="folioPresupuesto">
+                      <button class="sortable-column" type="button">Folio</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="empresa">
+                      <button class="sortable-column" type="button">Empresa</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="porcentajeComision">
+                      <button class="sortable-column" type="button">% Comisión</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="montoComision">
+                      <button class="sortable-column" type="button">Monto comisión</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th" data-sort-key="estatusPago">
+                      <button class="sortable-column" type="button">Estatus</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                    <span class="grid-th">
+                      <button class="sortable-column" type="button">Acción</button>
+                      <i class="column-resizer" aria-hidden="true"></i>
+                    </span>
+                  </div>
+                  <div id="commissionsCreatedRows"></div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <section class="budget-detail hidden" id="commissionsDetailView">
+            <button class="ghost-button" id="backToCommissionsButton" type="button">← Volver</button>
+            <h2>Comisión</h2>
+            <div id="commissionsDetailContent"></div>
+          </section>
+        </section>
+
+        <section class="module-view" id="reportesModule" data-module-panel="reportes">
+          <div class="workspace-heading">
+            <p class="eyebrow">Reportes</p>
+            <h1>Inteligencia operativa</h1>
+            <p>Vista ejecutiva de cobranza, pagos y utilidad real basada en proyectos efectivamente cobrados.</p>
+          </div>
+
+          <section class="reports-shell" id="reportsContent">
+            <div class="reports-loading">Cargando reportes...</div>
+          </section>
+        </section>
+
+        <section class="module-view" id="exportacionesModule" data-module-panel="exportaciones">
+          <div class="workspace-heading">
+            <p class="eyebrow">Exportaciones</p>
+            <h1>Centro de exportaciones</h1>
+            <p>Construye reportes con filtros y descarga únicamente la información requerida en Excel o PDF.</p>
+          </div>
+
+          <section class="reports-shell" id="exportacionesContent">
+            <div class="reports-loading">Preparando exportaciones...</div>
+          </section>
+        </section>
+
+        <section class="module-view" id="recuperacionDocumentalModule" data-module-panel="recuperacion-documental">
+          <div class="workspace-heading">
+            <p class="eyebrow">Recuperación documental</p>
+            <h1>Conciliación de archivos por proyecto</h1>
+            <p>Analiza carpetas de respaldo, detecta archivos faltantes en SQL e importa documentos recuperados sin borrar históricos.</p>
+          </div>
+
+          <section class="document-recovery-shell" id="recuperacionDocumentalContent">
+            <div class="reports-loading">Preparando conciliación documental...</div>
+          </section>
+        </section>
+
+        <section class="module-view" id="tareasModule" data-module-panel="tareas">
+          <div class="workspace-heading">
+            <p class="eyebrow">Tareas</p>
+            <h1>Notas y seguimientos</h1>
+            <p>Organiza pendientes, recordatorios, responsables y alertas internas.</p>
+          </div>
+
+          <section class="users-panel tasks-panel">
+            <div class="module-toolbar">
+              <div>
+                <h2>Tareas</h2>
+                <p>Guarda notas operativas, seguimientos y recordatorios para que nada se pierda.</p>
+              </div>
+              <label class="module-search">
+                <span>Buscar tareas</span>
+                <input id="tasksSearch" type="search" placeholder="Buscar tarea, responsable, nota o estatus..." autocomplete="off" />
+              </label>
+              <button class="table-action-button" id="openTaskFormButton" type="button">+ Nueva tarea</button>
+            </div>
+
+            <div class="task-stats-grid" id="taskStats"></div>
+
+            <form class="task-form" id="taskForm">
+              <div class="task-form-heading">
+                <div>
+                  <p class="eyebrow">Seguimiento</p>
+                  <h3 id="taskFormTitle">Nueva tarea</h3>
+                </div>
+                <span class="modal-status" id="taskFormStatus"></span>
+              </div>
+              <div class="task-form-grid">
+                <label>
+                  <span>Título</span>
+                  <input name="titulo" required placeholder="Ej. Revisar PO del cliente" />
+                </label>
+                <label>
+                  <span>Prioridad</span>
+                  <select name="prioridad">
+                    <option>Media</option>
+                    <option>Alta</option>
+                    <option>Urgente</option>
+                    <option>Baja</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Estatus</span>
+                  <select name="estatus">
+                    <option>Pendiente</option>
+                    <option>En proceso</option>
+                    <option>Completada</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Fecha límite</span>
+                  <input name="fechaLimite" type="date" />
+                </label>
+                <label>
+                  <span>Recordatorio</span>
+                  <input name="recordatorioAt" type="datetime-local" />
+                </label>
+                <label>
+                  <span>Asignar a</span>
+                  <select name="asignadoA" id="taskAssignedTo"></select>
+                </label>
+                <label class="is-wide">
+                  <span>Nota</span>
+                  <textarea name="descripcion" rows="3" placeholder="Contexto, comentario o información importante..."></textarea>
+                </label>
+                <label class="is-wide">
+                  <span>Seguimiento</span>
+                  <textarea name="seguimiento" rows="3" placeholder="Último avance, llamada, acuerdo o siguiente paso..."></textarea>
+                </label>
+              </div>
+              <div class="task-form-actions">
+                <button class="secondary-button hidden" id="taskCancelEditButton" type="button">Cancelar edición</button>
+                <button class="success-button" id="taskSubmitButton" type="submit">Guardar tarea</button>
+              </div>
+            </form>
+
+            <div class="tasks-list" id="tasksList"></div>
+          </section>
+        </section>
+
+        <section class="module-view" id="placeholderModule" data-module-panel="placeholder">
+          <div class="workspace-heading compact">
+            <p class="eyebrow">Módulo</p>
+            <h1 id="moduleTitle">Inicio</h1>
+            <p id="moduleDescription">La estructura de este módulo se integrará en el siguiente paso.</p>
+          </div>
+          <div class="module-toolbar">
+            <label class="module-search">
+              <span>Buscar en este módulo</span>
+              <input id="moduleSearch" type="search" placeholder="Buscar" autocomplete="off" />
+            </label>
+          </div>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>

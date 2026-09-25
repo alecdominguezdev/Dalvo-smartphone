@@ -11,7 +11,8 @@ import '../widgets/dalvo_widgets.dart';
 
 class ReportFormPage extends StatefulWidget {
   final DalvoProject project;
-  const ReportFormPage({super.key, required this.project});
+  final double? initialProgress;
+  const ReportFormPage({super.key, required this.project, this.initialProgress});
 
   @override
   State<ReportFormPage> createState() => _ReportFormPageState();
@@ -24,6 +25,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
   final _incidents = TextEditingController();
   final _observations = TextEditingController();
   final _missingInformation = TextEditingController();
+  final _progressInput = TextEditingController();
 
   double _progress = 0;
   bool _incomplete = false;
@@ -33,12 +35,21 @@ class _ReportFormPageState extends State<ReportFormPage> {
   final List<XFile> _photos = [];
 
   @override
+  void initState() {
+    super.initState();
+    // Cada informe parte del último avance confirmado del proyecto; nunca vuelve a 0% por defecto.
+    _progress = (widget.initialProgress ?? widget.project.lastProgress ?? 0).clamp(0, 100).toDouble();
+    _progressInput.text = _progress.toStringAsFixed(0);
+  }
+
+  @override
   void dispose() {
     _workDone.dispose();
     _pending.dispose();
     _incidents.dispose();
     _observations.dispose();
     _missingInformation.dispose();
+    _progressInput.dispose();
     super.dispose();
   }
 
@@ -68,6 +79,14 @@ class _ReportFormPageState extends State<ReportFormPage> {
 
   Future<void> _submit() async {
     if (_saving) return;
+    final enteredProgress = double.tryParse(_progressInput.text.trim().replaceAll(',', '.'));
+    if (enteredProgress == null || enteredProgress < 0 || enteredProgress > 100) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Ingresa un porcentaje de avance entre 0 y 100.')),
+      );
+      return;
+    }
+    _progress = enteredProgress;
     setState(() => _saving = true);
     try {
       final position = await LocationService.currentPosition();
@@ -163,14 +182,16 @@ class _ReportFormPageState extends State<ReportFormPage> {
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: DalvoColors.primary.withOpacity(.14)),
             ),
-            child: const Row(
+                    child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(Icons.info_outline_rounded, color: DalvoColors.primaryDark, size: 19),
                 SizedBox(width: 9),
-                Expanded(
-                  child: Text(
-                    'Este informe se guardará en Dalvo para revisión del supervisor y Administración. No se enviará automáticamente al cliente por correo.',
+                        Expanded(
+                          child: Text(
+                    _progress > 0
+                      ? 'El avance inicia en ${_progress.toStringAsFixed(0)}%, que corresponde al último informe registrado. Ajusta el porcentaje solo si hubo un cambio durante esta visita.'
+                      : 'Este es el primer informe del proyecto. Indica el avance actual y se conservará para el siguiente informe.',
                     style: TextStyle(color: DalvoColors.primaryDark, fontSize: 12, height: 1.35, fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -186,39 +207,20 @@ class _ReportFormPageState extends State<ReportFormPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'Avance del proyecto',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ),
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 180),
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: DalvoColors.ink,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          '${_progress.toStringAsFixed(0)}%',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Slider(
-                    value: _progress,
-                    min: 0,
-                    max: 100,
-                    divisions: 20,
-                    label: '${_progress.toStringAsFixed(0)}%',
-                    onChanged: (value) => setState(() => _progress = value),
+                  Text('Avance del proyecto', style: Theme.of(context).textTheme.titleMedium),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: _progressInput,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    decoration: const InputDecoration(
+                      labelText: 'Porcentaje de avance',
+                      suffixText: '%',
+                      hintText: '0 a 100',
+                    ),
+                    onChanged: (value) {
+                      final parsed = double.tryParse(value.trim().replaceAll(',', '.'));
+                      if (parsed != null && parsed >= 0 && parsed <= 100) _progress = parsed;
+                    },
                   ),
                 ],
               ),

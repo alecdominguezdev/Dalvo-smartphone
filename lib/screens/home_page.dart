@@ -498,16 +498,6 @@ class _RecentProjectCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 7),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(9),
-              child: LinearProgressIndicator(
-                value: progress / 100,
-                minHeight: 7,
-                backgroundColor: DalvoColors.line,
-                color: DalvoColors.primary,
-              ),
-            ),
           ],
         ],
       ),

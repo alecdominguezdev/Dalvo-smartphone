@@ -38,7 +38,6 @@ class _OperationsPageState extends State<OperationsPage> {
         ('summary', 'Resumen', Icons.space_dashboard_outlined),
         if (_allows('cuentas-pagar')) ('payables', 'CxP', Icons.payments_outlined),
         if (_allows('cuentas-cobrar')) ('receivables', 'CxC', Icons.request_quote_outlined),
-        if (_isSuperadmin) ('approvals', 'Aprobar', Icons.approval_outlined),
         if (_isAdmin) ('attendance', 'Equipo', Icons.badge_outlined),
       ];
 

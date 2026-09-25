@@ -5,6 +5,7 @@ import '../services/api_client.dart';
 import '../theme/dalvo_theme.dart';
 import '../widgets/dalvo_widgets.dart';
 import 'report_form_page.dart';
+import 'report_detail_page.dart';
 
 class ProjectPage extends StatefulWidget {
   final DalvoProject project;
@@ -40,8 +41,14 @@ class _ProjectPageState extends State<ProjectPage> {
   }
 
   Future<void> _newReport() async {
+    final previousProgress = _reports.isNotEmpty
+        ? (_reports.first.progress ?? widget.project.lastProgress ?? 0)
+        : (widget.project.lastProgress ?? 0);
     final created = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(builder: (_) => ReportFormPage(project: widget.project)),
+      MaterialPageRoute(builder: (_) => ReportFormPage(
+        project: widget.project,
+        initialProgress: previousProgress,
+      )),
     );
     if (created == true) await _load();
   }
@@ -121,20 +128,10 @@ class _ProjectPageState extends State<ProjectPage> {
                     const SizedBox(height: 20),
                     Row(
                       children: [
-                        const Text('Avance del proyecto', style: TextStyle(color: Color(0xFFB8C1C6), fontSize: 12)),
+                        const Text('Avance', style: TextStyle(color: Color(0xFFB8C1C6), fontSize: 12)),
                         const Spacer(),
                         Text('${progress.toStringAsFixed(0)}%', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
                       ],
-                    ),
-                    const SizedBox(height: 8),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(9),
-                      child: LinearProgressIndicator(
-                        value: progress / 100,
-                        minHeight: 7,
-                        backgroundColor: Colors.white.withOpacity(.10),
-                        color: closed ? const Color(0xFF61D09C) : const Color(0xFF72D4F7),
-                      ),
                     ),
                   ],
                 ),
@@ -175,6 +172,14 @@ class _ProjectPageState extends State<ProjectPage> {
                     child: _ReportCard(
                       report: _reports[index],
                       label: 'I${_reports.length - index}-${project.folio.isEmpty ? project.id : project.folio}',
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => ReportDetailPage(
+                            report: _reports[index],
+                            label: 'I${_reports.length - index}-${project.folio.isEmpty ? project.id : project.folio}',
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -225,7 +230,12 @@ class _DarkBadge extends StatelessWidget {
 class _ReportCard extends StatelessWidget {
   final SupervisionReport report;
   final String label;
-  const _ReportCard({required this.report, required this.label});
+  final VoidCallback onTap;
+  const _ReportCard({
+    required this.report,
+    required this.label,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -237,6 +247,7 @@ class _ReportCard extends StatelessWidget {
     final color = incomplete ? DalvoColors.warning : DalvoColors.success;
 
     return DalvoSurface(
+      onTap: onTap,
       padding: const EdgeInsets.all(17),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -283,6 +294,8 @@ class _ReportCard extends StatelessWidget {
               const Icon(Icons.photo_camera_outlined, size: 17, color: DalvoColors.muted),
               const SizedBox(width: 5),
               Text('${report.photosCount}', style: Theme.of(context).textTheme.bodySmall),
+              const SizedBox(width: 7),
+              const Icon(Icons.chevron_right_rounded, color: DalvoColors.muted),
             ],
           ),
           if (incomplete && report.missingInformation.isNotEmpty) ...[

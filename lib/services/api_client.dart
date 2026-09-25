@@ -137,6 +137,23 @@ class ApiClient {
     await _storage.delete(key: _tokenKey);
   }
 
+  Future<void> registerPushToken({
+    required String token,
+    required String platform,
+  }) async {
+    if (!hasToken || token.trim().isEmpty) return;
+    final response = await http.post(
+      ApiConfig.uri('/push-tokens'),
+      headers: _headers(),
+      body: jsonEncode({
+        'token': token.trim(),
+        'platform': platform,
+        'deviceId': await _deviceId(),
+      }),
+    );
+    _decode(response);
+  }
+
   Future<List<DalvoProject>> projects({String search = ''}) async {
     final response = await http.get(
       ApiConfig.uri('/projects', search.trim().isEmpty ? null : {'search': search.trim()}),
@@ -161,6 +178,14 @@ class ApiClient {
         .whereType<Map<String, dynamic>>()
         .map(SupervisionReport.fromJson)
         .toList();
+  }
+
+  Future<Map<String, dynamic>> reportDetail(int reportId) async {
+    final response = await http.get(
+      ApiConfig.uri('/reports/$reportId'),
+      headers: _headers(),
+    );
+    return _decode(response);
   }
 
   Future<int> createReport({
@@ -477,13 +502,18 @@ class ApiClient {
   }
 
   Future<List<Map<String, dynamic>>> budgets({
-    String search = '', String state = '', String status = '', String company = '',
+    String search = '',
+    String state = '',
+    String status = '',
+    String company = '',
+    bool pendingApproval = false,
   }) async {
     final response = await http.get(ApiConfig.uri('/budgets', {
       'search': search.trim(),
       if (state.isNotEmpty) 'state': state,
       if (status.isNotEmpty) 'status': status,
       if (company.isNotEmpty) 'company': company,
+      if (pendingApproval) 'pendingApproval': '1',
     }), headers: _headers());
     final data = _decode(response);
     return (data['budgets'] as List? ?? const []).whereType<Map<String, dynamic>>().toList();
@@ -494,9 +524,9 @@ class ApiClient {
     return _decode(response);
   }
 
-  Future<void> updateBudgetStatus(int budgetId, String action) async {
+  Future<Map<String, dynamic>> updateBudgetStatus(int budgetId, String action) async {
     final response = await http.patch(ApiConfig.uri('/budgets/$budgetId/status'), headers: _headers(), body: jsonEncode({'action': action}));
-    _decode(response);
+    return _decode(response);
   }
 
   Future<List<Map<String, dynamic>>> purchases({String search = '', String status = ''}) async {
@@ -536,6 +566,19 @@ class ApiClient {
     final data = _decode(response);
     final uri = Uri.tryParse('${data['url'] ?? ''}');
     if (uri == null || !uri.hasScheme) throw const ApiException('No se pudo preparar la vista del archivo.');
+    return uri;
+  }
+
+  Future<Uri> temporaryReportPdfUrl(int reportId) async {
+    final response = await http.post(
+      ApiConfig.uri('/reports/$reportId/pdf/open'),
+      headers: _headers(),
+    );
+    final data = _decode(response);
+    final uri = Uri.tryParse('${data['url'] ?? ''}');
+    if (uri == null || !uri.hasScheme) {
+      throw const ApiException('No se pudo preparar la descarga del informe.');
+    }
     return uri;
   }
 

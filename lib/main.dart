@@ -1,15 +1,30 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'screens/login_page.dart';
 import 'screens/shell_page.dart';
 import 'services/api_client.dart';
+import 'services/push_notification_service.dart';
 import 'services/shared_document_service.dart';
 import 'theme/dalvo_theme.dart';
 import 'widgets/dalvo_widgets.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isAndroid || Platform.isIOS) {
+    await Firebase.initializeApp();
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  }
   runApp(const DalvoMobileApp());
+}
+
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  await PushNotificationService.showBackgroundBudgetNotification(message);
 }
 
 class DalvoMobileApp extends StatelessWidget {
