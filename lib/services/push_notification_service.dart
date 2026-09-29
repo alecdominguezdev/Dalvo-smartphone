@@ -123,12 +123,15 @@ class PushNotificationService {
   Future<void> registerCurrentDevice() async {
     if (!ApiClient.instance.hasToken) return;
     if (Platform.isIOS) {
-      var apnsToken = await _messaging.getAPNSToken();
-      if (apnsToken == null) {
-        await Future<void>.delayed(const Duration(seconds: 2));
+      // iOS entrega el token APNs de forma asíncrona al arrancar. No registrar
+      // antes de que exista: FCM no podrá entregar avisos con la app cerrada.
+      String? apnsToken;
+      for (var attempt = 0; attempt < 15; attempt++) {
         apnsToken = await _messaging.getAPNSToken();
+        if (apnsToken != null && apnsToken.isNotEmpty) break;
+        await Future<void>.delayed(const Duration(seconds: 1));
       }
-      if (apnsToken == null) return;
+      if (apnsToken == null || apnsToken.isEmpty) return;
     }
     final token = await _messaging.getToken();
     if (token == null || token.isEmpty) return;
