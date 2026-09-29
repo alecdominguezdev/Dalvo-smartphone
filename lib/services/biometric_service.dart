@@ -19,6 +19,14 @@ class BiometricPresentation {
 class BiometricService {
   static final LocalAuthentication _auth = LocalAuthentication();
 
+  static Future<bool> isAvailable() async {
+    try {
+      return await _auth.isDeviceSupported() && await _auth.canCheckBiometrics;
+    } catch (_) {
+      return false;
+    }
+  }
+
   /// Texto que debe mostrar cada plataforma antes del checado. iPhone usa el
   /// nombre de Apple (Face ID/Touch ID); Android conserva el de huella.
   static Future<BiometricPresentation> presentation() async {
@@ -49,10 +57,10 @@ class BiometricService {
     );
   }
 
-  static Future<BiometricResult> verify() async {
-    final supported = await _auth.isDeviceSupported();
-    final canCheck = await _auth.canCheckBiometrics;
-    if (!supported || !canCheck) {
+  static Future<BiometricResult> verify({
+    String localizedReason = 'Confirma tu identidad para registrar el checado en Dalvo.',
+  }) async {
+    if (!await isAvailable()) {
       throw Exception('Este dispositivo no tiene biometría disponible.');
     }
 
@@ -69,7 +77,7 @@ class BiometricService {
     }
 
     final verified = await _auth.authenticate(
-      localizedReason: 'Confirma tu identidad para registrar el checado en Dalvo.',
+      localizedReason: localizedReason,
       options: const AuthenticationOptions(
         biometricOnly: true,
         stickyAuth: true,

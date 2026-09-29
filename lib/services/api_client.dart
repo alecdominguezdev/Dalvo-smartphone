@@ -25,17 +25,31 @@ class ApiClient {
   static const _storage = FlutterSecureStorage();
   static const _tokenKey = 'dalvo_mobile_token';
   static const _deviceIdKey = 'dalvo_mobile_device_id';
+  static const _biometricLoginEnabledKey = 'dalvo_mobile_biometric_login_enabled';
 
   String? _token;
+  bool _biometricLoginEnabled = false;
   MobileUser? currentUser;
   MobileAccessProfile? currentAccess;
 
   Future<void> initialize() async {
     _token = await _storage.read(key: _tokenKey);
+    _biometricLoginEnabled =
+        await _storage.read(key: _biometricLoginEnabledKey) == 'true';
   }
 
   bool get hasToken => (_token ?? '').isNotEmpty;
+  bool get biometricLoginEnabled => hasToken && _biometricLoginEnabled;
   String get bearerToken => _token ?? '';
+
+  Future<void> setBiometricLoginEnabled(bool enabled) async {
+    _biometricLoginEnabled = enabled;
+    if (enabled) {
+      await _storage.write(key: _biometricLoginEnabledKey, value: 'true');
+    } else {
+      await _storage.delete(key: _biometricLoginEnabledKey);
+    }
+  }
 
   Future<String> _deviceId() async {
     final existing = await _storage.read(key: _deviceIdKey);
@@ -94,6 +108,9 @@ class ApiClient {
     final token = '${data['token'] ?? ''}';
     if (token.isEmpty) throw const ApiException('La API no devolvió una sesión válida.');
     _token = token;
+    // La preferencia pertenece a una sesión concreta; nunca se hereda entre
+    // usuarios que inicien sesión en el mismo teléfono.
+    await setBiometricLoginEnabled(false);
     await _storage.write(key: _tokenKey, value: token);
     currentUser = MobileUser.fromJson(data['user'] as Map<String, dynamic>);
     if (data['access'] is Map<String, dynamic>) {
@@ -135,6 +152,7 @@ class ApiClient {
     currentUser = null;
     currentAccess = null;
     await _storage.delete(key: _tokenKey);
+    await setBiometricLoginEnabled(false);
   }
 
   Future<void> registerPushToken({

@@ -1,6 +1,9 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 
 import '../services/api_client.dart';
+import '../services/biometric_service.dart';
 import '../theme/dalvo_theme.dart';
 import '../widgets/dalvo_widgets.dart';
 import 'shell_page.dart';
@@ -18,12 +21,42 @@ class _LoginPageState extends State<LoginPage> {
   bool _loading = false;
   bool _obscure = true;
   String? _error;
+  bool _biometricLoginReady = false;
+  BiometricPresentation _biometric = const BiometricPresentation('biometría', 'strong');
+
+  @override
+  void initState() {
+    super.initState();
+    _prepareBiometricLogin();
+  }
 
   @override
   void dispose() {
     _username.dispose();
     _password.dispose();
     super.dispose();
+  }
+
+  Future<void> _prepareBiometricLogin() async {
+    if (!(Platform.isIOS || Platform.isAndroid) ||
+        !ApiClient.instance.biometricLoginEnabled ||
+        !await BiometricService.isAvailable()) {
+      return;
+    }
+    final presentation = await BiometricService.presentation();
+    if (mounted) {
+      setState(() {
+        _biometric = presentation;
+        _biometricLoginReady = true;
+      });
+    }
+  }
+
+  void _openSession() {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const DalvoShellPage()),
+      (_) => false,
+    );
   }
 
   Future<void> _login() async {
@@ -37,13 +70,67 @@ class _LoginPageState extends State<LoginPage> {
     });
     try {
       await ApiClient.instance.login(_username.text, _password.text);
+      await _offerBiometricLogin();
       if (!mounted) return;
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const DalvoShellPage()),
-        (_) => false,
-      );
+      _openSession();
     } catch (error) {
       if (mounted) setState(() => _error = error.toString());
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _offerBiometricLogin() async {
+    if (!mounted ||
+        !(Platform.isIOS || Platform.isAndroid) ||
+        !await BiometricService.isAvailable()) {
+      return;
+    }
+    final presentation = await BiometricService.presentation();
+    if (!mounted) return;
+    final enable = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Activar ${presentation.label}'),
+        content: Text(
+          'En próximos inicios podrás abrir tu sesión de Dalvo usando ${presentation.label}, sin volver a escribir tu contraseña.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Ahora no'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Activar'),
+          ),
+        ],
+      ),
+    );
+    if (enable != true) return;
+    final result = await BiometricService.verify(
+      localizedReason: 'Confirma tu identidad para activar ${presentation.label} en Dalvo.',
+    );
+    if (result.verified) await ApiClient.instance.setBiometricLoginEnabled(true);
+  }
+
+  Future<void> _loginWithBiometrics() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final result = await BiometricService.verify(
+        localizedReason: 'Confirma tu identidad para abrir tu sesión de Dalvo.',
+      );
+      if (!result.verified) return;
+      await ApiClient.instance.me();
+      if (!mounted) return;
+      _openSession();
+    } catch (_) {
+      if (mounted) {
+        setState(() => _error = 'No se pudo abrir la sesión con ${_biometric.label}. Inicia con tu contraseña.');
+      }
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -198,6 +285,18 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                           ),
+                          if (_biometricLoginReady) ...[
+                            const SizedBox(height: 12),
+                            OutlinedButton.icon(
+                              onPressed: _loading ? null : _loginWithBiometrics,
+                              icon: Icon(
+                                _biometric.method == 'face'
+                                    ? Icons.face_rounded
+                                    : Icons.fingerprint_rounded,
+                              ),
+                              label: Text('Ingresar con ${_biometric.label}'),
+                            ),
+                          ],
                         ],
                       ),
                     ),

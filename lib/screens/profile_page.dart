@@ -1,12 +1,64 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 
 import '../services/api_client.dart';
+import '../services/biometric_service.dart';
 import '../theme/dalvo_theme.dart';
 import '../widgets/dalvo_widgets.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   final VoidCallback onLogout;
   const ProfilePage({super.key, required this.onLogout});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  bool _biometricAvailable = false;
+  bool _biometricEnabled = ApiClient.instance.biometricLoginEnabled;
+  BiometricPresentation _biometric = const BiometricPresentation('biometría', 'strong');
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBiometricState();
+  }
+
+  Future<void> _loadBiometricState() async {
+    if (!(Platform.isIOS || Platform.isAndroid) || !await BiometricService.isAvailable()) return;
+    final presentation = await BiometricService.presentation();
+    if (mounted) {
+      setState(() {
+        _biometricAvailable = true;
+        _biometric = presentation;
+      });
+    }
+  }
+
+  Future<void> _setBiometricLogin(bool enabled) async {
+    if (!enabled) {
+      await ApiClient.instance.setBiometricLoginEnabled(false);
+      if (mounted) setState(() => _biometricEnabled = false);
+      return;
+    }
+
+    try {
+      final result = await BiometricService.verify(
+        localizedReason: 'Confirma tu identidad para activar ${_biometric.label} en Dalvo.',
+      );
+      if (!result.verified) return;
+      await ApiClient.instance.setBiometricLoginEnabled(true);
+      if (mounted) setState(() => _biometricEnabled = true);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('No se pudo activar ${_biometric.label} en este dispositivo.')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +87,7 @@ class ProfilePage extends StatelessWidget {
           child: DalvoSectionTitle(title: 'Seguridad'),
         ),
         const SizedBox(height: 12),
-        const DalvoAnimatedEntry(
+        DalvoAnimatedEntry(
           delayMs: 280,
           child: DalvoSurface(
             padding: EdgeInsets.symmetric(vertical: 4),
@@ -49,8 +101,16 @@ class ProfilePage extends StatelessWidget {
                 Divider(height: 1, indent: 62, endIndent: 12),
                 _SecurityTile(
                   icon: Icons.fingerprint_rounded,
-                  title: 'Biometría',
-                  subtitle: 'Huella o reconocimiento facial',
+                  title: _biometric.label,
+                  subtitle: _biometricAvailable
+                      ? 'Proteger inicio de sesión guardado'
+                      : 'No disponible en este dispositivo',
+                  trailing: _biometricAvailable
+                      ? Switch.adaptive(
+                          value: _biometricEnabled,
+                          onChanged: _setBiometricLogin,
+                        )
+                      : const Icon(Icons.info_outline_rounded, size: 20),
                 ),
                 Divider(height: 1, indent: 62, endIndent: 12),
                 _SecurityTile(
@@ -66,7 +126,7 @@ class ProfilePage extends StatelessWidget {
         DalvoAnimatedEntry(
           delayMs: 320,
           child: OutlinedButton.icon(
-            onPressed: onLogout,
+            onPressed: widget.onLogout,
             icon: const Icon(Icons.logout_rounded, color: DalvoColors.danger),
             label: const Text(
               'Cerrar sesión',
@@ -168,11 +228,13 @@ class _SecurityTile extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
+  final Widget? trailing;
 
   const _SecurityTile({
     required this.icon,
     required this.title,
     required this.subtitle,
+    this.trailing,
   });
 
   @override
@@ -181,6 +243,6 @@ class _SecurityTile extends StatelessWidget {
         leading: DalvoIconTile(icon: icon, size: 39),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
         subtitle: Text(subtitle),
-        trailing: const Icon(Icons.check_circle_rounded, color: DalvoColors.success, size: 20),
+        trailing: trailing ?? const Icon(Icons.check_circle_rounded, color: DalvoColors.success, size: 20),
       );
 }

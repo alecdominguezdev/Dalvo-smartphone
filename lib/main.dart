@@ -7,6 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'screens/login_page.dart';
 import 'screens/shell_page.dart';
 import 'services/api_client.dart';
+import 'services/biometric_service.dart';
 import 'services/push_notification_service.dart';
 import 'services/shared_document_service.dart';
 import 'theme/dalvo_theme.dart';
@@ -74,6 +75,22 @@ class _BootstrapPageState extends State<_BootstrapPage> {
     }
 
     if (ApiClient.instance.hasToken) {
+      if (ApiClient.instance.biometricLoginEnabled) {
+        try {
+          final biometric = await BiometricService.verify(
+            localizedReason: 'Confirma tu identidad para abrir tu sesión de Dalvo.',
+          );
+          if (!biometric.verified) {
+            if (mounted) setState(() => _loading = false);
+            return;
+          }
+        } catch (error, stackTrace) {
+          debugPrint('No se pudo validar la biometría de inicio: $error');
+          debugPrintStack(stackTrace: stackTrace);
+          if (mounted) setState(() => _loading = false);
+          return;
+        }
+      }
       try {
         await ApiClient.instance.me();
         _authenticated = true;

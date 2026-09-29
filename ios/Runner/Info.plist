@@ -29,7 +29,13 @@
 	<key>NSFaceIDUsageDescription</key>
 	<string>Dalvo usa Face ID para confirmar tu identidad al registrar entrada o salida.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Dalvo usa tu ubicación para validar que registres asistencia desde una locación autorizada.</string>
+        <string>Dalvo usa tu ubicación para validar que registres asistencia desde una locación autorizada.</string>
+        <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Dalvo usa tu ubicación para validar asistencia cuando registras entrada o salida desde una locación autorizada.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Dalvo requiere acceso a tus fotos para adjuntar evidencias e informes de avance.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Dalvo usa la cámara para capturar evidencias y adjuntarlas a informes o documentos.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
