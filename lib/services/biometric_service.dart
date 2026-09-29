@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:local_auth/local_auth.dart';
 
 class BiometricResult {
@@ -7,8 +9,45 @@ class BiometricResult {
   const BiometricResult(this.verified, this.method);
 }
 
+class BiometricPresentation {
+  final String label;
+  final String method;
+
+  const BiometricPresentation(this.label, this.method);
+}
+
 class BiometricService {
   static final LocalAuthentication _auth = LocalAuthentication();
+
+  /// Texto que debe mostrar cada plataforma antes del checado. iPhone usa el
+  /// nombre de Apple (Face ID/Touch ID); Android conserva el de huella.
+  static Future<BiometricPresentation> presentation() async {
+    try {
+      final available = await _auth.getAvailableBiometrics();
+      if (available.contains(BiometricType.face)) {
+        return const BiometricPresentation('Face ID', 'face');
+      }
+      if (available.contains(BiometricType.fingerprint)) {
+        return BiometricPresentation(
+          Platform.isIOS ? 'Touch ID' : 'huella digital',
+          'fingerprint',
+        );
+      }
+      if (available.contains(BiometricType.strong)) {
+        return const BiometricPresentation('biometría del dispositivo', 'strong');
+      }
+      if (available.contains(BiometricType.weak)) {
+        return const BiometricPresentation('biometría del dispositivo', 'weak');
+      }
+    } catch (_) {
+      // El mensaje del botón conserva una alternativa clara mientras el
+      // sistema termina de exponer el sensor biométrico.
+    }
+    return BiometricPresentation(
+      Platform.isIOS ? 'Face ID' : 'huella digital',
+      Platform.isIOS ? 'face' : 'fingerprint',
+    );
+  }
 
   static Future<BiometricResult> verify() async {
     final supported = await _auth.isDeviceSupported();

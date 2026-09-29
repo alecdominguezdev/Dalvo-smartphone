@@ -20,6 +20,7 @@ class _AttendancePageState extends State<AttendancePage> {
   bool _loading = true;
   bool _saving = false;
   String? _error;
+  BiometricPresentation _biometric = const BiometricPresentation('biometría', 'strong');
 
   bool get _isAdmin {
     final role = (ApiClient.instance.currentUser?.role ?? '').toLowerCase().replaceAll('ó', 'o');
@@ -27,7 +28,16 @@ class _AttendancePageState extends State<AttendancePage> {
   }
 
   @override
-  void initState() { super.initState(); _load(); }
+  void initState() {
+    super.initState();
+    _load();
+    _loadBiometricPresentation();
+  }
+
+  Future<void> _loadBiometricPresentation() async {
+    final presentation = await BiometricService.presentation();
+    if (mounted) setState(() => _biometric = presentation);
+  }
 
   Future<void> _load() async {
     setState(() { _loading = true; _error = null; });
@@ -92,7 +102,7 @@ class _AttendancePageState extends State<AttendancePage> {
             eyebrow: 'Personal',
             title: 'Asistencia',
             subtitle: 'Registra tu entrada o salida desde cualquiera de tus locaciones autorizadas.',
-            icon: Icons.fingerprint_rounded,
+            icon: _biometric.method == 'face' ? Icons.face_rounded : Icons.fingerprint_rounded,
             trailing: _isAdmin ? OutlinedButton.icon(
               onPressed: _openAdmin,
               icon: const Icon(Icons.settings_outlined, size: 18),
@@ -113,7 +123,13 @@ class _AttendancePageState extends State<AttendancePage> {
               action: OutlinedButton.icon(onPressed: _load, icon: const Icon(Icons.refresh_rounded), label: const Text('Reintentar')),
             )
           else ...[
-            _CheckCard(checkedIn: checkedIn, saving: _saving, locations: locations, onCheck: locations.isEmpty ? null : _register),
+            _CheckCard(
+              checkedIn: checkedIn,
+              saving: _saving,
+              locations: locations,
+              biometric: _biometric,
+              onCheck: locations.isEmpty ? null : _register,
+            ),
             const SizedBox(height: 24),
             const DalvoSectionTitle(title: 'Entradas y salidas'),
             const SizedBox(height: 12),
@@ -132,8 +148,15 @@ class _CheckCard extends StatelessWidget {
   final bool checkedIn;
   final bool saving;
   final List<AttendanceLocation> locations;
+  final BiometricPresentation biometric;
   final VoidCallback? onCheck;
-  const _CheckCard({required this.checkedIn, required this.saving, required this.locations, required this.onCheck});
+  const _CheckCard({
+    required this.checkedIn,
+    required this.saving,
+    required this.locations,
+    required this.biometric,
+    required this.onCheck,
+  });
 
   @override
   Widget build(BuildContext context) => DalvoSurface(
@@ -141,7 +164,11 @@ class _CheckCard extends StatelessWidget {
     child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Row(children: [
         DalvoIconTile(
-          icon: checkedIn ? Icons.location_on_rounded : Icons.fingerprint_rounded,
+          icon: checkedIn
+              ? Icons.location_on_rounded
+              : biometric.method == 'face'
+                  ? Icons.face_rounded
+                  : Icons.fingerprint_rounded,
           color: checkedIn ? DalvoColors.success : DalvoColors.primary,
           background: checkedIn ? DalvoColors.successSoft : DalvoColors.primarySoft,
           size: 48,
@@ -150,7 +177,12 @@ class _CheckCard extends StatelessWidget {
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(checkedIn ? 'Entrada activa' : 'Listo para checar', style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 3),
-          Text(checkedIn ? 'Registra tu salida al terminar tu jornada.' : 'Se validará tu ubicación y biometría.', style: Theme.of(context).textTheme.bodySmall),
+          Text(
+            checkedIn
+                ? 'Registra tu salida al terminar tu jornada.'
+                : 'Se validará tu ubicación y ${biometric.label}.',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
         ])),
         DalvoBadge(
           label: checkedIn ? 'DENTRO' : 'FUERA',
@@ -172,8 +204,22 @@ class _CheckCard extends StatelessWidget {
         const SizedBox(height: 18),
         FilledButton.icon(
           onPressed: saving ? null : onCheck,
-          icon: saving ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)) : Icon(checkedIn ? Icons.logout_rounded : Icons.fingerprint_rounded),
-          label: Text(saving ? 'Validando…' : checkedIn ? 'Registrar salida' : 'Registrar entrada'),
+          icon: saving
+              ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+              : Icon(
+                  checkedIn
+                      ? Icons.logout_rounded
+                      : biometric.method == 'face'
+                          ? Icons.face_rounded
+                          : Icons.fingerprint_rounded,
+                ),
+          label: Text(
+            saving
+                ? 'Validando…'
+                : checkedIn
+                    ? 'Registrar salida con ${biometric.label}'
+                    : 'Registrar entrada con ${biometric.label}',
+          ),
         ),
       ],
     ]),

@@ -26,6 +26,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Dalvo usa Face ID para confirmar tu identidad al registrar entrada o salida.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Dalvo usa tu ubicación para validar que registres asistencia desde una locación autorizada.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
