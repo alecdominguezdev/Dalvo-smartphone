@@ -76,6 +76,10 @@ const cuentasCobrarModule = document.querySelector("#cuentasCobrarModule");
 const cuentasPagarModule = document.querySelector("#cuentasPagarModule");
 const comisionesModule = document.querySelector("#comisionesModule");
 const tareasModule = document.querySelector("#tareasModule");
+const informesModule = document.querySelector("#informesModule");
+const informesContent = document.querySelector("#informesContent");
+const asistenciasModule = document.querySelector("#asistenciasModule");
+const asistenciasContent = document.querySelector("#asistenciasContent");
 const reportesModule = document.querySelector("#reportesModule");
 const reportsContent = document.querySelector("#reportsContent");
 const exportacionesModule = document.querySelector("#exportacionesModule");
@@ -603,6 +607,9 @@ let budgetContractorSort = { key: "", direction: "asc" };
 let budgetLaborSort = { key: "", direction: "asc" };
 let budgetMaterialSort = { key: "", direction: "asc" };
 let currentModuleName = "inicio";
+let supervisionReportsCache = [];
+let attendanceReportCache = [];
+let attendanceReportUsers = [];
 let userCreditsCache = [];
 let userCreditUsersCatalog = [];
 let activeUserCreditId = null;
@@ -631,6 +638,8 @@ const moduleCopy = {
   tareas: "Notas, seguimientos, recordatorios y alertas internas.",
   inventario: "Existencias, entradas, salidas y movimientos internos.",
   nomina: "Gestión de nómina y registros del personal.",
+  asistencias: "Entradas, salidas, jornadas y reportes de horas trabajadas.",
+  informes: "Informes de avance, evidencia fotográfica y PDF de la operación móvil.",
   reportes: "Vistas ejecutivas e indicadores del sistema.",
   exportaciones: "Reportes filtrados y descargas profesionales en Excel y PDF.",
   "recuperacion-documental": "Conciliación de respaldos, documentos faltantes y archivos por proyecto."
@@ -662,6 +671,8 @@ const MODULE_NAMES = new Set([
   "tareas",
   "inventario",
   "nomina",
+  "asistencias",
+  "informes",
   "reportes",
   "exportaciones",
   "recuperacion-documental"
@@ -671,8 +682,8 @@ let isApplyingHistoryState = false;
 const ROLE_MODULES = {
   superadmin: ALL_MODULES,
   administracion: ALL_MODULES,
-  supervisor: ["presupuesto", "tareas", "reportes", "exportaciones"],
-  compras: ["proveedores", "gastos-fijos", "compras", "cuentas-cobrar", "cuentas-pagar", "tareas", "reportes", "exportaciones"]
+  supervisor: ["presupuesto", "informes", "tareas", "reportes", "exportaciones"],
+  compras: ["proveedores", "gastos-fijos", "compras", "cuentas-cobrar", "cuentas-pagar", "informes", "tareas", "reportes", "exportaciones"]
 };
 
 const BUDGET_WARRANTY_RATE = 0.05;
@@ -6954,6 +6965,10 @@ function renderBudgetDetail(data) {
 
     ${renderBudgetSupplierQuoteDocuments(files, { canDelete: canDeleteRecords() })}
 
+    <section class="budget-supervision-module" id="budgetSupervisionModule">
+      <div class="budget-supervision-loading">Cargando informes de avance...</div>
+    </section>
+
     <section class="budget-block-panel">
       <h3>Presupuesto disponible por bloque</h3>
       <div class="budget-block-cards">
@@ -7038,6 +7053,45 @@ function renderBudgetDetail(data) {
   if (canShowClientQuoteFlow(budget)) {
     loadClientQuoteModule(budget.id);
     loadPurchaseFlowModule(budget.id);
+  }
+  loadBudgetSupervisionReports(budget.id);
+}
+
+function renderBudgetSupervisionReports(reports = []) {
+  const container = document.querySelector("#budgetSupervisionModule");
+  if (!container) return;
+  container.innerHTML = `
+    <div class="budget-supervision-heading">
+      <div><span>Operación móvil</span><h3>Informes de avance</h3><p>Informes y PDFs generados desde la aplicación para este proyecto.</p></div>
+      <span class="budget-supervision-count">${formatInteger(reports.length)} informe${reports.length === 1 ? "" : "s"}</span>
+    </div>
+    ${reports.length ? `<div class="budget-supervision-list">${reports.map((report) => {
+      const reportStatus = normalizeSupervisionReportStatus(report.status);
+      const progress = Math.max(0, Math.min(100, Number(report.progress || 0)));
+      return `<article class="budget-supervision-card" data-budget-report-card="${Number(report.id)}">
+        <div><strong>${escapeHtml(formatDate(report.visitDate) || "Sin fecha")}</strong><small>${escapeHtml(report.supervisor || "Sin supervisor")}</small></div>
+        <span class="budget-supervision-progress">${progress}%</span>
+        <span class="informes-photo-count"><i class="ri-image-line" aria-hidden="true"></i>${formatInteger(report.photosCount || 0)}</span>
+        <span class="informes-status ${reportStatus.className}">${escapeHtml(reportStatus.label)}</span>
+        <div class="budget-supervision-actions">
+          <button class="ghost-button" type="button" data-budget-report-preview="${Number(report.id)}"><i class="ri-eye-line" aria-hidden="true"></i> Ver PDF</button>
+          <a class="small-button" href="/api/supervision-reports/${Number(report.id)}/pdf" target="_blank" rel="noopener"><i class="ri-download-2-line" aria-hidden="true"></i> Descargar</a>
+        </div>
+        <div class="budget-report-pdf-preview hidden" data-budget-report-preview-panel="${Number(report.id)}"></div>
+      </article>`;
+    }).join("")}</div>` : '<div class="budget-supervision-empty">Aún no hay informes de avance capturados desde la aplicación.</div>'}`;
+}
+
+async function loadBudgetSupervisionReports(budgetId) {
+  const container = document.querySelector("#budgetSupervisionModule");
+  if (!container || !budgetId) return;
+  try {
+    const data = await api(`/api/budgets/${Number(budgetId)}/supervision-reports`, { toast: false });
+    renderBudgetSupervisionReports(Array.isArray(data.reports) ? data.reports : []);
+  } catch (error) {
+    if (document.querySelector("#budgetSupervisionModule")) {
+      container.innerHTML = `<div class="budget-supervision-empty">${escapeHtml(error.message)}</div>`;
+    }
   }
 }
 
@@ -9275,6 +9329,218 @@ async function loadReportsModule() {
     reportsContent.innerHTML = `<div class="empty-state">${escapeHtml(error.message)}</div>`;
   }
 }
+
+function normalizeSupervisionReportStatus(value = "") {
+  const raw = String(value || "BORRADOR").trim();
+  const normalized = raw.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+  if (normalized.includes("ENVI")) return { label: "Enviado", className: "is-sent" };
+  if (normalized.includes("APROB")) return { label: "Aprobado", className: "is-approved" };
+  if (normalized.includes("RECHAZ")) return { label: "Requiere ajuste", className: "is-warning" };
+  return { label: "Borrador", className: "is-draft" };
+}
+
+function supervisionReportDate(value) {
+  const date = formatDate(value);
+  return date || "Sin fecha";
+}
+
+function renderInformesModule() {
+  if (!informesContent) return;
+  const search = String(informesContent.querySelector("#informesSearch")?.value || "").trim().toLocaleLowerCase("es-MX");
+  const status = String(informesContent.querySelector("#informesStatus")?.value || "").trim().toUpperCase();
+  const reports = supervisionReportsCache.filter((report) => {
+    const haystack = [report.folio, report.project, report.company, report.client, report.supervisor]
+      .join(" ").toLocaleLowerCase("es-MX");
+    return (!search || haystack.includes(search)) && (!status || String(report.status || "").toUpperCase() === status);
+  });
+  const totalPhotos = reports.reduce((sum, report) => sum + Number(report.photosCount || 0), 0);
+  const averageProgress = reports.length
+    ? Math.round(reports.reduce((sum, report) => sum + Number(report.progress || 0), 0) / reports.length)
+    : 0;
+  const submitted = reports.filter((report) => normalizeSupervisionReportStatus(report.status).className !== "is-draft").length;
+  const statusOptions = [...new Set(supervisionReportsCache.map((report) => String(report.status || "BORRADOR").trim()).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b, "es"));
+
+  informesContent.innerHTML = `
+    <section class="informes-hero">
+      <div>
+        <span class="informes-kicker"><i class="ri-smartphone-line" aria-hidden="true"></i> Sincronizado con Dalvo Móvil</span>
+        <h2>Control de avances en campo</h2>
+        <p>Cada informe conserva el proyecto, supervisor, porcentaje de avance y la evidencia fotográfica capturada en la aplicación.</p>
+      </div>
+      <button class="ghost-button informes-refresh" id="informesRefreshButton" type="button"><i class="ri-refresh-line" aria-hidden="true"></i> Actualizar</button>
+    </section>
+    <section class="informes-kpi-grid">
+      <article><span>Informes visibles</span><strong>${formatInteger(reports.length)}</strong><small>Según tus permisos de proyecto</small></article>
+      <article><span>Avance promedio</span><strong>${averageProgress}%</strong><small>De los informes mostrados</small></article>
+      <article><span>Evidencia fotográfica</span><strong>${formatInteger(totalPhotos)}</strong><small>Fotografías adjuntas</small></article>
+      <article><span>Enviados / revisados</span><strong>${formatInteger(submitted)}</strong><small>Fuera de borrador</small></article>
+    </section>
+    <section class="informes-panel">
+      <div class="informes-toolbar">
+        <div><h2>Informes registrados</h2><p>Descarga un PDF con membrete y sus imágenes integradas.</p></div>
+        <label class="module-search"><span>Buscar informe</span><input id="informesSearch" type="search" value="${escapeHtml(search)}" placeholder="Folio, proyecto, empresa o supervisor..." autocomplete="off" /></label>
+        <label class="informes-status-filter"><span>Estatus</span><select id="informesStatus"><option value="">Todos</option>${statusOptions.map((value) => `<option value="${escapeHtml(value)}" ${status === String(value).toUpperCase() ? "selected" : ""}>${escapeHtml(normalizeSupervisionReportStatus(value).label)}</option>`).join("")}</select></label>
+      </div>
+      <div class="informes-table-shell" role="region" aria-label="Informes de avance" tabindex="0">
+        <table class="informes-table">
+          <thead><tr><th>Informe</th><th>Proyecto</th><th>Supervisor</th><th>Avance</th><th>Evidencia</th><th>Estatus</th><th></th></tr></thead>
+          <tbody>${reports.length ? reports.map((report) => {
+            const progress = Math.max(0, Math.min(100, Number(report.progress || 0)));
+            const reportStatus = normalizeSupervisionReportStatus(report.status);
+            return `<tr>
+              <td><strong>${escapeHtml(report.folio || `Informe #${report.id}`)}</strong><small>${escapeHtml(supervisionReportDate(report.visitDate))}</small></td>
+              <td><strong>${escapeHtml(report.project || "Sin título")}</strong><small>${escapeHtml([report.company, report.branch].filter(Boolean).join(" · ") || "Sin empresa")}</small></td>
+              <td>${escapeHtml(report.supervisor || "Sin supervisor")}${report.incompleteInformation ? '<small class="informes-attention">Información pendiente</small>' : ""}</td>
+              <td><strong class="informes-progress-value">${progress}%</strong></td>
+              <td><span class="informes-photo-count"><i class="ri-image-line" aria-hidden="true"></i>${formatInteger(report.photosCount || 0)}</span></td>
+              <td><span class="informes-status ${reportStatus.className}">${escapeHtml(reportStatus.label)}</span></td>
+              <td><a class="small-button informes-pdf-button" href="/api/supervision-reports/${Number(report.id)}/pdf" target="_blank" rel="noopener"><i class="ri-file-pdf-2-line" aria-hidden="true"></i> PDF</a></td>
+            </tr>`;
+          }).join("") : `<tr><td class="informes-empty" colspan="7">No hay informes que coincidan con los filtros.</td></tr>`}</tbody>
+        </table>
+      </div>
+    </section>`;
+}
+
+async function loadInformesModule() {
+  if (!informesContent) return;
+  informesContent.innerHTML = '<div class="reports-loading">Cargando informes de avance...</div>';
+  try {
+    const data = await api('/api/supervision-reports', { toast: false });
+    supervisionReportsCache = Array.isArray(data.reports) ? data.reports : [];
+    renderInformesModule();
+  } catch (error) {
+    informesContent.innerHTML = `<div class="empty-state">${escapeHtml(error.message)}</div>`;
+  }
+}
+
+informesContent?.addEventListener("input", (event) => {
+  if (event.target.matches("#informesSearch")) renderInformesModule();
+});
+
+informesContent?.addEventListener("change", (event) => {
+  if (event.target.matches("#informesStatus")) renderInformesModule();
+});
+
+informesContent?.addEventListener("click", (event) => {
+  if (event.target.closest("#informesRefreshButton")) loadInformesModule();
+});
+
+function attendanceHours(seconds = 0) {
+  const minutes = Math.max(0, Math.round(Number(seconds || 0) / 60));
+  return `${Math.floor(minutes / 60)}h ${String(minutes % 60).padStart(2, "0")}m`;
+}
+
+function formatAttendanceDateTime(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value).replace("T", " ").slice(0, 16);
+  return new Intl.DateTimeFormat("es-MX", {
+    day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false
+  }).format(date);
+}
+
+function attendanceFilterValues() {
+  return {
+    search: String(asistenciasContent?.querySelector("#asistenciasSearch")?.value || "").trim(),
+    userId: String(asistenciasContent?.querySelector("#asistenciasUser")?.value || "").trim(),
+    date: String(asistenciasContent?.querySelector("#asistenciasDate")?.value || "").trim(),
+    month: String(asistenciasContent?.querySelector("#asistenciasMonth")?.value || "").trim()
+  };
+}
+
+function attendanceQuery(values = attendanceFilterValues()) {
+  const query = new URLSearchParams();
+  if (values.search) query.set("search", values.search);
+  if (values.userId) query.set("userId", values.userId);
+  if (values.date) query.set("date", values.date);
+  else if (values.month) query.set("month", values.month);
+  return query.toString();
+}
+
+function renderAttendanceModule(values = attendanceFilterValues()) {
+  if (!asistenciasContent) return;
+  const rows = attendanceReportCache;
+  const totalSeconds = rows.reduce((sum, row) => sum + Number(row.workedSeconds || 0), 0);
+  const completeRows = rows.filter((row) => row.checkOut).length;
+  const people = attendanceReportUsers.length
+    ? attendanceReportUsers
+    : [...new Map(rows.map((row) => [String(row.userId), { id: row.userId, person: row.person, username: row.username }])).values()];
+  const currentUser = values.userId;
+  const userOptions = people.some((item) => String(item.id) === currentUser)
+    ? people
+    : currentUser ? [...people, { id: currentUser, person: "Persona seleccionada", username: "" }] : people;
+  const query = attendanceQuery(values);
+  const suffix = query ? `?${query}` : "";
+  asistenciasContent.innerHTML = `
+    <section class="asistencias-summary">
+      <article><span>Jornadas</span><strong>${formatInteger(rows.length)}</strong><small>Entradas registradas</small></article>
+      <article><span>Horas trabajadas</span><strong>${attendanceHours(totalSeconds)}</strong><small>Solo jornadas con salida</small></article>
+      <article><span>Jornadas completas</span><strong>${formatInteger(completeRows)}</strong><small>Entrada y salida registradas</small></article>
+      <article><span>Personal visible</span><strong>${formatInteger(new Set(rows.map((row) => row.userId)).size)}</strong><small>Según los filtros aplicados</small></article>
+    </section>
+    <section class="asistencias-panel">
+      <div class="asistencias-toolbar">
+        <div><h2>Reporte de jornadas</h2><p>Una entrada se vincula con la siguiente salida de la misma persona.</p></div>
+        <label class="module-search"><span>Buscar persona o locación</span><input id="asistenciasSearch" type="search" value="${escapeHtml(values.search)}" placeholder="Nombre, usuario o locación..." autocomplete="off" /></label>
+        <label><span>Persona</span><select id="asistenciasUser"><option value="">Todas las personas</option>${userOptions.map((item) => `<option value="${escapeHtml(item.id)}" ${String(item.id) === currentUser ? "selected" : ""}>${escapeHtml(item.person || item.username)}</option>`).join("")}</select></label>
+        <label><span>Fecha específica</span><input id="asistenciasDate" type="date" value="${escapeHtml(values.date)}" /></label>
+        <label><span>Mes</span><input id="asistenciasMonth" type="month" value="${escapeHtml(values.month)}" ${values.date ? "disabled" : ""} /></label>
+      </div>
+      <div class="asistencias-actions">
+        <button class="ghost-button" id="asistenciasRefreshButton" type="button"><i class="ri-refresh-line" aria-hidden="true"></i> Actualizar</button>
+        <a class="small-button" href="/api/attendance-reports/export.csv${suffix}"><i class="ri-file-excel-2-line" aria-hidden="true"></i> Descargar Excel</a>
+        <a class="small-button" href="/api/attendance-reports/export.pdf${suffix}" target="_blank" rel="noopener"><i class="ri-file-pdf-2-line" aria-hidden="true"></i> Descargar PDF</a>
+      </div>
+      <div class="asistencias-table-shell" role="region" aria-label="Reporte de asistencias" tabindex="0">
+        <table class="asistencias-table">
+          <thead><tr><th>Persona</th><th>Fecha</th><th>Entrada</th><th>Salida</th><th>Horas trabajadas</th><th>Locación</th></tr></thead>
+          <tbody>${rows.length ? rows.map((row) => `<tr>
+            <td><strong>${escapeHtml(row.person || "Sin nombre")}</strong><small>${escapeHtml(row.username || "")}</small></td>
+            <td>${escapeHtml(formatAttendanceDateTime(row.checkIn).slice(0, 10))}</td>
+            <td>${escapeHtml(formatAttendanceDateTime(row.checkIn).slice(11))}</td>
+            <td>${row.checkOut ? escapeHtml(formatAttendanceDateTime(row.checkOut).slice(11)) : '<span class="attendance-open">Entrada activa</span>'}</td>
+            <td><strong>${attendanceHours(row.workedSeconds)}</strong></td>
+            <td>${escapeHtml(row.location || "Sin locación")}</td>
+          </tr>`).join("") : '<tr><td class="asistencias-empty" colspan="6">No hay asistencias para los filtros seleccionados.</td></tr>'}</tbody>
+        </table>
+      </div>
+    </section>`;
+}
+
+async function loadAttendanceModule(values = attendanceFilterValues()) {
+  if (!asistenciasContent) return;
+  asistenciasContent.innerHTML = '<div class="reports-loading">Cargando asistencias...</div>';
+  try {
+    const data = await api(`/api/attendance-reports${attendanceQuery(values) ? `?${attendanceQuery(values)}` : ""}`, { toast: false });
+    attendanceReportCache = Array.isArray(data.rows) ? data.rows : [];
+    const seen = new Map(attendanceReportCache.map((row) => [String(row.userId), { id: row.userId, person: row.person, username: row.username }]));
+    attendanceReportUsers = [...seen.values()].sort((a, b) => String(a.person).localeCompare(String(b.person), "es"));
+    renderAttendanceModule(values);
+  } catch (error) {
+    asistenciasContent.innerHTML = `<div class="empty-state">${escapeHtml(error.message)}</div>`;
+  }
+}
+
+let attendanceSearchTimer = null;
+asistenciasContent?.addEventListener("input", (event) => {
+  if (!event.target.matches("#asistenciasSearch")) return;
+  clearTimeout(attendanceSearchTimer);
+  attendanceSearchTimer = setTimeout(() => loadAttendanceModule(), 250);
+});
+
+asistenciasContent?.addEventListener("change", (event) => {
+  if (!event.target.matches("#asistenciasUser, #asistenciasDate, #asistenciasMonth")) return;
+  const values = attendanceFilterValues();
+  if (event.target.matches("#asistenciasDate") && values.date) values.month = "";
+  if (event.target.matches("#asistenciasMonth") && values.month) values.date = "";
+  loadAttendanceModule(values);
+});
+
+asistenciasContent?.addEventListener("click", (event) => {
+  if (event.target.closest("#asistenciasRefreshButton")) loadAttendanceModule();
+});
 
 
 function formatFileSize(bytes = 0) {
@@ -12550,6 +12816,8 @@ function hideWorkspaceModules() {
     cuentasPagarModule,
     comisionesModule,
     tareasModule,
+    asistenciasModule,
+    informesModule,
     reportesModule,
     exportacionesModule,
     recuperacionDocumentalModule,
@@ -12756,6 +13024,22 @@ function setActiveModule(moduleName, options = {}) {
     hideWorkspaceModules();
     tareasModule.classList.add("active");
     loadTasksModule();
+    closeModuleLauncher();
+    return;
+  }
+
+  if (moduleName === "informes") {
+    hideWorkspaceModules();
+    informesModule.classList.add("active");
+    loadInformesModule();
+    closeModuleLauncher();
+    return;
+  }
+
+  if (moduleName === "asistencias") {
+    hideWorkspaceModules();
+    asistenciasModule.classList.add("active");
+    loadAttendanceModule();
     closeModuleLauncher();
     return;
   }
@@ -15854,6 +16138,27 @@ budgetDetailContent.addEventListener("click", async (event) => {
   const deleteBudgetFileButton = event.target.closest("[data-budget-file-delete]");
   const deleteClientPoButton = event.target.closest("[data-client-po-delete]");
   const billBudgetButton = event.target.closest("[data-budget-bill]");
+  const previewReportButton = event.target.closest("[data-budget-report-preview]");
+
+  if (previewReportButton) {
+    const reportId = Number(previewReportButton.dataset.budgetReportPreview || 0);
+    const panel = budgetDetailContent.querySelector(`[data-budget-report-preview-panel="${reportId}"]`);
+    if (!reportId || !panel) return;
+    const opening = panel.classList.contains("hidden");
+    budgetDetailContent.querySelectorAll("[data-budget-report-preview-panel]").forEach((item) => {
+      if (item !== panel) { item.classList.add("hidden"); item.innerHTML = ""; }
+    });
+    if (opening) {
+      panel.innerHTML = `<iframe title="Vista previa del informe" src="/api/supervision-reports/${reportId}/pdf/view"></iframe>`;
+      panel.classList.remove("hidden");
+      previewReportButton.innerHTML = '<i class="ri-eye-off-line" aria-hidden="true"></i> Ocultar PDF';
+    } else {
+      panel.classList.add("hidden");
+      panel.innerHTML = "";
+      previewReportButton.innerHTML = '<i class="ri-eye-line" aria-hidden="true"></i> Ver PDF';
+    }
+    return;
+  }
 
   if (inlineBackButton) {
     closeBudgetModal();
