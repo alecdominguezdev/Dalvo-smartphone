@@ -282,7 +282,7 @@ class _BudgetDetailPageState extends State<BudgetDetailPage> {
         ],
       ])),
       const SizedBox(height:12),_FinancialSummary(financial:financial??const{}),
-      if(data['quote'] is Map<String,dynamic>)...[const SizedBox(height:12),_QuoteSummary(quote:data['quote'] as Map<String,dynamic>)],
+      if(data['quote'] is Map<String,dynamic>)...[const SizedBox(height:12),_QuotationTotal(total:financial?['quotationCost'] ?? (data['quote'] as Map<String,dynamic>)['amount'])],
       const SizedBox(height:12),_CostBlocks(costs:(data['costs'] as Map<String,dynamic>? ?? const{})),
       const SizedBox(height:12),_FilesSection(files:(data['files'] as List? ?? const[])),
       const SizedBox(height:12),_HistorySection(rows:(data['history'] as List? ?? const[])),
@@ -290,9 +290,9 @@ class _BudgetDetailPageState extends State<BudgetDetailPage> {
   }
 }
 
-class _QuoteSummary extends StatelessWidget {
-  final Map<String, dynamic> quote;
-  const _QuoteSummary({required this.quote});
+class _QuotationTotal extends StatelessWidget {
+  final dynamic total;
+  const _QuotationTotal({required this.total});
 
   @override
   Widget build(BuildContext context) => DalvoSurface(
@@ -310,28 +310,15 @@ class _QuoteSummary extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Cotización vigente',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        '${quote['folio'] ?? 'Sin folio'} · Versión ${quote['version'] ?? 0}',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
+                      Text('Costo total de cotización',style: Theme.of(context).textTheme.titleMedium),
                     ],
                   ),
                 ),
                 Text(
-                  dalvoMoney(quote['amount']),
+                  dalvoMoney(total),
                   style: const TextStyle(fontWeight: FontWeight.w900),
                 ),
               ],
-            ),
-            const SizedBox(height: 11),
-            DalvoBadge(
-              label: '${quote['status'] ?? 'Sin estatus'}',
-              foreground: statusColor('${quote['status'] ?? ''}'),
             ),
           ],
         ),
@@ -347,12 +334,6 @@ class _FinancialSummary extends StatelessWidget { final Map<String,dynamic> fina
         : 'Comisión';
     return DalvoSurface(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
       Text('Resumen financiero',style:Theme.of(context).textTheme.titleMedium),const SizedBox(height:14),
-      _moneyRow('Equipos',financial['totalEquipment']),
-      _moneyRow('Mano de obra',financial['totalLabor']),
-      _moneyRow('Materiales',financial['totalMaterials']),
-      _moneyRow('Presupuesto adicional',financial['totalAdditional']),
-      const Divider(),
-      _moneyRow('Costo de cotización',financial['quotationCost'],bold:true),
       _moneyRow('Precio de venta',financial['salePrice']),
       if (commission.abs() > 0.005) _moneyRow(commissionLabel,financial['commission']),
     ]));
