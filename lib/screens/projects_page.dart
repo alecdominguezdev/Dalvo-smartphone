@@ -56,7 +56,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
         children: [
           const DalvoAnimatedEntry(
             child: DalvoSectionTitle(
-              title: 'Proyectos',
+              title: 'Informes',
             ),
           ),
           const SizedBox(height: 16),
@@ -139,7 +139,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
     );
 
     if (widget.embedded) return content;
-    return Scaffold(appBar: AppBar(title: const Text('Proyectos')), body: content);
+    return Scaffold(appBar: AppBar(title: const Text('Informes')), body: content);
   }
 }
 

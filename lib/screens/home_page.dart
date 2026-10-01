@@ -372,7 +372,7 @@ class _QuickActions extends StatelessWidget {
       if (canSupervise)
         _QuickActionData(
           icon: Icons.location_on_outlined,
-          label: 'Proyectos',
+          label: 'Informes',
           onTap: onProjects!,
           accent: DalvoColors.primary,
         ),

@@ -159,7 +159,7 @@ class _DalvoShellPageState extends State<DalvoShellPage> with WidgetsBindingObse
           badge: _pendingBudgets,
         ),
         const _Destination(label: 'Asistencia', icon: Icons.fingerprint_rounded, selectedIcon: Icons.fingerprint_rounded, keyName: 'attendance'),
-        const _Destination(label: 'Proyectos', icon: Icons.dashboard_outlined, selectedIcon: Icons.dashboard_rounded, keyName: 'projects'),
+        const _Destination(label: 'Informes', icon: Icons.dashboard_outlined, selectedIcon: Icons.dashboard_rounded, keyName: 'projects'),
         const _Destination(
           label: 'Ajustes',
           icon: Icons.settings_outlined,
@@ -491,7 +491,7 @@ class _DalvoDrawer extends StatelessWidget {
             _DrawerItem(icon: Icons.home_outlined, label: 'Inicio', onTap: () => onGoTo('home')),
             _DrawerItem(icon: Icons.request_quote_outlined, label: 'Presupuestos', onTap: () => onGoTo('budgets')),
             _DrawerItem(icon: Icons.fingerprint_rounded, label: 'Asistencia', onTap: () => onGoTo('attendance')),
-            _DrawerItem(icon: Icons.dashboard_outlined, label: 'Proyectos', onTap: () => onGoTo('projects')),
+            _DrawerItem(icon: Icons.dashboard_outlined, label: 'Informes', onTap: () => onGoTo('projects')),
             _DrawerItem(
               icon: Icons.settings_outlined,
               label: 'Ajustes',
