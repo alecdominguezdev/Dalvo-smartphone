@@ -180,10 +180,13 @@ class _ProjectCard extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 3),
-                    Text(
-                      project.company.isEmpty ? 'Sin empresa' : project.company,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
+                    if (project.client.isNotEmpty)
+                      Text(
+                        'Cliente: ${project.client}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                   ],
                 ),
               ),
@@ -240,7 +243,7 @@ class _ProjectCard extends StatelessWidget {
                 const Icon(Icons.person_outline_rounded, size: 17, color: DalvoColors.muted),
                 const SizedBox(width: 6),
                 Expanded(
-                  child: Text(project.supervisor, style: Theme.of(context).textTheme.bodySmall),
+                  child: Text('Supervisor: ${project.supervisor}', style: Theme.of(context).textTheme.bodySmall),
                 ),
               ],
             ),

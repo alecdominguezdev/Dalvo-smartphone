@@ -114,6 +114,7 @@ class DalvoProject {
   final int id;
   final String folio;
   final String company;
+  final String client;
   final String title;
   final String area;
   final String po;
@@ -128,6 +129,7 @@ class DalvoProject {
     required this.id,
     required this.folio,
     required this.company,
+    required this.client,
     required this.title,
     required this.area,
     required this.po,
@@ -143,6 +145,7 @@ class DalvoProject {
         id: int.tryParse('${json['id'] ?? 0}') ?? 0,
         folio: '${json['folio'] ?? ''}',
         company: '${json['company'] ?? ''}',
+        client: '${json['client'] ?? ''}',
         title: '${json['title'] ?? ''}',
         area: '${json['area'] ?? ''}',
         po: '${json['po'] ?? ''}',

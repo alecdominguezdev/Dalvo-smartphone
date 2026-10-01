@@ -157,15 +157,28 @@ class _BudgetCard extends StatelessWidget {
         Text(dalvoMoney(row['amount']), style: const TextStyle(fontWeight: FontWeight.w900)),
       ]),
       const SizedBox(height: 7),
-      Text('${row['company'] ?? ''}', style: const TextStyle(color: DalvoColors.primaryDark, fontWeight: FontWeight.w800)),
-      const SizedBox(height: 5), Text('${row['title'] ?? ''}', maxLines: 2, overflow: TextOverflow.ellipsis),
+      Text('${row['title'] ?? ''}', maxLines: 2, overflow: TextOverflow.ellipsis),
+      if ('${row['client'] ?? ''}'.trim().isNotEmpty) ...[
+        const SizedBox(height: 7),
+        _cardDetail(context, Icons.person_outline_rounded, 'Cliente: ${row['client']}'),
+      ],
+      if ('${row['owner'] ?? ''}'.trim().isNotEmpty) ...[
+        const SizedBox(height: 4),
+        _cardDetail(context, Icons.badge_outlined, 'Supervisor: ${row['owner']}'),
+      ],
       if ('${row['po'] ?? ''}'.trim().isNotEmpty) ...[const SizedBox(height: 5), Text('PO: ${row['po']}', style: Theme.of(context).textTheme.bodySmall)],
       const SizedBox(height: 12), Row(children: [
         DalvoBadge(label: status.isEmpty ? '${row['state'] ?? ''}' : status, foreground: statusColor(status)),
         const Spacer(), const Icon(Icons.chevron_right_rounded, color: DalvoColors.muted),
       ]),
-    ]));
-  }
+  ]));
+
+  Widget _cardDetail(BuildContext context, IconData icon, String text) => Row(children: [
+    Icon(icon, size: 15, color: DalvoColors.muted),
+    const SizedBox(width: 5),
+    Expanded(child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.bodySmall)),
+  ]);
+}
 }
 
 class BudgetDetailPage extends StatefulWidget {
@@ -318,9 +331,25 @@ class _QuoteSummary extends StatelessWidget {
 }
 
 class _FinancialSummary extends StatelessWidget { final Map<String,dynamic> financial; const _FinancialSummary({required this.financial});
-  @override Widget build(BuildContext context)=>DalvoSurface(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text('Resumen financiero',style:Theme.of(context).textTheme.titleMedium),const SizedBox(height:14),
-    _moneyRow('Equipos',financial['totalEquipment']),_moneyRow('Mano de obra',financial['totalLabor']),_moneyRow('Materiales',financial['totalMaterials']),_moneyRow('Presupuesto adicional',financial['totalAdditional']),const Divider(),_moneyRow('Costo de cotización',financial['quotationCost']),_moneyRow('Factor de venta',financial['saleFactor'],money:false),_moneyRow('Precio de venta',financial['salePrice']),_moneyRow('Utilidad bruta',financial['grossProfit']),_moneyRow('Comisión supervisor (${financial['commissionPercent']??0}%)',financial['commission']),const Divider(),_moneyRow('Utilidad total',financial['totalProfit'],bold:true),
-  ]));
+  @override Widget build(BuildContext context) {
+    final commission = _number(financial['commission']);
+    final commissionPercent = _number(financial['commissionPercent']);
+    final commissionLabel = commissionPercent > 0
+        ? 'Comisión (${commissionPercent.toStringAsFixed(commissionPercent % 1 == 0 ? 0 : 2)}%)'
+        : 'Comisión';
+    return DalvoSurface(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
+      Text('Resumen financiero',style:Theme.of(context).textTheme.titleMedium),const SizedBox(height:14),
+      _moneyRow('Equipos',financial['totalEquipment']),
+      _moneyRow('Mano de obra',financial['totalLabor']),
+      _moneyRow('Materiales',financial['totalMaterials']),
+      _moneyRow('Presupuesto adicional',financial['totalAdditional']),
+      const Divider(),
+      _moneyRow('Costo de cotización',financial['quotationCost'],bold:true),
+      _moneyRow('Precio de venta',financial['salePrice']),
+      if (commission.abs() > 0.005) _moneyRow(commissionLabel,financial['commission']),
+    ]));
+  }
+  double _number(dynamic value) => value is num ? value.toDouble() : double.tryParse('$value') ?? 0;
   Widget _moneyRow(String label,dynamic value,{bool money=true,bool bold=false})=>Padding(padding:const EdgeInsets.symmetric(vertical:6),child:Row(children:[Expanded(child:Text(label,style:TextStyle(fontWeight:bold?FontWeight.w900:FontWeight.w500))),Text(money?dalvoMoney(value):'${value??0}',style:TextStyle(fontWeight:bold?FontWeight.w900:FontWeight.w700))]));
 }
 
