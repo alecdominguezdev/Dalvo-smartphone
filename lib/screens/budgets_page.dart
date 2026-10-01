@@ -282,7 +282,7 @@ class _BudgetDetailPageState extends State<BudgetDetailPage> {
         ],
       ])),
       const SizedBox(height:12),_FinancialSummary(financial:financial??const{}),
-      if(data['quote'] is Map<String,dynamic>)...[const SizedBox(height:12),_QuotationTotal(total:financial?['quotationCost'] ?? (data['quote'] as Map<String,dynamic>)['amount'])],
+      if(data['quote'] is Map<String,dynamic>)...[const SizedBox(height:12),_QuotationTotal(total:financial?['salePrice'] ?? (data['quote'] as Map<String,dynamic>)['amount'])],
       const SizedBox(height:12),_CostBlocks(costs:(data['costs'] as Map<String,dynamic>? ?? const{})),
       const SizedBox(height:12),_FilesSection(files:(data['files'] as List? ?? const[])),
       const SizedBox(height:12),_HistorySection(rows:(data['history'] as List? ?? const[])),
