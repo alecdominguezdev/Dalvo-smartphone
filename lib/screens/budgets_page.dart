@@ -172,13 +172,13 @@ class _BudgetCard extends StatelessWidget {
         const Spacer(), const Icon(Icons.chevron_right_rounded, color: DalvoColors.muted),
       ]),
   ]));
+  }
 
   Widget _cardDetail(BuildContext context, IconData icon, String text) => Row(children: [
     Icon(icon, size: 15, color: DalvoColors.muted),
     const SizedBox(width: 5),
     Expanded(child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.bodySmall)),
   ]);
-}
 }
 
 class BudgetDetailPage extends StatefulWidget {
@@ -215,11 +215,19 @@ class _BudgetDetailPageState extends State<BudgetDetailPage> {
     if(confirm!=true)return; setState(()=>_busy=true);
     try {
       final result=await ApiClient.instance.updateBudgetStatus(widget.budgetId,action);
-      await _load();
+      if (!mounted) return;
+      final current = Map<String, dynamic>.from(_data ?? const {});
+      final rawBudget = current['budget'];
+      final updatedBudget = rawBudget is Map
+          ? Map<String, dynamic>.from(rawBudget)
+          : <String, dynamic>{};
+      updatedBudget['state'] = result['state'] ?? updatedBudget['state'];
+      updatedBudget['status'] = result['status'] ?? updatedBudget['status'];
+      current['budget'] = updatedBudget;
+      final message='${result['message'] ?? 'Presupuesto actualizado correctamente.'}';
+      setState(() { _data=current; _feedback=message; _feedbackApproved=approve || action == 'reopen'; });
       await widget.onStatusChanged?.call();
       if (!mounted) return;
-      final message='${result['message'] ?? 'Presupuesto actualizado correctamente.'}';
-      setState(() { _feedback=message; _feedbackApproved=approve || action == 'reopen'; });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: approve || action == 'reopen' ? DalvoColors.success : DalvoColors.warning,
         content: Row(children:[
