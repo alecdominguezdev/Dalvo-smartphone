@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "348815529081",
-    "project_id": "dalvo-pruebas",
-    "storage_bucket": "dalvo-pruebas.firebasestorage.app"
+    "project_number": "621682282144",
+    "project_id": "dalvo-2bc7e",
+    "storage_bucket": "dalvo-2bc7e.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:348815529081:android:290cabab154515b6abf0a8",
+        "mobilesdk_app_id": "1:621682282144:android:5e553a027b595b1b0583c5",
         "android_client_info": {
-          "package_name": "com.example.dalvo"
+          "package_name": "com.ejemplo.dalvo"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCt_7riycL-uFlJM4aE8RCAWxbpOJttaGk"
+          "current_key": "AIzaSyC_8GJ8BIH_GaoHpY3ehbU3qGKdqFZ0NrA"
         }
       ],
       "services": {

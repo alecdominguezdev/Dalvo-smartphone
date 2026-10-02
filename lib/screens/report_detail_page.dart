@@ -26,6 +26,7 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
   String? _error;
   Map<String, dynamic>? _report;
   List<Map<String, dynamic>> _files = const [];
+  bool _sendingEmail = false;
 
   @override
   void initState() {
@@ -79,6 +80,25 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
       _report?['incompleteInformation'] == true ||
       (_report == null && widget.report.incompleteInformation);
 
+  Future<void> _sendEmail() async {
+    if (_sendingEmail) return;
+    setState(() => _sendingEmail = true);
+    try {
+      final recipients = await ApiClient.instance.sendReportEmail(widget.report.id);
+      if (!mounted) return;
+      final suffix = recipients.isEmpty ? '' : ' a ${recipients.join(', ')}';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Informe enviado$suffix.')),
+      );
+    } on ApiException catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message)));
+      }
+    } finally {
+      if (mounted) setState(() => _sendingEmail = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final report = widget.report;
@@ -91,6 +111,13 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
       appBar: AppBar(
         title: Text(widget.label),
         actions: [
+          IconButton(
+            tooltip: 'Enviar por correo',
+            icon: _sendingEmail
+                ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                : const Icon(Icons.send_outlined),
+            onPressed: _loading || _sendingEmail ? null : _sendEmail,
+          ),
           IconButton(
             tooltip: 'Descargar PDF',
             icon: const Icon(Icons.picture_as_pdf_outlined),
