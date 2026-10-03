@@ -1,6 +1,7 @@
 import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -37,12 +38,64 @@ class DalvoMobileApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Dalvo Móvil',
       theme: buildDalvoTheme(),
-      builder: (context, child) => Listener(
-        behavior: HitTestBehavior.translucent,
-        onPointerDown: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+      builder: (context, child) => _KeyboardDismissLayer(
         child: child ?? const SizedBox.shrink(),
       ),
       home: const _BootstrapPage(),
+    );
+  }
+}
+
+class _KeyboardDismissLayer extends StatelessWidget {
+  const _KeyboardDismissLayer({required this.child});
+
+  final Widget child;
+
+  void _dismissKeyboard() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    SystemChannels.textInput.invokeMethod<void>('TextInput.hide');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: _dismissKeyboard,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          child,
+          if (keyboardHeight > 0)
+            Positioned(
+              right: 16,
+              bottom: keyboardHeight + 16,
+              child: Material(
+                color: DalvoColors.primary,
+                elevation: 5,
+                shape: const StadiumBorder(),
+                child: InkWell(
+                  customBorder: const StadiumBorder(),
+                  onTap: _dismissKeyboard,
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 11),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.keyboard_hide_rounded, color: Colors.white),
+                        SizedBox(width: 7),
+                        Text(
+                          'Ocultar teclado',
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
