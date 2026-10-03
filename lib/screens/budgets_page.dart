@@ -327,18 +327,11 @@ class _QuotationTotal extends StatelessWidget {
 
 class _FinancialSummary extends StatelessWidget { final Map<String,dynamic> financial; const _FinancialSummary({required this.financial});
   @override Widget build(BuildContext context) {
-    final commission = _number(financial['commission']);
-    final commissionPercent = _number(financial['commissionPercent']);
-    final commissionLabel = commissionPercent > 0
-        ? 'Comisión (${commissionPercent.toStringAsFixed(commissionPercent % 1 == 0 ? 0 : 2)}%)'
-        : 'Comisión';
     return DalvoSurface(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
       Text('Resumen financiero',style:Theme.of(context).textTheme.titleMedium),const SizedBox(height:14),
-      _moneyRow('Precio de venta',financial['salePrice']),
-      if (commission.abs() > 0.005) _moneyRow(commissionLabel,financial['commission']),
+      _moneyRow('Precio total',financial['salePrice']),
     ]));
   }
-  double _number(dynamic value) => value is num ? value.toDouble() : double.tryParse('$value') ?? 0;
   Widget _moneyRow(String label,dynamic value,{bool money=true,bool bold=false})=>Padding(padding:const EdgeInsets.symmetric(vertical:6),child:Row(children:[Expanded(child:Text(label,style:TextStyle(fontWeight:bold?FontWeight.w900:FontWeight.w500))),Text(money?dalvoMoney(value):'${value??0}',style:TextStyle(fontWeight:bold?FontWeight.w900:FontWeight.w700))]));
 }
 

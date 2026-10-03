@@ -37,6 +37,11 @@ class DalvoMobileApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Dalvo Móvil',
       theme: buildDalvoTheme(),
+      builder: (context, child) => Listener(
+        behavior: HitTestBehavior.translucent,
+        onPointerDown: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+        child: child ?? const SizedBox.shrink(),
+      ),
       home: const _BootstrapPage(),
     );
   }

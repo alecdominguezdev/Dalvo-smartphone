@@ -299,18 +299,6 @@ class ApiClient {
     _decode(response);
   }
 
-  Future<List<String>> sendReportEmail(int reportId) async {
-    final response = await http.post(
-      ApiConfig.uri('/reports/$reportId/email'),
-      headers: _headers(),
-    );
-    final data = _decode(response);
-    return (data['recipients'] as List? ?? const [])
-        .map((value) => value.toString())
-        .where((value) => value.trim().isNotEmpty)
-        .toList();
-  }
-
   Future<AttendanceStatus> attendanceStatus(int projectId) async {
     final response = await http.get(
       ApiConfig.uri('/projects/$projectId/attendance/status'),

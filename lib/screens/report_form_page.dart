@@ -133,16 +133,9 @@ class _ReportFormPageState extends State<ReportFormPage> {
       }
       await ApiClient.instance.submitReport(reportId);
 
-      String message = 'Informe guardado y enviado por correo.';
-      try {
-        await ApiClient.instance.sendReportEmail(reportId);
-      } on ApiException catch (error) {
-        message = 'Informe guardado. No se pudo enviar el correo: ${error.message}';
-      }
-
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
+        const SnackBar(content: Text('Informe guardado en Dalvo.')),
       );
       Navigator.of(context).pop(true);
     } on ApiException catch (error) {
@@ -445,8 +438,8 @@ class _ReportFormPageState extends State<ReportFormPage> {
                     height: 18,
                     child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                   )
-                : const Icon(Icons.send_outlined, size: 18),
-            label: Text(_saving ? 'Guardando...' : 'Guardar y enviar'),
+                : const Icon(Icons.save_outlined, size: 18),
+            label: Text(_saving ? 'Guardando...' : 'Guardar informe'),
           ),
         ),
       ),
