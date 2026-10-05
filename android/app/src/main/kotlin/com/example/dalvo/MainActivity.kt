@@ -1,4 +1,4 @@
-package com.example.dalvo
+package com.ejemplo.dalvo
 
 import android.Manifest
 import android.app.NotificationChannel
