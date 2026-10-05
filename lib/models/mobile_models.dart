@@ -288,6 +288,8 @@ class AttendanceMovement {
   final String userName;
   final double distanceMeters;
   final bool insideGeofence;
+  final String authenticationMethod;
+  final bool biometricVerified;
   final DateTime? createdAt;
 
   const AttendanceMovement({
@@ -299,6 +301,8 @@ class AttendanceMovement {
     required this.userName,
     required this.distanceMeters,
     required this.insideGeofence,
+    this.authenticationMethod = '',
+    this.biometricVerified = false,
     required this.createdAt,
   });
 
@@ -311,6 +315,8 @@ class AttendanceMovement {
         userName: '${json['userName'] ?? ''}',
         distanceMeters: double.tryParse('${json['distanceMeters'] ?? 0}') ?? 0,
         insideGeofence: json['insideGeofence'] != false,
+        authenticationMethod: '${json['authenticationMethod'] ?? json['biometricMethod'] ?? ''}',
+        biometricVerified: json['biometricVerified'] == true,
         createdAt: json['createdAt'] == null ? null : DateTime.tryParse('${json['createdAt']}'),
       );
 }

@@ -35,7 +35,7 @@ class _AttendancePageState extends State<AttendancePage> {
   }
 
   Future<void> _loadBiometricPresentation() async {
-    final presentation = await BiometricService.presentation();
+    final presentation = await BiometricService.attendancePresentation();
     if (mounted) setState(() => _biometric = presentation);
   }
 
@@ -59,8 +59,8 @@ class _AttendancePageState extends State<AttendancePage> {
     if (_saving) return;
     setState(() => _saving = true);
     try {
-      final biometric = await BiometricService.verify();
-      if (!biometric.verified) return;
+      final authentication = await BiometricService.verifyForAttendance();
+      if (!authentication.verified && !authentication.allowNormalRegistration) return;
       final position = await LocationService.currentPosition();
       final event = (_status?.checkedIn ?? false) ? 'SALIDA' : 'ENTRADA';
       final result = await ApiClient.instance.checkAttendance(
@@ -68,12 +68,12 @@ class _AttendancePageState extends State<AttendancePage> {
         latitude: position.latitude,
         longitude: position.longitude,
         accuracyMeters: position.accuracy,
-        biometricVerified: biometric.verified,
-        biometricMethod: biometric.method,
+        biometricVerified: authentication.verified,
+        biometricMethod: authentication.method,
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('$event registrada en ${result['locationName'] ?? 'la locación'} · ${result['distanceMeters'] ?? '-'} m'),
+        content: Text('$event registrada en ${result['locationName'] ?? 'la locación'} · ${authentication.label}'),
       ));
       await _load();
     } catch (error) {
@@ -158,6 +158,13 @@ class _CheckCard extends StatelessWidget {
     required this.onCheck,
   });
 
+  IconData get _authenticationIcon {
+    if (biometric.method == 'face') return Icons.face_rounded;
+    if (biometric.method == 'device_credential') return Icons.lock_rounded;
+    if (biometric.method == 'unprotected') return Icons.person_outline_rounded;
+    return Icons.fingerprint_rounded;
+  }
+
   @override
   Widget build(BuildContext context) => DalvoSurface(
     padding: const EdgeInsets.all(18),
@@ -166,9 +173,7 @@ class _CheckCard extends StatelessWidget {
         DalvoIconTile(
           icon: checkedIn
               ? Icons.location_on_rounded
-              : biometric.method == 'face'
-                  ? Icons.face_rounded
-                  : Icons.fingerprint_rounded,
+              : _authenticationIcon,
           color: checkedIn ? DalvoColors.success : DalvoColors.primary,
           background: checkedIn ? DalvoColors.successSoft : DalvoColors.primarySoft,
           size: 48,
@@ -209,16 +214,14 @@ class _CheckCard extends StatelessWidget {
               : Icon(
                   checkedIn
                       ? Icons.logout_rounded
-                      : biometric.method == 'face'
-                          ? Icons.face_rounded
-                          : Icons.fingerprint_rounded,
+                      : _authenticationIcon,
                 ),
           label: Text(
             saving
                 ? 'Validando…'
                 : checkedIn
-                    ? 'Registrar salida con ${biometric.label}'
-                    : 'Registrar entrada con ${biometric.label}',
+                    ? 'Registrar salida'
+                    : 'Registrar entrada',
           ),
         ),
       ],
@@ -473,6 +476,18 @@ class _MovementCard extends StatelessWidget {
   final bool showUser;
   const _MovementCard({required this.movement, this.showUser = false});
 
+  String get _authenticationLabel {
+    switch (movement.authenticationMethod) {
+      case 'face': return 'Face ID';
+      case 'fingerprint': return 'Huella digital';
+      case 'strong':
+      case 'weak': return 'Biometría del dispositivo';
+      case 'device_credential': return 'Código del celular';
+      case 'unprotected': return 'Sin bloqueo';
+      default: return movement.biometricVerified ? 'Biometría' : 'Sin dato';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final entry = movement.event.toUpperCase() == 'ENTRADA';
@@ -487,6 +502,8 @@ class _MovementCard extends StatelessWidget {
           Text(showUser && movement.userName.isNotEmpty ? movement.userName : movement.event, style: const TextStyle(fontWeight: FontWeight.w900)),
           const SizedBox(height: 2),
           Text('${movement.locationName} · $stamp', style: Theme.of(context).textTheme.bodySmall),
+          const SizedBox(height: 2),
+          Text('Validación: $_authenticationLabel', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: movement.authenticationMethod == 'unprotected' ? DalvoColors.warning : DalvoColors.muted)),
         ])),
         DalvoBadge(label: movement.event, foreground: entry ? DalvoColors.success : DalvoColors.primary),
       ]),
