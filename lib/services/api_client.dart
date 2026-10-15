@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import '../config/api_config.dart';
 import '../models/mobile_models.dart';
+import '../models/inventory_models.dart';
 
 class ApiException implements Exception {
   final String message;
@@ -25,7 +26,8 @@ class ApiClient {
   static const _storage = FlutterSecureStorage();
   static const _tokenKey = 'dalvo_mobile_token';
   static const _deviceIdKey = 'dalvo_mobile_device_id';
-  static const _biometricLoginEnabledKey = 'dalvo_mobile_biometric_login_enabled';
+  static const _biometricLoginEnabledKey =
+      'dalvo_mobile_biometric_login_enabled';
 
   String? _token;
   bool _biometricLoginEnabled = false;
@@ -62,10 +64,10 @@ class ApiClient {
   }
 
   Map<String, String> _headers({bool auth = true}) => {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        if (auth && hasToken) 'Authorization': 'Bearer $_token',
-      };
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    if (auth && hasToken) 'Authorization': 'Bearer $_token',
+  };
 
   Map<String, dynamic> _decode(http.Response response) {
     Map<String, dynamic> body = {};
@@ -106,7 +108,8 @@ class ApiClient {
     );
     final data = _decode(response);
     final token = '${data['token'] ?? ''}';
-    if (token.isEmpty) throw const ApiException('La API no devolvió una sesión válida.');
+    if (token.isEmpty)
+      throw const ApiException('La API no devolvió una sesión válida.');
     _token = token;
     // La preferencia pertenece a una sesión concreta; nunca se hereda entre
     // usuarios que inicien sesión en el mismo teléfono.
@@ -114,7 +117,9 @@ class ApiClient {
     await _storage.write(key: _tokenKey, value: token);
     currentUser = MobileUser.fromJson(data['user'] as Map<String, dynamic>);
     if (data['access'] is Map<String, dynamic>) {
-      currentAccess = MobileAccessProfile.fromJson(data['access'] as Map<String, dynamic>);
+      currentAccess = MobileAccessProfile.fromJson(
+        data['access'] as Map<String, dynamic>,
+      );
     } else {
       await access();
     }
@@ -126,7 +131,9 @@ class ApiClient {
     final data = _decode(response);
     currentUser = MobileUser.fromJson(data['user'] as Map<String, dynamic>);
     if (data['access'] is Map<String, dynamic>) {
-      currentAccess = MobileAccessProfile.fromJson(data['access'] as Map<String, dynamic>);
+      currentAccess = MobileAccessProfile.fromJson(
+        data['access'] as Map<String, dynamic>,
+      );
     } else {
       await access();
     }
@@ -134,7 +141,10 @@ class ApiClient {
   }
 
   Future<MobileAccessProfile> access() async {
-    final response = await http.get(ApiConfig.uri('/access'), headers: _headers());
+    final response = await http.get(
+      ApiConfig.uri('/access'),
+      headers: _headers(),
+    );
     final data = _decode(response);
     currentAccess = MobileAccessProfile.fromJson(
       (data['access'] as Map<String, dynamic>? ?? const <String, dynamic>{}),
@@ -174,7 +184,10 @@ class ApiClient {
 
   Future<List<DalvoProject>> projects({String search = ''}) async {
     final response = await http.get(
-      ApiConfig.uri('/projects', search.trim().isEmpty ? null : {'search': search.trim()}),
+      ApiConfig.uri(
+        '/projects',
+        search.trim().isEmpty ? null : {'search': search.trim()},
+      ),
       headers: _headers(),
     );
     final data = _decode(response);
@@ -388,7 +401,9 @@ class ApiClient {
         .toList();
   }
 
-  Future<List<AttendanceLocation>> attendanceLocations({String search = ''}) async {
+  Future<List<AttendanceLocation>> attendanceLocations({
+    String search = '',
+  }) async {
     final response = await http.get(
       ApiConfig.uri('/admin/attendance/locations', {'search': search.trim()}),
       headers: _headers(),
@@ -432,7 +447,10 @@ class ApiClient {
     _decode(response);
   }
 
-  Future<List<AttendanceMovement>> attendanceTeamLogs({String search = '', String date = ''}) async {
+  Future<List<AttendanceMovement>> attendanceTeamLogs({
+    String search = '',
+    String date = '',
+  }) async {
     final response = await http.get(
       ApiConfig.uri('/admin/attendance/logs', {
         'search': search.trim(),
@@ -452,7 +470,10 @@ class ApiClient {
     String search = '',
   }) async {
     final response = await http.get(
-      ApiConfig.uri('/documents/targets', {'scope': scope, 'search': search.trim()}),
+      ApiConfig.uri('/documents/targets', {
+        'scope': scope,
+        'search': search.trim(),
+      }),
       headers: _headers(),
     );
     final data = _decode(response);
@@ -472,7 +493,10 @@ class ApiClient {
     bool amountIncludesTax = false,
     String source = 'archivo',
   }) async {
-    final request = http.MultipartRequest('POST', ApiConfig.uri('/documents/assign'));
+    final request = http.MultipartRequest(
+      'POST',
+      ApiConfig.uri('/documents/assign'),
+    );
     request.headers['Accept'] = 'application/json';
     request.headers['Authorization'] = 'Bearer $_token';
     request.fields.addAll({
@@ -482,7 +506,8 @@ class ApiClient {
       'detail': detail.trim(),
       'source': source,
       if (amount != null) 'amount': amount.toStringAsFixed(2),
-      if (amount != null) 'amountIncludesTax': amountIncludesTax ? 'true' : 'false',
+      if (amount != null)
+        'amountIncludesTax': amountIncludesTax ? 'true' : 'false',
     });
     for (final filePath in filePaths) {
       request.files.add(await http.MultipartFile.fromPath('files', filePath));
@@ -526,64 +551,119 @@ class ApiClient {
     String company = '',
     bool pendingApproval = false,
   }) async {
-    final response = await http.get(ApiConfig.uri('/budgets', {
-      'search': search.trim(),
-      if (state.isNotEmpty) 'state': state,
-      if (status.isNotEmpty) 'status': status,
-      if (company.isNotEmpty) 'company': company,
-      if (pendingApproval) 'pendingApproval': '1',
-    }), headers: _headers());
+    final response = await http.get(
+      ApiConfig.uri('/budgets', {
+        'search': search.trim(),
+        if (state.isNotEmpty) 'state': state,
+        if (status.isNotEmpty) 'status': status,
+        if (company.isNotEmpty) 'company': company,
+        if (pendingApproval) 'pendingApproval': '1',
+      }),
+      headers: _headers(),
+    );
     final data = _decode(response);
-    return (data['budgets'] as List? ?? const []).whereType<Map<String, dynamic>>().toList();
+    return (data['budgets'] as List? ?? const [])
+        .whereType<Map<String, dynamic>>()
+        .toList();
   }
 
   Future<Map<String, dynamic>> budgetFull(int budgetId) async {
-    final response = await http.get(ApiConfig.uri('/budgets/$budgetId/full'), headers: _headers());
+    final response = await http.get(
+      ApiConfig.uri('/budgets/$budgetId/full'),
+      headers: _headers(),
+    );
     return _decode(response);
   }
 
-  Future<Map<String, dynamic>> updateBudgetStatus(int budgetId, String action) async {
-    final response = await http.patch(ApiConfig.uri('/budgets/$budgetId/status'), headers: _headers(), body: jsonEncode({'action': action}));
+  Future<Map<String, dynamic>> updateBudgetStatus(
+    int budgetId,
+    String action,
+  ) async {
+    final response = await http.patch(
+      ApiConfig.uri('/budgets/$budgetId/status'),
+      headers: _headers(),
+      body: jsonEncode({'action': action}),
+    );
     return _decode(response);
   }
 
-  Future<List<Map<String, dynamic>>> purchases({String search = '', String status = ''}) async {
-    final response = await http.get(ApiConfig.uri('/purchases', {
-      'search': search.trim(), if (status.isNotEmpty) 'status': status,
-    }), headers: _headers());
+  Future<List<Map<String, dynamic>>> purchases({
+    String search = '',
+    String status = '',
+  }) async {
+    final response = await http.get(
+      ApiConfig.uri('/purchases', {
+        'search': search.trim(),
+        if (status.isNotEmpty) 'status': status,
+      }),
+      headers: _headers(),
+    );
     final data = _decode(response);
-    return (data['purchases'] as List? ?? const []).whereType<Map<String, dynamic>>().toList();
+    return (data['purchases'] as List? ?? const [])
+        .whereType<Map<String, dynamic>>()
+        .toList();
   }
 
   Future<Map<String, dynamic>> purchaseDetail(int orderId) async {
-    final response = await http.get(ApiConfig.uri('/purchases/$orderId'), headers: _headers());
+    final response = await http.get(
+      ApiConfig.uri('/purchases/$orderId'),
+      headers: _headers(),
+    );
     return _decode(response);
   }
 
-  Future<Map<String, dynamic>> financialDetail({required bool receivable, required int accountId}) async {
+  Future<Map<String, dynamic>> financialDetail({
+    required bool receivable,
+    required int accountId,
+  }) async {
     final kind = receivable ? 'receivables' : 'payables';
-    final response = await http.get(ApiConfig.uri('/finance/$kind/$accountId'), headers: _headers());
+    final response = await http.get(
+      ApiConfig.uri('/finance/$kind/$accountId'),
+      headers: _headers(),
+    );
     return _decode(response);
   }
 
-  Future<List<Map<String, dynamic>>> tasks({String search = '', String status = '', String priority = ''}) async {
-    final response = await http.get(ApiConfig.uri('/tasks', {
-      'search': search.trim(), if (status.isNotEmpty) 'status': status, if (priority.isNotEmpty) 'priority': priority,
-    }), headers: _headers());
+  Future<List<Map<String, dynamic>>> tasks({
+    String search = '',
+    String status = '',
+    String priority = '',
+  }) async {
+    final response = await http.get(
+      ApiConfig.uri('/tasks', {
+        'search': search.trim(),
+        if (status.isNotEmpty) 'status': status,
+        if (priority.isNotEmpty) 'priority': priority,
+      }),
+      headers: _headers(),
+    );
     final data = _decode(response);
-    return (data['tasks'] as List? ?? const []).whereType<Map<String, dynamic>>().toList();
+    return (data['tasks'] as List? ?? const [])
+        .whereType<Map<String, dynamic>>()
+        .toList();
   }
 
   Future<void> updateTaskStatus(int taskId, String status) async {
-    final response = await http.patch(ApiConfig.uri('/tasks/$taskId/status'), headers: _headers(), body: jsonEncode({'status': status}));
+    final response = await http.patch(
+      ApiConfig.uri('/tasks/$taskId/status'),
+      headers: _headers(),
+      body: jsonEncode({'status': status}),
+    );
     _decode(response);
   }
 
-  Future<Uri> temporaryFileUrl({required String scope, required int fileId}) async {
-    final response = await http.post(ApiConfig.uri('/files/$scope/$fileId/open'), headers: _headers());
+  Future<Uri> temporaryFileUrl({
+    required String scope,
+    required int fileId,
+  }) async {
+    final response = await http.post(
+      ApiConfig.uri('/files/$scope/$fileId/open'),
+      headers: _headers(),
+    );
     final data = _decode(response);
     final uri = Uri.tryParse('${data['url'] ?? ''}');
-    if (uri == null || !uri.hasScheme) throw const ApiException('No se pudo preparar la vista del archivo.');
+    if (uri == null || !uri.hasScheme)
+      throw const ApiException('No se pudo preparar la vista del archivo.');
     return uri;
   }
 
@@ -601,10 +681,14 @@ class ApiClient {
   }
 
   Future<Uri> temporaryExportUrl(String kind) async {
-    final response = await http.post(ApiConfig.uri('/exports/$kind/open'), headers: _headers());
+    final response = await http.post(
+      ApiConfig.uri('/exports/$kind/open'),
+      headers: _headers(),
+    );
     final data = _decode(response);
     final uri = Uri.tryParse('${data['url'] ?? ''}');
-    if (uri == null || !uri.hasScheme) throw const ApiException('No se pudo preparar la exportación.');
+    if (uri == null || !uri.hasScheme)
+      throw const ApiException('No se pudo preparar la exportación.');
     return uri;
   }
 
@@ -628,7 +712,10 @@ class ApiClient {
     return _decode(response);
   }
 
-  Future<List<TeamAttendance>> teamAttendance({String search = '', String? date}) async {
+  Future<List<TeamAttendance>> teamAttendance({
+    String search = '',
+    String? date,
+  }) async {
     final response = await http.get(
       ApiConfig.uri('/attendance/team', {
         'search': search.trim(),
@@ -643,7 +730,9 @@ class ApiClient {
         .toList();
   }
 
-  Future<List<CompanyLocationTarget>> companyLocations({String search = ''}) async {
+  Future<List<CompanyLocationTarget>> companyLocations({
+    String search = '',
+  }) async {
     final response = await http.get(
       ApiConfig.uri('/admin/company-locations', {'search': search.trim()}),
       headers: _headers(),
@@ -698,5 +787,67 @@ class ApiClient {
     return OperationsSummary.fromJson(
       data['summary'] as Map<String, dynamic>? ?? const <String, dynamic>{},
     );
+  }
+
+  Future<InventoryResult> inventory({
+    String search = '',
+    String type = '',
+    String availability = '',
+    int page = 1,
+  }) async {
+    final response = await http
+        .get(
+          ApiConfig.uri('/inventory', {
+            'search': search.trim(),
+            'type': type,
+            'availability': availability,
+            'page': page,
+            'limit': 24,
+          }),
+          headers: _headers(),
+        )
+        .timeout(const Duration(seconds: 30));
+    return InventoryResult.fromJson(_decode(response));
+  }
+
+  Future<Map<String, dynamic>> inventoryDetail(int id) async {
+    final response = await http
+        .get(ApiConfig.uri('/inventory/$id'), headers: _headers())
+        .timeout(const Duration(seconds: 30));
+    return _decode(response);
+  }
+
+  Uri inventoryImageUri(int imageId) =>
+      ApiConfig.uri('/inventory/images/$imageId');
+  Map<String, String> get inventoryImageHeaders => {
+    'Authorization': 'Bearer $_token',
+  };
+
+  Future<InventoryItem> saveInventory({
+    int? id,
+    required Map<String, dynamic> item,
+    required List<InventoryUpload> images,
+  }) async {
+    final request = http.MultipartRequest(
+      id == null ? 'POST' : 'PUT',
+      ApiConfig.uri(id == null ? '/inventory' : '/inventory/$id'),
+    );
+    request.headers.addAll(_headers()..remove('Content-Type'));
+    request.fields['item'] = jsonEncode(item);
+    for (final image in images) {
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          'images',
+          image.bytes,
+          filename: image.name,
+        ),
+      );
+    }
+    final response = await http.Response.fromStream(await request.send());
+    final data = _decode(response);
+    final saved = data['item'] as Map<String, dynamic>?;
+    if (saved == null)
+      throw const ApiException('La API no devolvió el artículo guardado.');
+    return InventoryItem.fromJson(saved);
   }
 }
